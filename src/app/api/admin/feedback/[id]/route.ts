@@ -1,15 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { Feedback } from '@/models/Feedback';
 
-// 🌟 params: Promise<{ id: string }> ලෙස async type එකක් ලබාදෙයි
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   try {
     await connectDB();
-    const { id } = await params; // 🌟 await params මඟින් id එක ලබාගැනීම
+    const { id } = await params;
     const body = await request.json();
     const { isApproved } = body;
 
@@ -34,12 +33,12 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   try {
     await connectDB();
-    const { id } = await params; // 🌟 await params
+    const { id } = await params;
     await Feedback.findByIdAndDelete(id);
     return NextResponse.json({ success: true, message: 'Feedback deleted successfully' });
   } catch (error: any) {
