@@ -5,6 +5,7 @@ import { ContactInformation } from "@/models/ContactInformation";
 import { ServiceCategory } from "@/models/ServiceCategory";
 import { Portfolio } from "@/models/Portfolio";
 import { Staff } from "@/models/Staff";
+import { Service } from "@/models/Service";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
