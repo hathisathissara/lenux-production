@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // 🌟 Current URL එක හඳුනාගැනීම
-import { Phone, Clock, Menu, X, ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Phone, Clock, Menu, X } from "lucide-react";
 
 interface HeaderProps {
   phone: string;
@@ -13,19 +13,18 @@ interface HeaderProps {
 
 export default function Header({ phone, hours, companyName }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname(); // දැනට ඉන්න page එක (e.g., "/", "/about")
+  const pathname = usePathname();
 
-  // Navigation Links
+  // 🌟 අපේ ඇත්තම Pages වලට අදාළ Navigation Links
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Services", href: "/services" },
-    { name: "Branding & Print", href: "/branding-print" },
-    { name: "Staff", href: "/staff" },
-    { name: "Gallery", href: "/gallery" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "Contact", href: "/contact" },
   ];
 
-  // 🌟 දැනට ඉන්න පිටුව Active ද නැද්ද යන්න පරීක්ෂා කිරීම
+  // Current Active Page හඳුනාගැනීම
   const isActive = (href: string) => {
     if (href === "/") {
       return pathname === "/";
@@ -35,7 +34,9 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
 
   return (
     <>
-      {/* 1. TOP BAR */}
+      {/* ==========================================
+          1. TOP BAR (Phone & Business Hours)
+          ========================================== */}
       <div className="bg-[#0c0c0c] border-b border-white/5 py-2.5 text-xs text-gray-300 z-30 relative font-sans">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between sm:justify-start gap-6">
           <div className="flex items-center gap-2">
@@ -49,18 +50,20 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
         </div>
       </div>
 
-      {/* 2. MAIN HEADER */}
+      {/* ==========================================
+          2. MAIN HEADER NAVBAR
+          ========================================== */}
       <header className="absolute top-10 left-0 w-full z-40 bg-transparent font-sans">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           
-          {/* Company Name */}
+          {/* Company Name / Logo */}
           <Link href="/" className="z-50">
             <h1 className="text-base md:text-2xl font-bold tracking-wider text-white uppercase transition-all">
               {companyName}
             </h1>
           </Link>
 
-          {/* 🌟 Desktop Links with Dynamic Active Highlight */}
+          {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-8 text-sm font-normal">
             {navLinks.map((link) => {
               const active = isActive(link.href);
@@ -78,24 +81,21 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
                 </Link>
               );
             })}
-
-            <button className="hover:text-lenux-emerald transition-all flex items-center gap-1 text-gray-300">
-              More <ChevronDown size={14} />
-            </button>
           </nav>
 
-          {/* Desktop CTA Button */}
+          {/* 🌟 Desktop Primary CTA Button */}
           <Link 
-            href="/services" 
-            className="hidden lg:inline-block px-5 py-2 border border-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-lenux-emerald hover:shadow-lg hover:shadow-lenux-emerald/20 transition-all duration-300"
+            href="/contact" 
+            className="hidden lg:inline-block px-6 py-2.5 border border-lenux-emerald bg-lenux-emerald/10 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-lenux-emerald hover:shadow-lg hover:shadow-lenux-emerald/30 transition-all duration-300"
           >
-            Our Services
+            Get a Quote
           </Link>
 
-          {/* Hamburger Button (Mobile Only) */}
+          {/* Mobile Hamburger Button */}
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden z-50 text-white hover:text-lenux-emerald p-2"
+            className="lg:hidden z-50 text-white hover:text-lenux-emerald p-2 transition-all"
+            aria-label="Toggle Menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -103,7 +103,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
       </header>
 
       {/* ==========================================
-          MOBILE DRAWER MENU
+          3. MOBILE DRAWER MENU
           ========================================== */}
       <div className={`fixed inset-y-0 right-0 z-40 w-72 bg-[#080808] border-l border-white/5 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
         isMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -132,22 +132,23 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
           </nav>
         </div>
 
+        {/* Mobile CTA Button */}
         <div className="space-y-4">
           <Link 
             onClick={() => setIsMenuOpen(false)} 
-            href="/services" 
-            className="block text-center px-5 py-3 bg-lenux-emerald text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
+            href="/contact" 
+            className="block text-center px-5 py-3.5 bg-lenux-emerald text-white rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-lenux-emerald/20 transition-all"
           >
-            Our Services
+            Get a Quote
           </Link>
         </div>
       </div>
 
-      {/* Dark overlay */}
+      {/* Dark Backdrop Overlay */}
       {isMenuOpen && (
         <div 
           onClick={() => setIsMenuOpen(false)}
-          className="fixed inset-0 bg-black/60 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 lg:hidden"
         />
       )}
     </>
