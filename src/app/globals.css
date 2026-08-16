@@ -1,27 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* 1. Tailwind v4 Custom Theme Variables */
+@theme {
+  --font-sans: "Bahnschrift", Arial, sans-serif;
+
+  --color-lenux-deep: #064e3b;
+  --color-lenux-dark: #065f46;
+  --color-lenux-emerald: #10b981;
+  --color-lenux-soft: #d1fae5;
+  --color-lenux-charcoal: #1f2937;
+  --color-lenux-darkGray: #374151;
+  --color-lenux-offWhite: #f9fafb;
+}
+
+/* 2. Base HTML Elements */
 @layer base {
   body {
-    @apply font-sans font-light text-lenux-charcoal bg-white antialiased;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    color: var(--color-lenux-charcoal);
+    background-color: white;
+    -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-normal text-lenux-deep tracking-wide;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    color: var(--color-lenux-deep);
+    letter-spacing: 0.025em;
   }
 }
 
+/* 3. Custom Reusable Components */
 @layer components {
-  /* Reusable Buttons */
   .btn-primary {
     @apply inline-flex justify-center items-center px-6 py-3 bg-lenux-emerald text-white rounded transition-all duration-300 hover:bg-lenux-dark shadow-md hover:shadow-lg focus:ring-2 focus:ring-lenux-soft outline-none;
   }
-  
+
   .btn-secondary {
     @apply inline-flex justify-center items-center px-6 py-3 border border-lenux-emerald text-lenux-emerald rounded transition-all duration-300 hover:bg-lenux-soft shadow-sm;
   }
 
-  /* Admin Dashboard Inputs */
   .admin-input {
     @apply w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-lenux-emerald focus:border-transparent outline-none transition-all;
   }

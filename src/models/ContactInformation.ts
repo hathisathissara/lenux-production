@@ -1,21 +1,40 @@
-import mongoose, { Schema, models } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+
+const ImageSchema = new Schema(
+  {
+    url: { type: String, default: '' },
+    publicId: { type: String, default: '' },
+  },
+  { _id: false }
+);
 
 const ContactInformationSchema = new Schema(
   {
-    companyName: { type: String, default: 'Lenux Production' },
-    phone: { type: String },
-    secondaryPhone: { type: String },
-    whatsapp: { type: String },
-    email: { type: String },
-    address: { type: String },
-    businessHours: { type: String },
-    googleMapUrl: { type: String },
-    facebook: { type: String },
-    instagram: { type: String },
-    linkedin: { type: String },
-    otherSocial: { type: String },
+    companyName: { type: String, default: 'LENUX PRODUCTION (PVT) LTD' },
+    logo: { type: ImageSchema, default: null },
+    vision: { type: String, default: '' },
+    visionImage: { type: ImageSchema, default: null },
+    mission: { type: String, default: '' },
+    missionImage: { type: ImageSchema, default: null },
+    phone: { type: String, default: '' },
+    secondaryPhone: { type: String, default: '' },
+    whatsapp: { type: String, default: '' },
+    email: { type: String, default: '' },
+    address: { type: String, default: '' },
+    businessHours: { type: String, default: 'Mon-Sat: 09AM - 05PM' },
+    googleMapUrl: { type: String, default: '' },
+    facebook: { type: String, default: '' },
+    instagram: { type: String, default: '' },
+    linkedin: { type: String, default: '' },
+    otherSocial: { type: String, default: '' },
   },
-  { timestamps: true }
+  // strict: false දැමීමෙන් කිසිදු field එකක් Mongoose මඟින් discard නොවේ
+  { timestamps: true, strict: false }
 );
 
-export const ContactInformation = models.ContactInformation || mongoose.model('ContactInformation', ContactInformationSchema);
+// Next.js Hot Reload වලදී පරණ Model එක cache වී තිබීම වැළැක්වීම
+if (mongoose.models.ContactInformation) {
+  delete mongoose.models.ContactInformation;
+}
+
+export const ContactInformation = mongoose.model('ContactInformation', ContactInformationSchema);

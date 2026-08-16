@@ -1,0 +1,345 @@
+import Image from "next/image";
+import Link from "next/link";
+import { connectDB } from "@/lib/db";
+import { ContactInformation } from "@/models/ContactInformation";
+import { Staff } from "@/models/Staff";
+
+import Header from "@/components/Header";
+import ScrollReveal from "@/components/ScrollReveal";
+import ScrollToTop from "@/components/ScrollToTop";
+import StaffCard from "@/components/StaffCard";
+
+import { 
+  Target, Eye, Compass, ShieldCheck, Award, Sparkles, 
+  Lightbulb, Layers, Send, CheckCircle2, MessageCircle 
+} from "lucide-react";
+
+export const dynamic = "force-dynamic";
+
+async function getAboutData() {
+  await connectDB();
+  
+  // 🌟 .lean() පාවිච්චි කර Mongoose Objects වෙනුවට Plain Data ලබාගැනීම
+  const [settingsDoc, staffDocList] = await Promise.all([
+    ContactInformation.findOne().lean(),
+    Staff.find({ isActive: true }).sort({ sortOrder: 1 }).lean(),
+  ]);
+
+  // 🌟 Next.js Client Components වලට යැවීම සඳහා 100% Plain JSON Objects බවට පරිවර්තනය කිරීම
+  const settings = settingsDoc ? JSON.parse(JSON.stringify(settingsDoc)) : null;
+  const staffList = staffDocList ? JSON.parse(JSON.stringify(staffDocList)) : [];
+
+  return { settings, staffList };
+}
+
+export default async function AboutPage() {
+  const { settings, staffList } = await getAboutData();
+
+  const phone = settings?.phone || "+94 77 123 4567";
+  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
+  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
+  const email = settings?.email || "info@lenux.lk";
+  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
+  const logoUrl = settings?.logo?.url;
+
+  const visionText = settings?.vision || "To become Sri Lanka's leading creative and advertising agency, delivering innovative, high-quality, and impactful solutions that help businesses stand out and grow.";
+  const missionText = settings?.mission || "To provide fair, fast, and reliable advertising and production services that help our clients connect with their customers effectively under one roof.";
+  const visionImg = settings?.visionImage?.url || "/images/values-man-bg.jpeg";
+  const missionImg = settings?.missionImage?.url || "/images/hero-bg.jpg";
+
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">
+      
+      {/* 1. Header */}
+      <Header phone={phone} hours={hours} companyName={companyName} />
+
+      {/* ==========================================
+          ABOUT HERO BANNER
+          ========================================== */}
+      <section className="relative w-full pt-40 pb-24 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-20">
+          <Image src="/images/hero-bg.jpg" alt="About Hero" fill className="object-cover" priority />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
+          <ScrollReveal>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
+              <Sparkles size={14} /> Design • Print • Production
+            </div>
+            <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
+              About <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Lenux Production</span>
+            </h1>
+            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+              Creative ideas. Professional execution. Powerful visual results that elevate brands across Sri Lanka.
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          WHO WE ARE & COMPANY PROFILE (Logo Centered Fixed)
+          ========================================== */}
+      <section className="py-28 bg-[#040404] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div className="lg:col-span-6 space-y-6">
+            <ScrollReveal>
+              <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Company Profile</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                Your Complete <span className="text-lenux-emerald">Visual Advertising Partner</span>
+              </h2>
+              <p className="text-gray-300 text-base font-light leading-relaxed">
+                Lenux Production is a premier creative advertising and branding company in Sri Lanka. We specialize in conceptual design, precision digital & offset printing, vehicle branding, display units, signage, and end-to-end production setups.
+              </p>
+              <p className="text-gray-400 text-sm font-light leading-relaxed">
+                “Lenux is the ideal platform to take your business to the public and reach a wider audience.” We work closely with businesses of all sizes to understand their requirements and deliver results that truly represent their brand identity.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 pt-4 text-xs font-bold text-gray-200">
+                <div className="flex items-center gap-2 bg-[#0c0c0c] p-3 rounded-xl border border-white/5">
+                  <CheckCircle2 size={16} className="text-lenux-emerald" /> 100% Original Works
+                </div>
+                <div className="flex items-center gap-2 bg-[#0c0c0c] p-3 rounded-xl border border-white/5">
+                  <CheckCircle2 size={16} className="text-lenux-emerald" /> Modern Technology
+                </div>
+                <div className="flex items-center gap-2 bg-[#0c0c0c] p-3 rounded-xl border border-white/5">
+                  <CheckCircle2 size={16} className="text-lenux-emerald" /> Skilled Master Team
+                </div>
+                <div className="flex items-center gap-2 bg-[#0c0c0c] p-3 rounded-xl border border-white/5">
+                  <CheckCircle2 size={16} className="text-lenux-emerald" /> Fair & Reliable Service
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+
+          {/* Brand Logo Display Box */}
+          <div className="lg:col-span-6 w-full">
+            <ScrollReveal>
+              <div className="relative w-full h-[450px] rounded-3xl overflow-hidden border border-white/10 bg-[#080808] shadow-2xl flex items-center justify-center p-8 group">
+                {logoUrl ? (
+                  <div className="relative w-full h-full max-w-[340px] max-h-[340px]">
+                    <Image 
+                      src={logoUrl} 
+                      alt={companyName} 
+                      fill 
+                      className="object-contain p-4 group-hover:scale-105 transition-transform duration-700" 
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <div className="relative w-full h-full">
+                    <Image 
+                      src="/images/hero-bg.jpg" 
+                      alt="Production Facility" 
+                      fill 
+                      className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+              </div>
+            </ScrollReveal>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==========================================
+          OUR 4-STEP PRODUCTION APPROACH
+          ========================================== */}
+      <section className="py-28 bg-black border-t border-white/5 relative">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <ScrollReveal>
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">How We Work</span>
+              <h3 className="text-3xl sm:text-5xl font-extrabold text-white tracking-wide uppercase">
+                Our 4-Step <span className="text-lenux-emerald">Approach</span>
+              </h3>
+              <p className="text-gray-400 text-sm md:text-base font-light">
+                A seamless process engineered for flawless production from start to finish.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { step: "01", title: "Understand", desc: "We listen and carefully analyze your brand vision, target audience, and project specifications.", icon: Compass },
+              { step: "02", title: "Create", desc: "Our creative designers craft innovative 2D/3D concepts and tailored artwork.", icon: Lightbulb },
+              { step: "03", title: "Produce", desc: "Using cutting-edge machinery, premium materials, and UV finishes, we build the final visual.", icon: Layers },
+              { step: "04", title: "Deliver & Setup", desc: "On-time delivery and professional on-site installation managed seamlessly.", icon: Send }
+            ].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <ScrollReveal key={i}>
+                  <div className="p-8 rounded-3xl bg-[#090909] border border-white/5 hover:border-lenux-emerald/50 transition-all duration-500 group relative shadow-xl flex flex-col justify-between h-full">
+                    <span className="text-5xl font-black text-white/5 group-hover:text-lenux-emerald/20 transition-colors select-none absolute top-4 right-6">
+                      {item.step}
+                    </span>
+                    <div className="space-y-4 relative z-10">
+                      <div className="w-12 h-12 rounded-2xl bg-lenux-emerald/10 border border-lenux-emerald/30 flex items-center justify-center text-lenux-emerald group-hover:scale-110 transition-transform">
+                        <Icon size={24} />
+                      </div>
+                      <h4 className="text-xl font-bold text-white tracking-wide">{item.title}</h4>
+                      <p className="text-xs md:text-sm text-gray-400 font-light leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          VISION & MISSION SECTION
+          ========================================== */}
+      <section className="py-28 bg-[#050505] border-t border-white/5 relative">
+        <div className="max-w-7xl mx-auto px-6 space-y-14">
+          <ScrollReveal>
+            <div className="text-center space-y-3">
+              <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Purpose & Direction</span>
+              <h3 className="text-3xl sm:text-5xl font-extrabold text-white uppercase">
+                Vision & <span className="text-lenux-emerald">Mission</span>
+              </h3>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Vision */}
+            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between h-[520px]">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                    <Eye size={22} />
+                  </div>
+                  <span className="px-4 py-1 rounded-full bg-[#091a13] border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase">Vision</span>
+                </div>
+                <h4 className="text-2xl font-bold text-white">Our Vision</h4>
+                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">"{visionText}"</p>
+              </div>
+              <div className="relative w-full h-44 rounded-2xl overflow-hidden mt-6">
+                <Image src={visionImg} alt="Vision" fill className="object-cover" />
+              </div>
+            </div>
+
+            {/* Mission */}
+            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between h-[520px]">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                    <Target size={22} />
+                  </div>
+                  <span className="px-4 py-1 rounded-full bg-[#091a13] border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase">Mission</span>
+                </div>
+                <h4 className="text-2xl font-bold text-white">Our Mission</h4>
+                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">"{missionText}"</p>
+              </div>
+              <div className="relative w-full h-44 rounded-2xl overflow-hidden mt-6">
+                <Image src={missionImg} alt="Mission" fill className="object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          🌟 COMPLETE STAFF SHOWCASE (Full-Bleed Cards)
+          ========================================== */}
+      <section className="py-28 bg-[#040404] border-t border-white/5 relative" id="team">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <ScrollReveal>
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">The Professionals</span>
+              <h3 className="text-3xl sm:text-5xl font-extrabold text-white tracking-wide">
+                Meet the Minds Behind <span className="text-lenux-emerald">Lenux</span>
+              </h3>
+              <p className="text-gray-400 text-sm font-light">
+                Our skilled team brings passion, precision, and years of visual expertise to every project.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* 🌟 Plain JSON Passed Cleanly to Client Component */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {staffList.map((member: any) => (
+              <ScrollReveal key={member._id}>
+                <StaffCard member={member} />
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
+          CTA BANNER
+          ========================================== */}
+      <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
+        <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
+          <ScrollReveal>
+            <h3 className="text-3xl sm:text-5xl font-extrabold text-white">
+              Ready to Start Your <span className="text-lenux-emerald">Next Project?</span>
+            </h3>
+            <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
+              Let's build strong visual branding together. Contact our creative specialists today.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <Link href="/contact" className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl transition-all">
+                Get a Quote
+              </Link>
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" className="px-8 py-4 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex items-center gap-2">
+                <MessageCircle size={16} /> WhatsApp Us
+              </a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          FOOTER
+          ========================================== */}
+      <footer className="bg-[#040404] border-t border-white/10 pt-16 pb-12 text-sm text-gray-400">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/5">
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xl font-bold text-white tracking-wider uppercase">{companyName}</h4>
+            <p className="text-xs text-lenux-emerald font-semibold uppercase tracking-widest">Design, Print & Production</p>
+            <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
+              Sri Lanka's leading visual advertising and branding partner, creating impactful printing, signboards, displays, and event solutions.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h5>
+            <ul className="space-y-2 text-xs">
+              <li><Link href="/" className="hover:text-lenux-emerald">Home</Link></li>
+              <li><Link href="/about" className="hover:text-lenux-emerald">About Us</Link></li>
+              <li><Link href="/services" className="hover:text-lenux-emerald">All Services</Link></li>
+              <li><Link href="/portfolio" className="hover:text-lenux-emerald">Portfolio</Link></li>
+              <li><Link href="/contact" className="hover:text-lenux-emerald">Contact</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-3">
+            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Top Services</h5>
+            <ul className="space-y-2 text-xs">
+              <li><Link href="/services" className="hover:text-lenux-emerald">Digital Printing</Link></li>
+              <li><Link href="/services" className="hover:text-lenux-emerald">Offset Printing</Link></li>
+              <li><Link href="/services" className="hover:text-lenux-emerald">Vehicle Branding</Link></li>
+              <li><Link href="/services" className="hover:text-lenux-emerald">Board & Signage</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-3">
+            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Get In Touch</h5>
+            <p className="text-xs">{phone}</p>
+            <p className="text-xs">{email}</p>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-500 text-center sm:text-left">
+          © {new Date().getFullYear()} Lenux Production. All Rights Reserved.
+        </div>
+      </footer>
+
+      <ScrollToTop />
+
+    </div>
+  );
+}
