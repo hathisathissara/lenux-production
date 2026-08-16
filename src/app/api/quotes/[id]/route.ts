@@ -2,17 +2,21 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { QuoteRequest } from '@/models/QuoteRequest';
 
-// PATCH Update Quote Status and Admin Notes
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+// 🌟 params: Promise<{ id: string }> ලෙස async type එකක් ලබාදෙයි
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDB();
+    const { id } = await params; // 🌟 await params
     const body = await request.json();
     const { status, adminNotes } = body;
 
     const updatedQuote = await QuoteRequest.findByIdAndUpdate(
-      params.id,
+      id,
       { status, adminNotes },
-      { new: true } // Update වූ අලුත්ම document එක return කරනවා
+      { new: true }
     );
 
     if (!updatedQuote) {
@@ -25,11 +29,14 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
-// DELETE Quote Request
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDB();
-    await QuoteRequest.findByIdAndDelete(params.id);
+    const { id } = await params; // 🌟 await params
+    await QuoteRequest.findByIdAndDelete(id);
     return NextResponse.json({ success: true, message: 'Quotation deleted successfully' });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
