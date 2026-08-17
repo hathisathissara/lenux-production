@@ -71,7 +71,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
         <nav className={`w-full transition-all duration-300 border-b ${
           isScrolled 
           ? "bg-black/30 backdrop-blur-md border-white/10 shadow-2xl py-3.5" 
-          : "bg-gradient-to-b from-black/50 to-transparent border-transparent py-4"
+          : "bg-gradient-to-b from-black/40 to-transparent border-transparent py-4"
         }`}>
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             
