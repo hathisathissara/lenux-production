@@ -31,10 +31,8 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
   return (
     <div className="space-y-12">
       
-      {/* 🌟 1. SEARCH & CATEGORY FILTER BAR */}
+      {/* SEARCH & CATEGORY FILTER BAR */}
       <div className="space-y-6">
-        
-        {/* Search Input Box */}
         <div className="max-w-xl mx-auto relative">
           <input
             type="text"
@@ -75,7 +73,7 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
         </div>
       </div>
 
-      {/* 🌟 2. SERVICES GRID */}
+      {/* SERVICES GRID */}
       {filteredServices.length === 0 ? (
         <div className="bg-[#0a0a0a] rounded-3xl p-16 text-center border border-white/5 space-y-4 max-w-xl mx-auto">
           <Layers size={48} className="mx-auto text-lenux-emerald opacity-60" />
@@ -98,7 +96,6 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
               className="rounded-3xl bg-[#090909] border border-white/5 overflow-hidden hover:border-lenux-emerald/40 transition-all duration-500 group shadow-2xl flex flex-col justify-between h-full"
             >
               <div>
-                {/* Service Cover Image */}
                 <div className="relative w-full h-60 bg-gray-900 overflow-hidden">
                   {service.image?.url ? (
                     <Image
@@ -112,13 +109,11 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#090909] via-transparent to-transparent" />
                   
-                  {/* Category Pill Tag */}
                   <span className="absolute top-4 left-4 z-10 px-3 py-1 bg-black/70 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-lenux-emerald">
                     {service.category?.name || "Production"}
                   </span>
                 </div>
 
-                {/* Service Info */}
                 <div className="p-7 space-y-3">
                   <h4 className="text-xl font-bold text-white group-hover:text-lenux-emerald transition-colors">
                     {service.title}
@@ -129,13 +124,13 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
                 </div>
               </div>
 
-              {/* Action Bar */}
+              {/* 🌟 Action Bar: Request Quote වෙනුවට View Projects (Portfolio Filter) වෙත යොමු වේ */}
               <div className="p-7 pt-0 flex items-center justify-between border-t border-white/5 mt-4 pt-4">
                 <Link
-                  href="/contact"
+                  href={`/portfolio?service=${encodeURIComponent(service.title)}`}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-lenux-emerald hover:text-white transition-colors"
                 >
-                  Request Quote <ArrowRight size={14} />
+                  View Related Projects <ArrowRight size={14} />
                 </Link>
                 
                 <span className="text-[10px] text-gray-500 uppercase tracking-widest flex items-center gap-1">

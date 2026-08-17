@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,17 +11,31 @@ interface PortfolioGalleryProps {
 }
 
 export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [activeProject, setActiveProject] = useState<any | null>(null);
   const searchParams = useSearchParams();
+  const serviceParam = searchParams.get("service");
+  const categoryParam = searchParams.get("category");
   const openId = searchParams.get("open");
 
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [activeProject, setActiveProject] = useState<any | null>(null);
+
+  // 🌟 Services පිටුවෙන් හෝ URL එකෙන් එන Query Param එක අනුව Auto Filter වීම
+  useEffect(() => {
+    if (serviceParam) {
+      setSelectedCategory(serviceParam);
+    } else if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [serviceParam, categoryParam]);
+
+  // URL එකේ ?open=<id> තිබේ නම් අදාළ Modal එක Auto Open වීම
   useEffect(() => {
     if (openId && projects.length > 0) {
       const found = projects.find((p) => p._id === openId);
       if (found) setActiveProject(found);
     }
   }, [openId, projects]);
+
   // Available unique categories from projects
   const categories = [
     "all",
@@ -32,7 +45,8 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
   // Filter projects by selected service/category
   const filteredProjects = projects.filter((project) => {
     if (selectedCategory === "all") return true;
-    return (project.service?.title || "Branding") === selectedCategory;
+    const serviceTitle = project.service?.title || "";
+    return serviceTitle.toLowerCase() === selectedCategory.toLowerCase();
   });
 
   return (
@@ -45,7 +59,7 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 ${
-              selectedCategory === cat
+              selectedCategory.toLowerCase() === cat.toLowerCase()
                 ? "bg-lenux-emerald text-white shadow-lg shadow-lenux-emerald/30 scale-105"
                 : "bg-[#0d0d0d] text-gray-400 border border-white/5 hover:border-lenux-emerald/50 hover:text-white"
             }`}
@@ -63,6 +77,12 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
           <p className="text-sm text-gray-400 font-light">
             No portfolio projects added in this category yet.
           </p>
+          <button
+            onClick={() => setSelectedCategory("all")}
+            className="px-6 py-2.5 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-lenux-emerald hover:bg-lenux-emerald hover:text-white transition-all"
+          >
+            Show All Projects
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
