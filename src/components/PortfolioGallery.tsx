@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, Eye, X, Calendar, User, ArrowRight, Layers, ImageIcon } from "lucide-react";
@@ -12,7 +14,15 @@ interface PortfolioGalleryProps {
 export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeProject, setActiveProject] = useState<any | null>(null);
+  const searchParams = useSearchParams();
+  const openId = searchParams.get("open");
 
+  useEffect(() => {
+    if (openId && projects.length > 0) {
+      const found = projects.find((p) => p._id === openId);
+      if (found) setActiveProject(found);
+    }
+  }, [openId, projects]);
   // Available unique categories from projects
   const categories = [
     "all",
