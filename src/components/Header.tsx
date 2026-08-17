@@ -16,7 +16,6 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Scroll වෙද්දී Header එකට background එකක් එකතු වීම සඳහා
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 40) {
@@ -47,12 +46,12 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
   return (
     <>
       {/* ==========================================
-          🌟 FIXED HEADER CONTAINER (Top Bar + Navbar එකම උඩ fixed වේ)
+          🌟 FIXED HEADER CONTAINER (උඩම Fixed වී ඇත)
           ========================================== */}
       <div className="fixed top-0 left-0 w-full z-50 font-sans transition-all duration-300">
         
-        {/* 1. TOP BAR (ස්ක්‍රෝල් කළ විට කුඩා වී හෝ සඟවාගත හැක, මෙහි උඩම fixed ඇත) */}
-        <div className={`bg-[#0c0c0c] border-b border-white/5 py-2 text-xs text-gray-300 transition-all duration-300 ${
+        {/* Top Bar */}
+        <div className={`bg-[#0c0c0c]/90 border-b border-white/5 py-2 text-xs text-gray-300 transition-all duration-300 ${
           isScrolled ? "hidden sm:block opacity-90" : "block"
         }`}>
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between sm:justify-start gap-6">
@@ -67,17 +66,17 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
           </div>
         </div>
 
-        {/* 2. MAIN NAVBAR (Glassmorphic Dark Effect on Scroll) */}
-        <nav className={`w-full transition-all duration-300 border-b ${
+        {/* 🌟 MAIN NAVBAR (උඩම ඉද්දී Transparent වේ. පහළට Scroll කළ විට Glassmorphic වේ) */}
+        <nav className={`w-full transition-all duration-500 border-b ${
           isScrolled 
-          ? "bg-black/30 backdrop-blur-md border-white/10 shadow-2xl py-3.5" 
-          : "bg-gradient-to-b from-black/40 to-transparent border-transparent py-4"
+          ? "bg-black/50 backdrop-blur-md border-white/10 shadow-2xl py-3.5" // Scroll කරද්දී පමණක් Glass Effect
+          : "bg-transparent border-transparent py-4" // උඩම ඉද්දී 100% Transparent (පසුබිමේ පින්තූරය පෙනේ)
         }`}>
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             
             {/* Company Name / Logo */}
             <Link href="/" className="z-50">
-              <h1 className="text-base md:text-xl font-bold tracking-wider text-white uppercase transition-all">
+              <h1 className="text-base md:text-xl font-bold tracking-wider text-white uppercase transition-all drop-shadow-md">
                 {companyName}
               </h1>
             </Link>
@@ -90,10 +89,10 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`transition-all duration-300 ${
+                    className={`transition-all duration-300 drop-shadow ${
                       active
-                        ? "text-lenux-emerald font-semibold drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]"
-                        : "text-gray-300 hover:text-lenux-emerald"
+                        ? "text-lenux-emerald font-semibold drop-shadow-[0_0_12px_rgba(16,185,129,0.7)]"
+                        : "text-gray-200 hover:text-lenux-emerald"
                     }`}
                   >
                     {link.name}
@@ -122,11 +121,8 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
         </nav>
       </div>
 
-      {/* 🌟 Header එක fixed කර ඇති නිසා Content යටට වැටීම වැළැක්වීමට Top Padding එකක් ලබා දේ */}
-      <div className="pt-24 sm:pt-28" />
-
       {/* ==========================================
-          3. MOBILE DRAWER MENU
+          MOBILE DRAWER MENU
           ========================================== */}
       <div className={`fixed inset-y-0 right-0 z-50 w-72 bg-[#080808] border-l border-white/5 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
         isMenuOpen ? "translate-x-0" : "translate-x-full"
