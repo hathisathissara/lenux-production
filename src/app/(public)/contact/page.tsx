@@ -7,22 +7,12 @@ import { Service } from "@/models/Service";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import ScrollToTop from "@/components/ScrollToTop";
-import ContactQuoteForm from "@/components/ContactQuoteForm"; // 🌟 Quotation Form
+import ContactQuoteForm from "@/components/ContactQuoteForm"; // Quotation Form
+import FeedbackForm from "@/components/FeedbackForm"; // 🌟 Feedback Review Form
 
 import { 
-  Phone, Mail, MapPin, Clock, MessageCircle, Sparkles 
+  Phone, Mail, MapPin, Clock, MessageCircle, Sparkles, MessageSquare 
 } from "lucide-react";
-
-// Inline Build-Safe SVGs
-const FacebookIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
-);
-const InstagramIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
-);
-const LinkedinIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-);
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +66,7 @@ export default async function ContactPage() {
               Contact & <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Quotation</span>
             </h1>
             <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              We are ready to bring your branding and production ideas to life. Connect with our team today.
+              We are ready to bring your branding and production ideas to life. Connect with our team or share your feedback below.
             </p>
           </ScrollReveal>
         </div>
@@ -173,13 +163,24 @@ export default async function ContactPage() {
       </section>
 
       {/* ==========================================
-          🌟 FULL-WIDTH GOOGLE MAP PREVIEW
+          🌟 FEEDBACK SUBMISSION SECTION (Contact Page එක යටින් එකතු කර ඇත)
+          ========================================== */}
+      <section className="py-24 bg-[#070707] border-t border-white/5 relative">
+        <div className="max-w-3xl mx-auto px-6">
+          <ScrollReveal>
+            <FeedbackForm />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          🌟 FULL-WIDTH FULL-COLOR GOOGLE MAP (ග්‍රේස්කෙල් ඉවත් කර සම්පූර්ණ වර්ණවත් කර ඇත)
           ========================================== */}
       <section className="relative w-full h-[450px] bg-[#0c0c0c] border-t border-white/5 overflow-hidden">
         {mapUrl ? (
           <iframe
             src={mapUrl}
-            className="w-full h-full border-0 grayscale invert contrast-125 opacity-80"
+            className="w-full h-full border-0" // 🌟 පරණ grayscale / invert ඉවත් කර සම්පූර්ණ වර්ණවත් Map එක ලබා දී ඇත
             allowFullScreen={false}
             loading="lazy"
           />

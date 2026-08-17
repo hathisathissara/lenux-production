@@ -5,11 +5,13 @@ import { ContactInformation } from "@/models/ContactInformation";
 import { ServiceCategory } from "@/models/ServiceCategory";
 import { Portfolio } from "@/models/Portfolio";
 import { Staff } from "@/models/Staff";
+import { Feedback } from "@/models/Feedback"; // 🌟 Testimonials Model
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import ScrollToTop from "@/components/ScrollToTop";
-import StaffCard from "@/components/StaffCard"; // 🌟 About පිටුවේ හැදූ Interactive Staff Card එක
+import StaffCard from "@/components/StaffCard"; // Interactive Staff Card
+import TestimonialsSection from "@/components/TestimonialsSection"; // 🌟 Testimonials Slideshow
 
 import { 
   Target, Eye, ArrowRight, ShieldCheck, Award, Zap, 
@@ -33,11 +35,12 @@ export const dynamic = "force-dynamic";
 async function getHomeData() {
   await connectDB();
 
-  const [settingsDoc, categoriesDoc, projectsDoc, staffDoc] = await Promise.all([
+  const [settingsDoc, categoriesDoc, projectsDoc, staffDoc, feedbackDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
     ServiceCategory.find({ isActive: true }).sort({ sortOrder: 1 }).limit(8).lean(),
     Portfolio.find({ isFeatured: true, isPublished: true }).populate('service', 'title').limit(6).lean(),
     Staff.find({ isFeatured: true, isActive: true }).sort({ sortOrder: 1 }).limit(4).lean(),
+    Feedback.find({ isApproved: true }).sort({ createdAt: -1 }).lean(), // 🌟 Approved Feedbacks
   ]);
 
   return {
@@ -45,14 +48,15 @@ async function getHomeData() {
     categories: categoriesDoc ? JSON.parse(JSON.stringify(categoriesDoc)) : [],
     featuredProjects: projectsDoc ? JSON.parse(JSON.stringify(projectsDoc)) : [],
     featuredStaff: staffDoc ? JSON.parse(JSON.stringify(staffDoc)) : [],
+    feedbacks: feedbackDoc ? JSON.parse(JSON.stringify(feedbackDoc)) : [], // 🌟 Pass to page
   };
 }
 
 export default async function HomePage() {
-  const { settings, categories, featuredProjects, featuredStaff } = await getHomeData();
+  const { settings, categories, featuredProjects, featuredStaff, feedbacks } = await getHomeData();
 
   const phone = settings?.phone || "+94 77 123 4567";
-  const secondaryPhone=settings?.secondaryPhone || "+94 77 123 4567";
+  const secondaryPhone = settings?.secondaryPhone || "+94 11 123 4567";
   const whatsapp = settings?.whatsapp || "+94 77 123 4567";
   const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
   const email = settings?.email || "info@lenux.lk";
@@ -363,7 +367,7 @@ export default async function HomePage() {
       </section>
 
       {/* ==========================================
-          🌟 SECTION 07 — FEATURED PORTFOLIO (Click opens Portfolio page with auto modal!)
+          🌟 SECTION 07 — FEATURED PORTFOLIO
           ========================================== */}
       <section className="py-28 bg-black border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
@@ -382,7 +386,6 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
 
-          {/* 🌟 Clicking any project navigates to /portfolio?open=<id> so it automatically opens the modal */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map((proj: any) => (
               <ScrollReveal key={proj._id}>
@@ -409,7 +412,7 @@ export default async function HomePage() {
       </section>
 
       {/* ==========================================
-          🌟 SECTION 08 — MEET OUR TEAM (Using Interactive StaffCard!)
+          🌟 SECTION 08 — MEET OUR TEAM
           ========================================== */}
       <section className="py-28 bg-[#050505] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
@@ -425,7 +428,6 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
 
-          {/* 🌟 Full-Bleed Interactive StaffCards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featuredStaff.map((member: any) => (
               <ScrollReveal key={member._id}>
@@ -435,6 +437,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ==========================================
+          🌟 TESTIMONIALS SLIDESHOW (පාරිභෝගික අදහස් ස්ලයිඩ්ෂෝව)
+          ========================================== */}
+      <TestimonialsSection feedbacks={feedbacks} />
 
       {/* ==========================================
           SECTION 09 — CLIENT CTA BANNER
@@ -520,12 +527,11 @@ export default async function HomePage() {
             </ScrollReveal>
           </div>
 
-          {/* 🌟 Full Color Google Maps Embed (ග්‍රේස්කෙල් ඉවත් කර වර්ණවත් කර ඇත) */}
           <div className="lg:col-span-7 h-[420px] rounded-3xl overflow-hidden border border-white/10 bg-[#0c0c0c] relative shadow-2xl">
             {mapUrl ? (
               <iframe 
                 src={mapUrl} 
-                className="w-full h-full border-0" // 🌟 පරණ grayscale invert ඉවත් කර සම්පූර්ණ වර්ණවත් Map එක ලබා දී ඇත
+                className="w-full h-full border-0" 
                 allowFullScreen={false} 
                 loading="lazy" 
               />
@@ -539,7 +545,7 @@ export default async function HomePage() {
 
         </div>
       </section>
-
+      
       {/* ==========================================
           SECTION 11 — MAIN FOOTER
           ========================================== */}
