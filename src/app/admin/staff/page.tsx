@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Upload, Trash, Check, AlertCircle, User, Award } from "lucide-react";
+import { Plus, Upload, Trash, Check, AlertCircle, Award, Edit, X } from "lucide-react";
 
 // ==========================================
 // 100% BUILD-SAFE INLINE SVG BRAND ICONS
@@ -37,23 +37,34 @@ export default function StaffManagement() {
   const [team, setTeam] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Form States
+  // Form States (Create)
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [bio, setBio] = useState("");
   const [sortOrder, setSortOrder] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isActive, setIsActive] = useState(true);
-
-  // Social Media Links (Memeber කෙනෙක් දාද්දි මේ ටික Database එකට යනවා)
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-
-  // Photo Upload State
   const [photo, setPhoto] = useState<{ url: string; publicId: string } | null>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  // Edit Modal States
+  const [editingStaff, setEditingStaff] = useState<any | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editPosition, setEditPosition] = useState("");
+  const [editBio, setEditBio] = useState("");
+  const [editSortOrder, setEditSortOrder] = useState(0);
+  const [editFeatured, setEditFeatured] = useState(false);
+  const [editActive, setEditActive] = useState(true);
+  const [editFacebook, setEditFacebook] = useState("");
+  const [editInstagram, setEditInstagram] = useState("");
+  const [editLinkedin, setEditLinkedin] = useState("");
+  const [editWhatsapp, setEditWhatsapp] = useState("");
+  const [editPhoto, setEditPhoto] = useState<{ url: string; publicId: string } | null>(null);
+  const [updating, setUpdating] = useState(false);
 
   const [message, setMessage] = useState({ text: "", type: "" });
 
@@ -80,22 +91,22 @@ export default function StaffManagement() {
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
 
-  // Photo Upload Handler
+  const uploadStaffPhoto = async (file: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "staff");
+    const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+    return await res.json();
+  };
+
+  // Photo Upload Handler (Create)
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingPhoto(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("folder", "staff");
-
     try {
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: formData
-      });
-      const data = await res.json();
+      const data = await uploadStaffPhoto(file);
       if (data.success) {
         setPhoto({ url: data.url, publicId: data.publicId });
         showNotification("Profile photo uploaded!", "success");
@@ -107,7 +118,7 @@ export default function StaffManagement() {
     }
   };
 
-  // Submit Staff Form
+  // Submit Staff Form (Create)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !position || !photo) {
@@ -127,35 +138,95 @@ export default function StaffManagement() {
           sortOrder,
           isFeatured,
           isActive,
-          // Social Links සේරම මෙතනින් Database එකට සේව් වෙනවා
-          socialLinks: {
-            facebook,
-            instagram,
-            linkedin,
-            whatsapp
-          }
+          socialLinks: { facebook, instagram, linkedin, whatsapp }
         })
       });
 
       const data = await res.json();
       if (data.success) {
         showNotification("Staff member added successfully!", "success");
-        // Clear Form
-        setName("");
-        setPosition("");
-        setBio("");
-        setSortOrder(0);
-        setIsFeatured(false);
-        setIsActive(true);
-        setFacebook("");
-        setInstagram("");
-        setLinkedin("");
-        setWhatsapp("");
+        setName(""); setPosition(""); setBio(""); setSortOrder(0);
+        setIsFeatured(false); setIsActive(true);
+        setFacebook(""); setInstagram(""); setLinkedin(""); setWhatsapp("");
         setPhoto(null);
         fetchStaff();
       }
     } catch (err) {
       showNotification("Failed to add staff member", "error");
+    }
+  };
+
+  // Delete Staff Member
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this staff member?")) return;
+
+    try {
+      const res = await fetch(`/api/admin/staff/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        showNotification("Staff member deleted successfully!", "success");
+        fetchStaff();
+      }
+    } catch (err) {
+      showNotification("Failed to delete staff member", "error");
+    }
+  };
+
+  // Open Edit Modal
+  const handleOpenEdit = (member: any) => {
+    setEditingStaff(member);
+    setEditName(member.name);
+    setEditPosition(member.position);
+    setEditBio(member.bio || "");
+    setEditSortOrder(member.sortOrder || 0);
+    setEditFeatured(member.isFeatured || false);
+    setEditActive(member.isActive !== undefined ? member.isActive : true);
+    setEditFacebook(member.socialLinks?.facebook || "");
+    setEditInstagram(member.socialLinks?.instagram || "");
+    setEditLinkedin(member.socialLinks?.linkedin || "");
+    setEditWhatsapp(member.socialLinks?.whatsapp || "");
+    setEditPhoto(member.photo);
+  };
+
+  // Submit Update Staff (PUT)
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStaff) return;
+    setUpdating(true);
+
+    try {
+      const res = await fetch(`/api/admin/staff/${editingStaff._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editName,
+          position: editPosition,
+          bio: editBio,
+          sortOrder: editSortOrder,
+          isFeatured: editFeatured,
+          isActive: editActive,
+          photo: editPhoto,
+          socialLinks: {
+            facebook: editFacebook,
+            instagram: editInstagram,
+            linkedin: editLinkedin,
+            whatsapp: editWhatsapp
+          }
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        showNotification("Staff member updated successfully!", "success");
+        setEditingStaff(null);
+        fetchStaff();
+      } else {
+        showNotification(data.message || "Update failed", "error");
+      }
+    } catch (err) {
+      showNotification("Failed to update staff member", "error");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -169,13 +240,11 @@ export default function StaffManagement() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-lenux-deep">Team / Staff Management</h1>
         <p className="text-lenux-darkGray mt-1">Manage the creative minds behind Lenux Production.</p>
       </div>
 
-      {/* Notifications */}
       {message.text && (
         <div className={`p-4 rounded-xl flex items-center gap-3 border ${
           message.type === "success" ? "bg-emerald-50 text-emerald-800 border-emerald-200" : "bg-red-50 text-red-800 border-red-200"
@@ -185,12 +254,11 @@ export default function StaffManagement() {
         </div>
       )}
 
-      {/* Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* LEFT COLUMN: STAFF LIST */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-lenux-deep mb-6">Current Team Members</h3>
+          <h3 className="text-lg font-bold text-lenux-deep mb-6">Current Team Members ({team.length})</h3>
           
           {team.length === 0 ? (
             <p className="text-gray-400 text-sm">No staff members added yet.</p>
@@ -199,19 +267,11 @@ export default function StaffManagement() {
               {team.map((member) => (
                 <div key={member._id} className="border border-gray-100 rounded-2xl p-5 flex gap-4 hover:shadow-md transition-all relative">
                   
-                  {/* Avatar Image using next/image */}
                   <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
-                    <Image 
-                      src={member.photo.url} 
-                      alt={member.name} 
-                      fill 
-                      className="object-cover"
-                      sizes="80px"
-                    />
+                    <Image src={member.photo.url} alt={member.name} fill className="object-cover" sizes="80px" />
                   </div>
 
-                  {/* Profile Details */}
-                  <div className="space-y-1.5 flex-1">
+                  <div className="space-y-1.5 flex-1 pr-12">
                     <div className="flex items-center justify-between gap-2">
                       <h4 className="font-bold text-lenux-charcoal text-base">{member.name}</h4>
                       <div className="flex gap-1">
@@ -230,7 +290,6 @@ export default function StaffManagement() {
                       <p className="text-xs text-lenux-darkGray line-clamp-2 leading-relaxed">{member.bio}</p>
                     )}
 
-                    {/* Social Icons Indicators */}
                     <div className="flex gap-2 pt-2 text-gray-400">
                       {member.socialLinks?.facebook && <FacebookIcon className="w-4 h-4 text-blue-600" />}
                       {member.socialLinks?.instagram && <InstagramIcon className="w-4 h-4 text-pink-600" />}
@@ -239,10 +298,15 @@ export default function StaffManagement() {
                     </div>
                   </div>
 
-                  {/* Delete Button */}
-                  <button className="absolute bottom-4 right-4 text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg transition-all">
-                    <Trash size={16} />
-                  </button>
+                  {/* Edit & Delete Buttons */}
+                  <div className="absolute bottom-4 right-4 flex gap-1">
+                    <button onClick={() => handleOpenEdit(member)} className="text-blue-500 hover:text-blue-700 p-1.5 hover:bg-blue-50 rounded-lg transition-all" title="Edit">
+                      <Edit size={16} />
+                    </button>
+                    <button onClick={() => handleDelete(member._id)} className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all" title="Delete">
+                      <Trash size={16} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -282,7 +346,6 @@ export default function StaffManagement() {
               <textarea rows={2} className="admin-input" placeholder="Brief intro..." value={bio} onChange={(e) => setBio(e.target.value)} />
             </div>
 
-            {/* Profile Photo Upload */}
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Profile Photo</label>
               <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
@@ -300,7 +363,6 @@ export default function StaffManagement() {
               </div>
             </div>
 
-            {/* Social Media Links Section */}
             <div className="border-t border-gray-100 pt-4 space-y-3">
               <span className="block text-xs font-bold text-lenux-deep uppercase">Social Profiles (Optional)</span>
               
@@ -340,6 +402,88 @@ export default function StaffManagement() {
         </div>
 
       </div>
+
+      {/* ==========================================
+          🌟 EDIT STAFF MODAL
+          ========================================== */}
+      {editingStaff && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col justify-between">
+            
+            <div className="p-6 bg-lenux-deep text-white flex justify-between items-center">
+              <h3 className="text-lg font-bold">Edit Staff Member</h3>
+              <button onClick={() => setEditingStaff(null)} className="text-white/80 hover:text-white p-1">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdate} className="p-6 space-y-4 overflow-y-auto">
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Full Name</label>
+                <input type="text" required className="admin-input" value={editName} onChange={(e) => setEditName(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Position / Title</label>
+                <input type="text" required className="admin-input" value={editPosition} onChange={(e) => setEditPosition(e.target.value)} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Display Order</label>
+                  <input type="number" className="admin-input" value={editSortOrder} onChange={(e) => setEditSortOrder(Number(e.target.value))} />
+                </div>
+                <div className="flex flex-col justify-end pb-2">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-lenux-charcoal font-medium">
+                    <input type="checkbox" className="rounded text-lenux-emerald focus:ring-lenux-emerald" checked={editFeatured} onChange={(e) => setEditFeatured(e.target.checked)} />
+                    Feature on Home
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Brief Bio</label>
+                <textarea rows={2} className="admin-input" value={editBio} onChange={(e) => setEditBio(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Profile Photo</label>
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
+                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if(file) {
+                      const data = await	uploadStaffPhoto(file);
+                      if(data.success) setEditPhoto({ url: data.url, publicId: data.publicId });
+                    }
+                  }} />
+                  {editPhoto?.url ? (
+                    <div className="text-center relative w-16 h-16">
+                      <Image src={editPhoto.url} alt="Edit preview" fill className="object-cover rounded-full" />
+                    </div>
+                  ) : (
+                    <span className="text-xs text-gray-400">Upload new photo</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-4 space-y-3">
+                <span className="block text-xs font-bold text-lenux-deep uppercase">Social Profiles</span>
+                <input type="url" className="admin-input py-1 text-sm" placeholder="Facebook URL" value={editFacebook} onChange={(e) => setEditFacebook(e.target.value)} />
+                <input type="url" className="admin-input py-1 text-sm" placeholder="Instagram URL" value={editInstagram} onChange={(e) => setEditInstagram(e.target.value)} />
+                <input type="url" className="admin-input py-1 text-sm" placeholder="LinkedIn URL" value={editLinkedin} onChange={(e) => setEditLinkedin(e.target.value)} />
+                <input type="text" className="admin-input py-1 text-sm" placeholder="WhatsApp Number" value={editWhatsapp} onChange={(e) => setEditWhatsapp(e.target.value)} />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onClick={() => setEditingStaff(null)} className="px-5 py-2.5 border rounded-xl text-sm text-gray-600">Cancel</button>
+                <button type="submit" disabled={updating} className="btn-primary text-sm px-6">{updating ? "Updating..." : "Save Changes"}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
