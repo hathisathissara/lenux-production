@@ -25,7 +25,7 @@ export async function PUT(
     const updatedCat = await ServiceCategory.findByIdAndUpdate(
       id,
       { $set: body },
-      { new: true }
+      {returnDocument: 'after' }
     );
 
     return NextResponse.json({ success: true, message: 'Category updated successfully', data: updatedCat });

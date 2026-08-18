@@ -26,7 +26,7 @@ export async function PUT(
     const updatedStaff = await Staff.findByIdAndUpdate(
       id,
       { $set: body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     return NextResponse.json({ success: true, message: 'Staff member updated successfully', data: updatedStaff });

@@ -26,7 +26,7 @@ export async function PUT(
     const updatedProject = await Portfolio.findByIdAndUpdate(
       id,
       { $set: body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     return NextResponse.json({ success: true, message: 'Portfolio updated successfully', data: updatedProject });

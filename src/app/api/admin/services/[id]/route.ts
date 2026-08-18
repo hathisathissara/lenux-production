@@ -26,7 +26,7 @@ export async function PUT(
     const updatedService = await Service.findByIdAndUpdate(
       id,
       { $set: body },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     return NextResponse.json({ success: true, message: 'Service updated successfully', data: updatedService });

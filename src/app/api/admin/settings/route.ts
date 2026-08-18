@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const updatedSettings = await ContactInformation.findOneAndUpdate(
       {},
       { $set: body },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      {upsert: true, setDefaultsOnInsert: true,returnDocument: 'after' }
     );
 
     return NextResponse.json({

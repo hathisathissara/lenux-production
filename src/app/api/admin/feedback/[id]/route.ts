@@ -15,7 +15,7 @@ export async function PATCH(
     const updatedFeedback = await Feedback.findByIdAndUpdate(
       id,
       { isApproved },
-      { new: true }
+      { returnDocument: 'after'}
     );
 
     if (!updatedFeedback) {
