@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"; // 🌟 Link එක import කර ඇත
+import { ArrowLeft } from "lucide-react"; // 🌟 Back Arrow Icon එක
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -25,7 +27,6 @@ export default function AdminLogin() {
       const data = await res.json();
 
       if (data.success) {
-        // Login හරිනම් Dashboard එකට යවනවා
         router.push("/admin");
         router.refresh();
       } else {
@@ -39,13 +40,24 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-lenux-offWhite px-4">
+    <div className="min-h-screen flex items-center justify-center bg-lenux-offWhite px-4 relative font-sans">
+      
+      {/* 🌟 Back to Home Button (උඩම වම් කෙළවරේ) */}
+      <div className="absolute top-6 left-6">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-lenux-darkGray hover:text-lenux-emerald transition-colors bg-white px-4 py-2.5 rounded-full shadow-sm border border-gray-200"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </Link>
+      </div>
+
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border-t-4 border-lenux-emerald">
         
         {/* Logo / Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-lenux-deep uppercase tracking-wider">Lenux</h1>
-          <p className="text-sm text-lenux-darkGray tracking-widest mt-1">PRODUCTION</p>
+          <p className="text-xs text-lenux-darkGray tracking-widest mt-1">PRODUCTION</p>
           <h2 className="text-xl mt-6 text-lenux-charcoal">Admin Login</h2>
         </div>
 
