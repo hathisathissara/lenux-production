@@ -64,27 +64,13 @@ export default async function TeamPage() {
           </ScrollReveal>
         </div>
       </section>
-
       {/* ==========================================
-          🌟 FULL TEAM SHOWCASE GRID
+          🌟 FULL TEAM SHOWCASE GRID (Cleaned up heading)
           ========================================== */}
       <section className="py-28 bg-[#040404] relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           
-          <ScrollReveal>
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest flex items-center justify-center gap-1.5">
-                <Users size={14} /> Professionals At Work
-              </span>
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-wide uppercase">
-                Driving Excellence Under <span className="text-lenux-emerald">One Roof</span>
-              </h3>
-              <p className="text-gray-400 text-sm font-light">
-                Hover over the cards (or tap on mobile) to view detailed bios and social profile connections.
-              </p>
-            </div>
-          </ScrollReveal>
-
+          {/* අමතර Heading එක ඉවත් කර, කෙලින්ම Cards ටික පෙන්වන සේ සකසා ඇත */}
           {staffList.length === 0 ? (
             <div className="bg-[#0a0a0a] rounded-3xl p-16 text-center border border-white/5 space-y-4 max-w-xl mx-auto">
               <Award size={48} className="mx-auto text-lenux-emerald opacity-60" />
