@@ -1,5 +1,16 @@
 import mongoose, { Schema, models } from 'mongoose';
 
+// 🌟 ServiceCategory Schema එක අනිවාර්යයෙන් මෙහි සම්බන්ධ විය යුතුය (Population සඳහා)
+import '@/models/ServiceCategory';
+
+const ImageSchema = new Schema(
+  {
+    url: { type: String, required: true },
+    publicId: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const ServiceSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -7,16 +18,8 @@ const ServiceSchema = new Schema(
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceCategory', required: true },
     shortDescription: { type: String, required: true },
     description: { type: String, required: true },
-    image: {
-      url: { type: String, required: true },
-      publicId: { type: String, required: true },
-    },
-    gallery: [
-      {
-        url: { type: String },
-        publicId: { type: String },
-      },
-    ],
+    image: { type: ImageSchema, required: true },
+    gallery: [ImageSchema],
     isActive: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },
     sortOrder: { type: Number, default: 0 },
@@ -24,4 +27,9 @@ const ServiceSchema = new Schema(
   { timestamps: true }
 );
 
-export const Service = models.Service || mongoose.model('Service', ServiceSchema);
+// Next.js Hot Reload වලදී Stale Model Cache වීම වැළැක්වීම
+if (mongoose.models.Service) {
+  delete mongoose.models.Service;
+}
+
+export const Service = mongoose.model('Service', ServiceSchema);
