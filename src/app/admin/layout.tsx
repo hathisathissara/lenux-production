@@ -18,9 +18,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Services', href: '/admin/services', icon: Briefcase },
     { name: 'Portfolio', href: '/admin/portfolio', icon: ImageIcon },
+    { name: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
     { name: 'Team / Staff', href: '/admin/staff', icon: Users },
     { name: 'Quote Requests', href: '/admin/quotes', icon: FileText },
-     { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },
+    { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 

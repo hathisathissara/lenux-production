@@ -32,7 +32,9 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Services", href: "/services" },
+    { name: "Team", href: "/team" },
     { name: "Portfolio", href: "/portfolio" },
+    { name: "Gallery", href: "/gallery" },
     { name: "Contact", href: "/contact" },
   ];
 

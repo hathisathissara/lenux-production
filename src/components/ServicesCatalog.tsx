@@ -16,10 +16,15 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
 
   // Category සහ Search Query එක අනුව Services Filter කිරීම
   const filteredServices = services.filter((service) => {
+    const serviceCatId = service.category?._id?.toString() || service.category?.toString();
+    const serviceCatSlug = service.category?.slug?.toLowerCase() || "";
+    const serviceCatName = service.category?.name?.toLowerCase() || "";
+
     const matchesCategory = 
       selectedCategory === "all" || 
-      service.category?._id === selectedCategory || 
-      service.category?.slug === selectedCategory;
+      serviceCatId === selectedCategory || 
+      serviceCatSlug === selectedCategory.toLowerCase() ||
+      serviceCatName === selectedCategory.toLowerCase();
 
     const matchesSearch = 
       service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
