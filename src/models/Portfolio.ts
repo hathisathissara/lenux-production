@@ -1,11 +1,22 @@
 import mongoose, { Schema, models } from 'mongoose';
 
+// 🌟 Vercel Serverless වලදී Service Populate වීම සඳහා මෙය අත්‍යවශ්‍ය වේ
+import '@/models/Service';
+
+const ImageSchema = new Schema(
+  {
+    url: { type: String, required: true },
+    publicId: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const PortfolioSchema = new Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     
-    // 🌟 මෙන්න මෙතනින් Portfolio Project එක අදාළ සේවාවට (Service) සම්බන්ධ කරනවා
+    // Service Model Reference
     service: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'Service', 
@@ -13,22 +24,19 @@ const PortfolioSchema = new Schema(
     },
 
     description: { type: String, required: true },
-    coverImage: {
-      url: { type: String, required: true },
-      publicId: { type: String, required: true },
-    },
-    gallery: [
-      {
-        url: { type: String },
-        publicId: { type: String },
-      },
-    ],
-    clientName: { type: String }, // e.g., Dialog Axiata
+    coverImage: { type: ImageSchema, required: true },
+    gallery: [ImageSchema],
+    clientName: { type: String },
     completionDate: { type: Date },
     isFeatured: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
-export const Portfolio = models.Portfolio || mongoose.model('Portfolio', PortfolioSchema);
+// Next.js Hot Reload සහ Vercel Build වලදී Model Cache ගැටලු මඟහරවා ගැනීම
+if (mongoose.models.Portfolio) {
+  delete mongoose.models.Portfolio;
+}
+
+export const Portfolio = mongoose.model('Portfolio', PortfolioSchema);
