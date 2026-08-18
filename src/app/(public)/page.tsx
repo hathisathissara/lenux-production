@@ -19,6 +19,7 @@ import { Feedback } from "@/models/Feedback";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import ScrollToTop from "@/components/ScrollToTop";
+import Footer from "@/components/Footer";
 import StaffCard from "@/components/StaffCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
 
@@ -554,56 +555,7 @@ export default async function HomePage() {
         </div>
       </section>
       
-      {/* ==========================================
-          SECTION 11 — MAIN FOOTER
-          ========================================== */}
-      <footer className="bg-[#040404] border-t border-white/10 pt-16 pb-12 text-sm text-gray-400">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/5">
-          <div className="lg:col-span-2 space-y-4">
-            <h4 className="text-xl font-bold text-white tracking-wider uppercase">{companyName}</h4>
-            <p className="text-xs text-lenux-emerald font-semibold uppercase tracking-widest">Design, Print & Production</p>
-            <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
-              Sri Lanka's leading visual advertising and branding partner, creating impactful printing, signboards, displays, and event solutions.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h5>
-            <ul className="space-y-2 text-xs">
-              <li><Link href="/" className="hover:text-lenux-emerald">Home</Link></li>
-              <li><Link href="/about" className="hover:text-lenux-emerald">About Us</Link></li>
-              <li><Link href="/services" className="hover:text-lenux-emerald">All Services</Link></li>
-              <li><Link href="/portfolio" className="hover:text-lenux-emerald">Portfolio</Link></li>
-              <li><Link href="/contact" className="hover:text-lenux-emerald">Contact</Link></li>
-            </ul>
-          </div>
-
-          <div className="space-y-3">
-            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Top Services</h5>
-            <ul className="space-y-2 text-xs">
-              <li><Link href="/services" className="hover:text-lenux-emerald">Digital Printing</Link></li>
-              <li><Link href="/services" className="hover:text-lenux-emerald">Offset Printing</Link></li>
-              <li><Link href="/services" className="hover:text-lenux-emerald">Vehicle Branding</Link></li>
-              <li><Link href="/services" className="hover:text-lenux-emerald">Board & Signage</Link></li>
-            </ul>
-          </div>
-
-          <div className="space-y-3">
-            <h5 className="text-white font-bold text-xs uppercase tracking-widest">Get In Touch</h5>
-            <p className="text-xs">{phone}</p>
-            <p className="text-xs">{email}</p>
-            <div className="flex gap-3 pt-2">
-              <a href={settings?.facebook || "#"} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><FacebookIcon /></a>
-              <a href={settings?.instagram || "#"} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><InstagramIcon /></a>
-              <a href={settings?.linkedin || "#"} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><LinkedinIcon /></a>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-500 text-center sm:text-left">
-          © {new Date().getFullYear()} Lenux Production. All Rights Reserved.
-        </div>
-      </footer>
+      <Footer />
 
       <ScrollToTop />
 
