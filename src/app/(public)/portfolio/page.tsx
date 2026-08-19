@@ -37,7 +37,6 @@ export default async function PortfolioPage() {
   const phone = settings?.phone || "+94 77 123 4567";
   const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
   const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const email = settings?.email || "info@lenux.lk";
   const whatsapp = settings?.whatsapp || "+94 77 123 4567";
 
   return (

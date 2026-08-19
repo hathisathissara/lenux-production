@@ -399,7 +399,7 @@ export default async function HomePage() {
             {featuredProjects.map((proj: any) => (
               <ScrollReveal key={proj._id}>
                 <Link 
-                  href={`/portfolio?open=${proj._id}`}
+                  href={`/portfolio/${proj.slug}`} // 🌟 
                   className="group rounded-3xl overflow-hidden bg-[#0a0a0a] border border-white/5 hover:border-lenux-emerald/40 transition-all duration-500 shadow-xl flex flex-col justify-between block"
                 >
                   <div className="relative w-full h-64 overflow-hidden bg-gray-900">
