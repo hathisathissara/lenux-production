@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next"; 
 import { connectDB } from "@/lib/db";
 
-// 🌟 සියලුම Mongoose Models මෙහි අනිවාර්යයෙන්ම import විය යුතුය (Schema Registration සඳහා)
 import "@/models/ContactInformation";
 import "@/models/ServiceCategory";
 import "@/models/Service";
@@ -28,6 +28,46 @@ import {
   DollarSign, Clock4, ThumbsUp, Phone, Mail, MapPin, 
   Clock, Sparkles, MessageCircle 
 } from "lucide-react";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
+export async function generateMetadata(): Promise<Metadata> {
+  await connectDB();
+  const settings = await ContactInformation.findOne().lean() as any;
+
+  const companyTitle = settings?.companyName || "Lenux Production";
+  const rawLogo = settings?.logo?.url || "/images/logo.png";
+  const logoUrl = rawLogo.startsWith("http") ? rawLogo : `${SITE_URL}${rawLogo.startsWith("/") ? "" : "/"}${rawLogo}`;
+  
+  const siteDescription = "Lenux Production is Sri Lanka's leading creative advertising and branding partner, providing high-quality digital printing, signboards, displays, and event solutions.";
+
+  return {
+    title: `${companyTitle} | Design, Print & Production`,
+    description: siteDescription,
+    openGraph: {
+      title: `${companyTitle} | Design, Print & Production`,
+      description: siteDescription,
+      url: SITE_URL,
+      siteName: companyTitle,
+      images: [
+        {
+          url: logoUrl, // 🌟 Home Page එකේදී Company Logo එක හෝ Brand Image එක පෙන්වයි
+          width: 1200,
+          height: 630,
+          alt: `${companyTitle} - Creative Advertising & Production`,
+          type: "image/png",
+        }
+      ],
+      type: 'website',
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${companyTitle} | Design, Print & Production`,
+      description: siteDescription,
+      images: [logoUrl],
+    }
+  };
+}
 // Build-Safe SVGs
 const FacebookIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
