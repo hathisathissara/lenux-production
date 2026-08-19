@@ -5,34 +5,26 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const folder = formData.get('folder') as string || 'lenux';
+    const folder = (formData.get('folder') as string) || 'lenux';
 
     if (!file) {
       return NextResponse.json({ success: false, message: 'No file uploaded' }, { status: 400 });
     }
 
-    // File එක Buffer එකක් බවට පත් කරනවා
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Cloudinary Stream එක හරහා Upload සහ Compression එක එකපාර සිද්ද වෙනවා
+    // 🌟 Cloudinary Upload Stream with Forced WebP Conversion & Lossy Compression
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         {
           folder: `lenux/${folder}`,
-          // 1. පින්තූරය අනිවාර්යයෙන්ම WebP Format එකට හැරවීම
+          resource_type: 'image',
+          // 🌟 PNG සහ වෙනත් ඕනෑම එකක් අනිවාර්යයෙන්ම WebP වලට හැරවීම සඳහා format එක force කරයි
           format: 'webp',
-          
-          // 2. Compression සහ Auto-Resize කිරීම
           transformation: [
-            { 
-              width: 1200,      // පින්තූරය ගොඩක් ලොකු නම් Width එක Pixels 1200 කට සීමා කරනවා
-              crop: 'limit'     // පින්තූරයේ අනුපාතය (Ratio) වෙනස් නොවී Limit කරනවා
-            },
-            { 
-              quality: 'auto:good', // පෙනුම වෙනස් නොවී උපරිම Compression එක දෙනවා
-              fetch_format: 'auto' 
-            }
+            { width: 1200, crop: 'limit' },
+            { quality: 'auto:good', fetch_format: 'webp', flags: 'lossy' }
           ]
         },
         (error, result) => {
@@ -42,10 +34,9 @@ export async function POST(request: Request) {
       ).end(buffer);
     }) as any;
 
-    // Output එක බැලුවොත් ඔයාට පෙනෙයි .webp extension එකෙන්මයි URL එක එන්නේ කියලා
     return NextResponse.json({
       success: true,
-      url: uploadResult.secure_url, // WebP URL එක
+      url: uploadResult.secure_url, // දැන් මෙහි URL එකේ අගට .webp අනිවාර්යයෙන්ම දිස්වේවි
       publicId: uploadResult.public_id
     });
 

@@ -9,37 +9,70 @@ export default function FeedbackForm() {
   const [designation, setDesignation] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(5);
-  
-  // Avatar / Company Logo State (Optional)
+
+  // Avatar / Company Logo State
   const [avatar, setAvatar] = useState<{ url: string; publicId: string } | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [deletingAvatar, setDeletingAvatar] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ text: string; type: "success" | "error" | "" }>({ text: "", type: "" });
 
-  // Handle Avatar / Logo Upload to Cloudinary
+  // 🌟 පාරිභෝගිකයා දාන Profile Photo/Logo එක Cloudinary Upload API හරහා WebP බවට හැරවීම
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingAvatar(true);
+    setStatus({ text: "", type: "" });
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("folder", "feedback_avatars");
 
     try {
-      const res = await fetch("/api/admin/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
+
       if (data.success) {
         setAvatar({ url: data.url, publicId: data.publicId });
+      } else {
+        setStatus({ text: data.message || "Image conversion failed", type: "error" });
       }
     } catch (err) {
-      console.error("Avatar upload failed", err);
+      setStatus({ text: "Image upload failed. Please try again.", type: "error" });
     } finally {
       setUploadingAvatar(false);
+    }
+  }
+
+  // 🌟 X බටනය ඔබන විට Cloudinary එකේ ඇති පින්තූරය delete කර, පසුව state එක clear කිරීම
+  const handleAvatarRemove = async () => {
+    if (!avatar || deletingAvatar) return;
+
+    setDeletingAvatar(true);
+    setStatus({ text: "", type: "" });
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId: avatar.publicId }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setAvatar(null);
+      } else {
+        setStatus({ text: data.message || "Failed to remove image", type: "error" });
+      }
+    } catch (err) {
+      setStatus({ text: "Failed to remove image. Please try again.", type: "error" });
+    } finally {
+      setDeletingAvatar(false);
     }
   };
 
@@ -64,7 +97,7 @@ export default function FeedbackForm() {
         setRating(5);
         setAvatar(null);
       } else {
-        setStatus({ text: data.message || "Failed to submit feedback", type: "error" });
+        setStatus({ text: data.message || "Failed to submit feedback", type: "error" },);
       }
     } catch (err) {
       setStatus({ text: "Something went wrong. Please try again.", type: "error" });
@@ -74,9 +107,9 @@ export default function FeedbackForm() {
   };
 
   return (
-    <div className="bg-[#090909] border border-white/10 rounded-[2.5rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+    <div className="bg-[#090909] border border-white/10 rounded-[2.5rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden font-sans">
       <div className="space-y-6 relative z-10">
-        
+
         <div>
           <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest flex items-center gap-1.5 mb-2">
             <MessageSquare size={14} /> Share Your Experience
@@ -90,18 +123,17 @@ export default function FeedbackForm() {
         </div>
 
         {status.text && (
-          <div className={`p-4 rounded-2xl flex items-start gap-3 border text-xs sm:text-sm ${
-            status.type === "success" 
-            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300" 
+          <div className={`p-4 rounded-2xl flex items-start gap-3 border text-xs sm:text-sm ${status.type === "success"
+            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
             : "bg-red-950/40 border-red-500/40 text-red-300"
-          }`}>
+            }`}>
             {status.type === "success" ? <CheckCircle2 size={18} className="shrink-0 mt-0.5 text-emerald-400" /> : <AlertCircle size={18} className="shrink-0 mt-0.5 text-red-400" />}
             <span>{status.text}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-1.5">
@@ -152,7 +184,7 @@ export default function FeedbackForm() {
             </div>
           </div>
 
-          {/* 🌟 Optional Profile Image / Company Logo Upload */}
+          {/* Profile Image / Company Logo Upload (Auto WebP & Compressed) */}
           <div>
             <label className="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-1.5">
               Profile Photo / Company Logo (Optional)
@@ -169,19 +201,29 @@ export default function FeedbackForm() {
                   <div className="relative w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0">
                     <Image src={avatar.url} alt="Avatar preview" fill className="object-cover" />
                   </div>
-                  <span className="text-xs text-emerald-400 font-semibold truncate flex-1">Photo Uploaded</span>
+                  <span className="text-xs text-emerald-400 font-semibold truncate flex-1">
+                    {deletingAvatar ? "Removing..." : "WebP Photo Ready"}
+                  </span>
+
+                  {/* 🌟 නිවැරදි කරන ලද X බටන් එක - Cloudinary එකෙන්ම delete කරයි */}
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); setAvatar(null); }}
-                    className="p-1 text-gray-400 hover:text-red-400"
+                    disabled={deletingAvatar}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleAvatarRemove();
+                    }}
+                    className="z-20 p-2 text-gray-400 hover:text-red-400 bg-white/5 hover:bg-white/10 rounded-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Remove photo"
                   >
                     <X size={16} />
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-3 text-gray-400 text-xs">
+                <div className="flex items-center gap-3 text-gray-400 text-xs w-full">
                   <Upload size={18} className="text-lenux-emerald shrink-0" />
-                  <span>{uploadingAvatar ? "Uploading..." : "Upload photo or logo (Optional)"}</span>
+                  <span>{uploadingAvatar ? "Optimizing to WebP..." : "Upload photo or logo (Optional)"}</span>
                 </div>
               )}
             </div>

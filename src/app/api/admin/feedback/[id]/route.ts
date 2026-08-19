@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { Feedback } from '@/models/Feedback';
+import cloudinary from '@/lib/cloudinary';
 
+// PATCH Toggle Feedback Approval Status
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -15,7 +17,7 @@ export async function PATCH(
     const updatedFeedback = await Feedback.findByIdAndUpdate(
       id,
       { isApproved },
-      { returnDocument: 'after'}
+      { returnDocument: 'after' }
     );
 
     if (!updatedFeedback) {
@@ -32,6 +34,7 @@ export async function PATCH(
   }
 }
 
+// DELETE Feedback & Cloudinary Image Clean up
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -39,8 +42,20 @@ export async function DELETE(
   try {
     await connectDB();
     const { id } = await params;
+
+    const item = await Feedback.findById(id);
+    if (!item) {
+      return NextResponse.json({ success: false, message: 'Feedback not found' }, { status: 404 });
+    }
+
+    // 🌟 පින්තූරයක් ඇත්නම් Cloudinary එකෙන් ඉවත් කිරීම
+    if (item.avatar?.publicId) {
+      await cloudinary.uploader.destroy(item.avatar.publicId).catch(console.error);
+    }
+
     await Feedback.findByIdAndDelete(id);
-    return NextResponse.json({ success: true, message: 'Feedback deleted successfully' });
+
+    return NextResponse.json({ success: true, message: 'Feedback and avatar image deleted successfully' });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
