@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 import { Portfolio } from "@/models/Portfolio";
@@ -14,6 +15,53 @@ import { Calendar, User, MessageCircle, ImageIcon, Sparkles } from "lucide-react
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  await connectDB();
+  const project = await Portfolio.findOne({ slug, isPublished: true }).lean() as any;
+
+  if (!project) {
+    return {
+      title: "Project Not Found | Lenux Production",
+    };
+  }
+
+  const projectTitle = project.title;
+  const projectDesc = project.description ? project.description.substring(0, 150) + "..." : "Lenux Production portfolio project.";
+  const coverImg = project.coverImage?.url ? (project.coverImage.url.startsWith("http") ? project.coverImage.url : `${SITE_URL}${project.coverImage.url}`) : `${SITE_URL}/images/logo.png`;
+  const pageUrl = `${SITE_URL}/portfolio/${slug}`;
+
+  return {
+    title: projectTitle,
+    description: projectDesc,
+    openGraph: {
+      title: `${projectTitle} | Lenux Production Portfolio`,
+      description: projectDesc,
+      url: pageUrl,
+      images: [
+        {
+          url: coverImg, // 🌟 මෙහිදී පොදු ලෝගෝ එක වෙනුවට අදාළ Project එකේ Cover Photo එක පෙන්වයි!
+          width: 1200,
+          height: 630,
+          alt: projectTitle,
+        }
+      ],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: projectTitle,
+      description: projectDesc,
+      images: [coverImg],
+    }
+  };
+}
 
 async function getProjectDetail(slug: string) {
   await connectDB();
