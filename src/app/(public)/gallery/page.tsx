@@ -88,20 +88,38 @@ export default async function GalleryPage() {
       {/* ==========================================
           CTA BANNER
           ========================================== */}
+      {/* ==========================================
+          🌟 HIGH-IMPACT CLIENT CTA BANNER
+          ========================================== */}
       <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
+        
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
           <ScrollReveal>
             <h3 className="text-3xl sm:text-5xl font-extrabold text-white">
-              Inspired by Our <span className="text-lenux-emerald">Work?</span>
+              Have an Idea? <br /><span className="text-lenux-emerald">Let’s Bring It to Life.</span>
             </h3>
             <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
-              Let's create something extraordinary for your brand today. Contact our production experts.
+              From graphic design and printing to complete business branding and on-site production.
             </p>
+            
+            {/* 🌟 ඩිසයින් එකට අනුව බටන්ස් දෙක නිවැරදිව සකසා ඇත */}
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              <Link href="/contact" className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl transition-all">
-                Get a Quote
+              {/* බටන් 1: Get a Free Quote */}
+              <Link 
+                href="/contact" 
+                className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
+              >
+                Get a Free Quote
               </Link>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" className="px-8 py-4 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex items-center gap-2">
+              
+              {/* බටන් 2: WhatsApp Us */}
+              <a 
+                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center gap-2"
+              >
                 <MessageCircle size={16} /> WhatsApp Us
               </a>
             </div>
