@@ -17,7 +17,11 @@ export default function PortfolioManagement() {
   const [completionDate, setCompletionDate] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [coverImage, setCoverImage] = useState<{ url: string; publicId: string } | null>(null);
-  const [galleryImages, setGalleryImages] = useState<{ url: string; publicId: string }[]>([]);
+
+  // 🌟 Stage Photos (Create)
+  const [beforeImages, setBeforeImages] = useState<{ url: string; publicId: string }[]>([]);
+  const [productionImages, setProductionImages] = useState<{ url: string; publicId: string }[]>([]);
+  const [installationImages, setInstallationImages] = useState<{ url: string; publicId: string }[]>([]);
 
   // Edit Modal States
   const [editingProject, setEditingProject] = useState<any | null>(null);
@@ -28,11 +32,13 @@ export default function PortfolioManagement() {
   const [editDate, setEditDate] = useState("");
   const [editFeatured, setEditFeatured] = useState(false);
   const [editCover, setEditCover] = useState<{ url: string; publicId: string } | null>(null);
-  const [editGallery, setEditGallery] = useState<{ url: string; publicId: string }[]>([]);
+  const [editBefore, setEditBefore] = useState<{ url: string; publicId: string }[]>([]);
+  const [editProduction, setEditProduction] = useState<{ url: string; publicId: string }[]>([]);
+  const [editInstallation, setEditInstallation] = useState<{ url: string; publicId: string }[]>([]);
   const [updating, setUpdating] = useState(false);
 
   const [uploadingCover, setUploadingCover] = useState(false);
-  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [uploadingStage, setUploadingStage] = useState<string | null>(null);
   const [message, setMessage] = useState({ text: "", type: "" });
 
   const fetchData = async () => {
@@ -71,70 +77,41 @@ export default function PortfolioManagement() {
     return await res.json();
   };
 
-  // Cover Image Upload (Create)
-  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploadingCover(true);
-    try {
-      const data = await uploadImage(file, "portfolio_covers");
-      if (data.success) {
-        setCoverImage({ url: data.url, publicId: data.publicId });
-        showNotification("Cover image uploaded!", "success");
-      }
-    } catch (err) {
-      showNotification("Cover upload failed", "error");
-    } finally {
-      setUploadingCover(false);
-    }
-  };
-
-  // Gallery Upload (Create)
-  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload Handler for Specific Stages
+  const handleStagePhotosUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    stage: "before" | "production" | "installation",
+    isEdit = false
+  ) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    setUploadingGallery(true);
+    setUploadingStage(stage);
     try {
+      const uploaded: { url: string; publicId: string }[] = [];
       for (let i = 0; i < files.length; i++) {
-        const data = await uploadImage(files[i], "portfolio_gallery");
+        const data = await uploadImage(files[i], `portfolio_${stage}`);
         if (data.success) {
-          setGalleryImages(prev => [...prev, { url: data.url, publicId: data.publicId }]);
+          uploaded.push({ url: data.url, publicId: data.publicId });
         }
       }
-      showNotification("Gallery images uploaded!", "success");
+
+      if (isEdit) {
+        if (stage === "before") setEditBefore(prev => [...prev, ...uploaded]);
+        if (stage === "production") setEditProduction(prev => [...prev, ...uploaded]);
+        if (stage === "installation") setEditInstallation(prev => [...prev, ...uploaded]);
+      } else {
+        if (stage === "before") setBeforeImages(prev => [...prev, ...uploaded]);
+        if (stage === "production") setProductionImages(prev => [...prev, ...uploaded]);
+        if (stage === "installation") setInstallationImages(prev => [...prev, ...uploaded]);
+      }
+
+      showNotification(`${uploaded.length} ${stage} photos uploaded!`, "success");
     } catch (err) {
-      showNotification("Gallery upload failed", "error");
+      showNotification("Upload failed", "error");
     } finally {
-      setUploadingGallery(false);
+      setUploadingStage(null);
     }
-  };
-
-  const removeGalleryImage = (index: number) => {
-    setGalleryImages(prev => prev.filter((_, i) => i !== index));
-  };
-
-  // Gallery Upload (Edit Modal)
-  const handleEditGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    try {
-      for (let i = 0; i < files.length; i++) {
-        const data = await uploadImage(files[i], "portfolio_gallery");
-        if (data.success) {
-          setEditGallery(prev => [...prev, { url: data.url, publicId: data.publicId }]);
-        }
-      }
-      showNotification("Gallery images added!", "success");
-    } catch (err) {
-      showNotification("Gallery upload failed", "error");
-    }
-  };
-
-  const removeEditGalleryImage = (index: number) => {
-    setEditGallery(prev => prev.filter((_, i) => i !== index));
   };
 
   // Submit Create Project
@@ -154,7 +131,9 @@ export default function PortfolioManagement() {
           serviceId: selectedService,
           description,
           coverImage,
-          gallery: galleryImages,
+          beforeImages,
+          productionImages,
+          installationImages,
           clientName,
           completionDate,
           isFeatured
@@ -163,9 +142,9 @@ export default function PortfolioManagement() {
 
       const data = await res.json();
       if (data.success) {
-        showNotification("Portfolio project added successfully!", "success");
+        showNotification("Portfolio project added with stage photos!", "success");
         setTitle(""); setSelectedService(""); setDescription(""); setClientName(""); setCompletionDate("");
-        setCoverImage(null); setGalleryImages([]); setIsFeatured(false);
+        setCoverImage(null); setBeforeImages([]); setProductionImages([]); setInstallationImages([]); setIsFeatured(false);
         fetchData();
       }
     } catch (err) {
@@ -175,7 +154,7 @@ export default function PortfolioManagement() {
 
   // Delete Project
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this portfolio project?")) return;
+    if (!confirm("Are you sure you want to delete this portfolio project and all its photos?")) return;
 
     try {
       const res = await fetch(`/api/admin/portfolio/${id}`, { method: "DELETE" });
@@ -199,7 +178,9 @@ export default function PortfolioManagement() {
     setEditDate(proj.completionDate ? proj.completionDate.substring(0, 10) : "");
     setEditFeatured(proj.isFeatured || false);
     setEditCover(proj.coverImage);
-    setEditGallery(proj.gallery || []);
+    setEditBefore(proj.beforeImages || []);
+    setEditProduction(proj.productionImages || []);
+    setEditInstallation(proj.installationImages || []);
   };
 
   // Submit Update Project (PUT)
@@ -220,7 +201,9 @@ export default function PortfolioManagement() {
           completionDate: editDate ? new Date(editDate) : undefined,
           isFeatured: editFeatured,
           coverImage: editCover,
-          gallery: editGallery
+          beforeImages: editBefore,
+          productionImages: editProduction,
+          installationImages: editInstallation
         })
       });
 
@@ -251,7 +234,7 @@ export default function PortfolioManagement() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-lenux-deep">Portfolio Management</h1>
-        <p className="text-lenux-darkGray mt-1">Showcase completed visual production works here.</p>
+        <p className="text-lenux-darkGray mt-1">Showcase Before, Production, and Final Installation works here.</p>
       </div>
 
       {message.text && (
@@ -267,7 +250,7 @@ export default function PortfolioManagement() {
         
         {/* LIST */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-lenux-deep mb-6">Current Projects Gallery ({projects.length})</h3>
+          <h3 className="text-lg font-bold text-lenux-deep mb-6">Current Projects ({projects.length})</h3>
           {projects.length === 0 ? (
             <p className="text-gray-400 text-sm">No portfolio projects added yet.</p>
           ) : (
@@ -295,9 +278,12 @@ export default function PortfolioManagement() {
                         {proj.completionDate && <span className="flex items-center gap-1"><Calendar size={14} /> {new Date(proj.completionDate).toLocaleDateString()}</span>}
                       </div>
 
-                      {proj.gallery && proj.gallery.length > 0 && (
-                        <p className="text-[11px] text-emerald-600 font-medium">📷 {proj.gallery.length} Gallery Photos</p>
-                      )}
+                      {/* Stage Photos count indicators */}
+                      <div className="flex gap-2 text-[10px] text-gray-500 font-medium pt-1">
+                        {proj.beforeImages?.length > 0 && <span className="bg-gray-100 px-2 py-0.5 rounded">Before: {proj.beforeImages.length}</span>}
+                        {proj.productionImages?.length > 0 && <span className="bg-gray-100 px-2 py-0.5 rounded">Prod: {proj.productionImages.length}</span>}
+                        {proj.installationImages?.length > 0 && <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">Final: {proj.installationImages.length}</span>}
+                      </div>
                     </div>
                   </div>
                   
@@ -323,7 +309,7 @@ export default function PortfolioManagement() {
 
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Project Title</label>
-              <input type="text" required className="admin-input" placeholder="e.g., Dialog Van Branding" value={title} onChange={(e) => setTitle(e.target.value)} />
+              <input type="text" required className="admin-input" placeholder="e.g., Dialog Delivery Van Branding" value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
 
             <div>
@@ -338,7 +324,7 @@ export default function PortfolioManagement() {
 
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Client Name</label>
-              <input type="text" className="admin-input" placeholder="e.g., Dialog Axiata" value={clientName} onChange={(e) => setClientName(e.target.value)} />
+              <input type="text" className="admin-input" placeholder="e.g., Dialog Axiata PLC" value={clientName} onChange={(e) => setClientName(e.target.value)} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -356,14 +342,22 @@ export default function PortfolioManagement() {
 
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Description</label>
-              <textarea rows={3} required className="admin-input" placeholder="Project description..." value={description} onChange={(e) => setDescription(e.target.value)} />
+              <textarea rows={3} required className="admin-input" placeholder="Project execution details..." value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
 
-            {/* Cover Image Upload */}
+            {/* Main Cover Image */}
             <div>
-              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Cover Image</label>
+              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Cover Image (Final Result)</label>
               <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
-                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleCoverUpload} />
+                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setUploadingCover(true);
+                    const data = await uploadImage(file, "portfolio_covers");
+                    if (data.success) setCoverImage({ url: data.url, publicId: data.publicId });
+                    setUploadingCover(false);
+                  }
+                }} />
                 {coverImage ? (
                   <div className="text-center relative w-16 h-16">
                     <Image src={coverImage.url} alt="Cover preview" fill className="object-cover rounded-lg" />
@@ -371,35 +365,63 @@ export default function PortfolioManagement() {
                 ) : (
                   <div className="text-center text-gray-400">
                     <Upload size={20} className="mx-auto mb-1" />
-                    <span className="text-[11px]">{uploadingCover ? "Uploading..." : "Upload Cover Image"}</span>
+                    <span className="text-[11px]">{uploadingCover ? "Uploading..." : "Upload Main Cover"}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* 🌟 Production Gallery Images (Multiple) */}
+            {/* 🌟 1. Before Photos Upload */}
             <div>
-              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Production Gallery Photos (Optional)</label>
-              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-3">
-                <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleGalleryUpload} />
-                <div className="text-center text-gray-400">
-                  <ImageIcon size={18} className="mx-auto mb-1" />
-                  <span className="text-[11px]">{uploadingGallery ? "Uploading..." : "Add Gallery Photos"}</span>
-                </div>
+              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">1. Before Photos (Optional)</label>
+              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2.5 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-2">
+                <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "before")} />
+                <span className="text-xs text-gray-400 flex items-center gap-1"><ImageIcon size={14} /> {uploadingStage === "before" ? "Uploading..." : "Add Before Photos"}</span>
               </div>
+              {beforeImages.length > 0 && (
+                <div className="grid grid-cols-4 gap-1.5 max-h-20 overflow-y-auto">
+                  {beforeImages.map((img, i) => (
+                    <div key={i} className="relative h-10 bg-gray-100 rounded overflow-hidden group">
+                      <Image src={img.url} alt="Before" fill className="object-cover" />
+                      <button type="button" onClick={() => setBeforeImages(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-              {galleryImages.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 border border-gray-100 p-2 rounded-xl bg-gray-50 max-h-24 overflow-y-auto">
-                  {galleryImages.map((img, i) => (
-                    <div key={i} className="relative w-full h-10 bg-white rounded border border-gray-200 group">
-                      <Image src={img.url} alt="Gallery item" fill className="object-cover rounded" />
-                      <button 
-                        type="button" 
-                        onClick={() => removeGalleryImage(i)}
-                        className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash size={8} />
-                      </button>
+            {/* 🌟 2. Production Photos Upload */}
+            <div>
+              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">2. Production Photos (Optional)</label>
+              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2.5 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-2">
+                <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "production")} />
+                <span className="text-xs text-gray-400 flex items-center gap-1"><ImageIcon size={14} /> {uploadingStage === "production" ? "Uploading..." : "Add Production Photos"}</span>
+              </div>
+              {productionImages.length > 0 && (
+                <div className="grid grid-cols-4 gap-1.5 max-h-20 overflow-y-auto">
+                  {productionImages.map((img, i) => (
+                    <div key={i} className="relative h-10 bg-gray-100 rounded overflow-hidden group">
+                      <Image src={img.url} alt="Production" fill className="object-cover" />
+                      <button type="button" onClick={() => setProductionImages(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 🌟 3. Final Installation Photos Upload */}
+            <div>
+              <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">3. Final Installation Photos (Optional)</label>
+              <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2.5 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-2">
+                <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "installation")} />
+                <span className="text-xs text-gray-400 flex items-center gap-1"><ImageIcon size={14} /> {uploadingStage === "installation" ? "Uploading..." : "Add Final Installation Photos"}</span>
+              </div>
+              {installationImages.length > 0 && (
+                <div className="grid grid-cols-4 gap-1.5 max-h-20 overflow-y-auto">
+                  {installationImages.map((img, i) => (
+                    <div key={i} className="relative h-10 bg-gray-100 rounded overflow-hidden group">
+                      <Image src={img.url} alt="Final" fill className="object-cover" />
+                      <button type="button" onClick={() => setInstallationImages(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
                     </div>
                   ))}
                 </div>
@@ -407,7 +429,7 @@ export default function PortfolioManagement() {
             </div>
 
             <button type="submit" className="btn-primary w-full gap-2 text-sm mt-4">
-              <Plus size={16} /> Save Project
+              <Plus size={16} /> Save Project with Stages
             </button>
           </form>
         </div>
@@ -415,14 +437,14 @@ export default function PortfolioManagement() {
       </div>
 
       {/* ==========================================
-          🌟 EDIT PORTFOLIO MODAL (with Gallery support)
+          🌟 EDIT PORTFOLIO MODAL (With All Stage Photos)
           ========================================== */}
       {editingProject && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col justify-between">
             
             <div className="p-6 bg-lenux-deep text-white flex justify-between items-center">
-              <h3 className="text-lg font-bold">Edit Portfolio Project</h3>
+              <h3 className="text-lg font-bold">Edit Project & Stage Photos</h3>
               <button onClick={() => setEditingProject(null)} className="text-white/80 hover:text-white p-1">
                 <X size={20} />
               </button>
@@ -469,7 +491,7 @@ export default function PortfolioManagement() {
               {/* Edit Cover Image */}
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Cover Image</label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
                   <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if(file) {
@@ -478,35 +500,64 @@ export default function PortfolioManagement() {
                     }
                   }} />
                   {editCover?.url ? (
-                    <div className="text-center relative w-16 h-16">
-                      <Image src={editCover.url} alt="Edit cover" fill className="object-cover rounded-lg" />
+                    <div className="text-center relative w-14 h-14">
+                      <Image src={editCover.url} alt="Cover" fill className="object-cover rounded-lg" />
                     </div>
-                  ) : (
-                    <span className="text-xs text-gray-400">Upload new cover</span>
-                  )}
+                  ) : <span className="text-xs text-gray-400">Upload new cover</span>}
                 </div>
               </div>
 
-              {/* Edit Gallery Images */}
+              {/* Edit Before Photos */}
               <div>
-                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Production Gallery Photos</label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-2">
-                  <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleEditGalleryUpload} />
-                  <span className="text-xs text-gray-400">Add More Gallery Photos</span>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Before Photos ({editBefore.length})</label>
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-1.5">
+                  <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "before", true)} />
+                  <span className="text-xs text-gray-400">Add More Before Photos</span>
                 </div>
+                {editBefore.length > 0 && (
+                  <div className="grid grid-cols-4 gap-1.5 max-h-16 overflow-y-auto">
+                    {editBefore.map((img, i) => (
+                      <div key={i} className="relative h-9 bg-gray-100 rounded overflow-hidden group">
+                        <Image src={img.url} alt="Before" fill className="object-cover" />
+                        <button type="button" onClick={() => setEditBefore(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-                {editGallery.length > 0 && (
-                  <div className="grid grid-cols-4 gap-2 border border-gray-100 p-2 rounded-xl bg-gray-50 max-h-24 overflow-y-auto">
-                    {editGallery.map((img, i) => (
-                      <div key={i} className="relative w-full h-10 bg-white rounded border border-gray-200 group">
-                        <Image src={img.url} alt="Gallery item" fill className="object-cover rounded" />
-                        <button 
-                          type="button" 
-                          onClick={() => removeEditGalleryImage(i)}
-                          className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <Trash size={8} />
-                        </button>
+              {/* Edit Production Photos */}
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Production Photos ({editProduction.length})</label>
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-1.5">
+                  <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "production", true)} />
+                  <span className="text-xs text-gray-400">Add More Production Photos</span>
+                </div>
+                {editProduction.length > 0 && (
+                  <div className="grid grid-cols-4 gap-1.5 max-h-16 overflow-y-auto">
+                    {editProduction.map((img, i) => (
+                      <div key={i} className="relative h-9 bg-gray-100 rounded overflow-hidden group">
+                        <Image src={img.url} alt="Prod" fill className="object-cover" />
+                        <button type="button" onClick={() => setEditProduction(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Edit Final Installation Photos */}
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Final Installation Photos ({editInstallation.length})</label>
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-2 flex items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-1.5">
+                  <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleStagePhotosUpload(e, "installation", true)} />
+                  <span className="text-xs text-gray-400">Add More Final Installation Photos</span>
+                </div>
+                {editInstallation.length > 0 && (
+                  <div className="grid grid-cols-4 gap-1.5 max-h-16 overflow-y-auto">
+                    {editInstallation.map((img, i) => (
+                      <div key={i} className="relative h-9 bg-gray-100 rounded overflow-hidden group">
+                        <Image src={img.url} alt="Final" fill className="object-cover" />
+                        <button type="button" onClick={() => setEditInstallation(p => p.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100"><Trash size={8} /></button>
                       </div>
                     ))}
                   </div>

@@ -23,14 +23,21 @@ export default function ServicesManagement() {
   const [serImage, setSerImage] = useState<{ url: string; publicId: string } | null>(null);
   const [uploadingSerImg, setUploadingSerImg] = useState(false);
 
-  // Edit Modal States
+  // Edit Service Modal States
   const [editingService, setEditingService] = useState<any | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [editShortDesc, setEditShortDesc] = useState("");
   const [editDesc, setEditDesc] = useState("");
   const [editImage, setEditImage] = useState<{ url: string; publicId: string } | null>(null);
-  const [updating, setUpdating] = useState(false);
+  const [updatingService, setUpdatingService] = useState(false);
+
+  // 🌟 Edit Category Modal States
+  const [editingCategory, setEditingCategory] = useState<any | null>(null);
+  const [editCatName, setEditCatName] = useState("");
+  const [editCatDesc, setEditCatDesc] = useState("");
+  const [editCatImage, setEditCatImage] = useState<{ url: string; publicId: string } | null>(null);
+  const [updatingCategory, setUpdatingCategory] = useState(false);
 
   const [activeTab, setActiveTab] = useState<"services" | "categories">("services");
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -62,7 +69,7 @@ export default function ServicesManagement() {
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "category" | "service" | "edit") => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "category" | "service" | "edit-service" | "edit-category") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -80,7 +87,9 @@ export default function ServicesManagement() {
         const imgObj = { url: data.url, publicId: data.publicId };
         if (type === "category") setCatImage(imgObj);
         else if (type === "service") setSerImage(imgObj);
-        else if (type === "edit") setEditImage(imgObj);
+        else if (type === "edit-service") setEditImage(imgObj);
+        else if (type === "edit-category") setEditCatImage(imgObj);
+        
         showNotification("Image uploaded successfully!", "success");
       }
     } catch (err) {
@@ -131,6 +140,45 @@ export default function ServicesManagement() {
     }
   };
 
+  // Open Edit Category Modal
+  const handleOpenEditCategory = (cat: any) => {
+    setEditingCategory(cat);
+    setEditCatName(cat.name);
+    setEditCatDesc(cat.description || "");
+    setEditCatImage(cat.image || null);
+  };
+
+  // Update Category (PUT)
+  const handleUpdateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCategory) return;
+    setUpdatingCategory(true);
+
+    try {
+      const res = await fetch(`/api/admin/categories/${editingCategory._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editCatName,
+          description: editCatDesc,
+          image: editCatImage
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showNotification("Category updated successfully!", "success");
+        setEditingCategory(null);
+        fetchData();
+      } else {
+        showNotification(data.message || "Update failed", "error");
+      }
+    } catch (err) {
+      showNotification("Failed to update category", "error");
+    } finally {
+      setUpdatingCategory(false);
+    }
+  };
+
   // Create Service
   const handleAddService = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,8 +210,23 @@ export default function ServicesManagement() {
     }
   };
 
-  // Open Edit Modal
-  const handleOpenEdit = (service: any) => {
+  // Delete Service
+  const handleDeleteService = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this service?")) return;
+    try {
+      const res = await fetch(`/api/admin/services/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        showNotification("Service deleted successfully!", "success");
+        fetchData();
+      }
+    } catch (err) {
+      showNotification("Failed to delete service", "error");
+    }
+  };
+
+  // Open Edit Service Modal
+  const handleOpenEditService = (service: any) => {
     setEditingService(service);
     setEditTitle(service.title);
     setEditCategory(service.category?._id || service.category);
@@ -172,11 +235,11 @@ export default function ServicesManagement() {
     setEditImage(service.image);
   };
 
-  // Submit Update Service (PUT)
+  // Update Service (PUT)
   const handleUpdateService = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingService) return;
-    setUpdating(true);
+    setUpdatingService(true);
 
     try {
       const res = await fetch(`/api/admin/services/${editingService._id}`, {
@@ -201,22 +264,7 @@ export default function ServicesManagement() {
     } catch (err) {
       showNotification("Failed to update service", "error");
     } finally {
-      setUpdating(false);
-    }
-  };
-
-  // Delete Service
-  const handleDeleteService = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
-    try {
-      const res = await fetch(`/api/admin/services/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        showNotification("Service deleted successfully!", "success");
-        fetchData();
-      }
-    } catch (err) {
-      showNotification("Failed to delete service", "error");
+      setUpdatingService(false);
     }
   };
 
@@ -295,16 +343,14 @@ export default function ServicesManagement() {
                           </td>
                           <td className="py-3 font-medium text-lenux-charcoal">{item.title}</td>
                           <td className="py-3 text-lenux-darkGray">{item.category?.name || "Uncategorized"}</td>
-                          <td className="py-3 text-right space-x-2">
-                            {/* Edit Button */}
+                          <td className="py-3 text-right space-x-1">
                             <button 
-                              onClick={() => handleOpenEdit(item)}
+                              onClick={() => handleOpenEditService(item)}
                               className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-all inline-block"
                               title="Edit Service"
                             >
                               <Edit size={16} />
                             </button>
-                            {/* Delete Button */}
                             <button 
                               onClick={() => handleDeleteService(item._id)}
                               className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all inline-block"
@@ -340,13 +386,24 @@ export default function ServicesManagement() {
                           <p className="text-xs text-gray-400">Slug: {cat.slug}</p>
                         </div>
                       </div>
-                      <button 
-                        onClick={() => handleDeleteCategory(cat._id)}
-                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all"
-                        title="Delete Category"
-                      >
-                        <Trash size={16} />
-                      </button>
+                      
+                      <div className="flex gap-1">
+                        {/* 🌟 Category Edit Button */}
+                        <button 
+                          onClick={() => handleOpenEditCategory(cat)}
+                          className="text-blue-500 hover:text-blue-700 p-1.5 hover:bg-blue-50 rounded-lg transition-all"
+                          title="Edit Category"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteCategory(cat._id)}
+                          className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all"
+                          title="Delete Category"
+                        >
+                          <Trash size={16} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -448,7 +505,7 @@ export default function ServicesManagement() {
       </div>
 
       {/* ==========================================
-          🌟 EDIT SERVICE MODAL (POPUP)
+          🌟 1. EDIT SERVICE MODAL (Category Change & Image Cleanup Supported)
           ========================================== */}
       {editingService && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -467,6 +524,7 @@ export default function ServicesManagement() {
                 <input type="text" required className="admin-input" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
               </div>
 
+              {/* 🌟 Category Selector inside Service Edit Modal */}
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Category</label>
                 <select required className="admin-input" value={editCategory} onChange={(e) => setEditCategory(e.target.value)}>
@@ -489,7 +547,7 @@ export default function ServicesManagement() {
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Service Image</label>
                 <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
-                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(e, "edit")} />
+                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(e, "edit-service")} />
                   {editImage?.url ? (
                     <div className="text-center relative w-16 h-16">
                       <Image src={editImage.url} alt="Edit preview" fill className="object-cover rounded-lg" />
@@ -502,7 +560,56 @@ export default function ServicesManagement() {
 
               <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onClick={() => setEditingService(null)} className="px-5 py-2.5 border rounded-xl text-sm text-gray-600">Cancel</button>
-                <button type="submit" disabled={updating} className="btn-primary text-sm px-6">{updating ? "Updating..." : "Save Changes"}</button>
+                <button type="submit" disabled={updatingService} className="btn-primary text-sm px-6">{updatingService ? "Updating..." : "Save Changes"}</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          🌟 2. EDIT CATEGORY MODAL (Name, Desc & Image Cleanup Supported)
+          ========================================== */}
+      {editingCategory && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col justify-between">
+            
+            <div className="p-6 bg-lenux-deep text-white flex justify-between items-center">
+              <h3 className="text-lg font-bold">Edit Category</h3>
+              <button onClick={() => setEditingCategory(null)} className="text-white/80 hover:text-white p-1">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateCategory} className="p-6 space-y-4 overflow-y-auto">
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Category Name</label>
+                <input type="text" required className="admin-input" value={editCatName} onChange={(e) => setEditCatName(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase-1 mb-1">Description</label>
+                <textarea rows={3} className="admin-input" value={editCatDesc} onChange={(e) => setEditCatDesc(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Category Image</label>
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
+                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(e, "edit-category")} />
+                  {editCatImage?.url ? (
+                    <div className="text-center relative w-16 h-16">
+                      <Image src={editCatImage.url} alt="Edit category preview" fill className="object-cover rounded-lg" />
+                    </div>
+                  ) : (
+                    <span className="text-xs text-gray-400">Upload new image</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onClick={() => setEditingCategory(null)} className="px-5 py-2.5 border rounded-xl text-sm text-gray-600">Cancel</button>
+                <button type="submit" disabled={updatingCategory} className="btn-primary text-sm px-6">{updatingCategory ? "Updating..." : "Save Changes"}</button>
               </div>
             </form>
 

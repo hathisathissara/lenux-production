@@ -3,7 +3,6 @@ import { connectDB } from '@/lib/db';
 import { Portfolio } from '@/models/Portfolio';
 import cloudinary from '@/lib/cloudinary';
 
-// PUT Update Portfolio Project
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -18,7 +17,6 @@ export async function PUT(
       return NextResponse.json({ success: false, message: 'Portfolio project not found' }, { status: 404 });
     }
 
-    // Cover Image එක මාරු කරලා නම්, පරණ එක Cloudinary එකෙන් delete කරනවා
     if (body.coverImage?.publicId && existingProject.coverImage?.publicId && body.coverImage.publicId !== existingProject.coverImage.publicId) {
       await cloudinary.uploader.destroy(existingProject.coverImage.publicId).catch(console.error);
     }
@@ -35,7 +33,6 @@ export async function PUT(
   }
 }
 
-// DELETE Portfolio Project
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -49,23 +46,24 @@ export async function DELETE(
       return NextResponse.json({ success: false, message: 'Portfolio project not found' }, { status: 404 });
     }
 
-    // Cover Image එක Delete කිරීම
-    if (project.coverImage?.publicId) {
-      await cloudinary.uploader.destroy(project.coverImage.publicId).catch(console.error);
-    }
+    // Clean all images from Cloudinary
+    const allImages = [
+      project.coverImage,
+      ...(project.beforeImages || []),
+      ...(project.productionImages || []),
+      ...(project.installationImages || []),
+      ...(project.gallery || []),
+    ];
 
-    // Gallery Images ටිකත් Delete කිරීම
-    if (project.gallery && project.gallery.length > 0) {
-      for (const img of project.gallery) {
-        if (img.publicId) {
-          await cloudinary.uploader.destroy(img.publicId).catch(console.error);
-        }
+    for (const img of allImages) {
+      if (img?.publicId) {
+        await cloudinary.uploader.destroy(img.publicId).catch(console.error);
       }
     }
 
     await Portfolio.findByIdAndDelete(id);
 
-    return NextResponse.json({ success: true, message: 'Portfolio project and images deleted successfully' });
+    return NextResponse.json({ success: true, message: 'Portfolio project and all stage photos deleted successfully' });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

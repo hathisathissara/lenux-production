@@ -1,6 +1,4 @@
-import mongoose, { Schema, models } from 'mongoose';
-
-// 🌟 Vercel Serverless වලදී Service Populate වීම සඳහා මෙය අත්‍යවශ්‍ය වේ
+import mongoose, { Schema } from 'mongoose';
 import '@/models/Service';
 
 const ImageSchema = new Schema(
@@ -15,17 +13,20 @@ const PortfolioSchema = new Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    
-    // Service Model Reference
     service: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'Service', 
       required: true 
     },
-
     description: { type: String, required: true },
     coverImage: { type: ImageSchema, required: true },
+
+    // 🌟 Before / Production / Final Installation Photos
+    beforeImages: [ImageSchema],
+    productionImages: [ImageSchema],
+    installationImages: [ImageSchema],
     gallery: [ImageSchema],
+
     clientName: { type: String },
     completionDate: { type: Date },
     isFeatured: { type: Boolean, default: false },
@@ -34,7 +35,6 @@ const PortfolioSchema = new Schema(
   { timestamps: true, strict: false }
 );
 
-// Next.js Hot Reload සහ Vercel Build වලදී Model Cache ගැටලු මඟහරවා ගැනීම
 if (mongoose.models.Portfolio) {
   delete mongoose.models.Portfolio;
 }

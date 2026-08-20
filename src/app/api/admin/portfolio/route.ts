@@ -5,11 +5,9 @@ import { Portfolio } from '@/models/Portfolio';
 const slugify = (text: string) => 
   text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-// GET All Portfolio Projects (with linked Service details populated)
 export async function GET() {
   try {
     await connectDB();
-    // `.populate('service')` එකෙන් මේ වැඩේට අදාළ Service එකේ විස්තර (Title) auto අරන් දෙනවා
     const projects = await Portfolio.find().populate('service', 'title').sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: projects });
   } catch (error: any) {
@@ -17,12 +15,15 @@ export async function GET() {
   }
 }
 
-// POST Create Portfolio Project
 export async function POST(request: Request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { title, serviceId, description, coverImage, gallery, clientName, completionDate, isFeatured } = body;
+    const { 
+      title, serviceId, description, coverImage, 
+      beforeImages, productionImages, installationImages, gallery, 
+      clientName, completionDate, isFeatured 
+    } = body;
 
     if (!title || !serviceId || !description || !coverImage) {
       return NextResponse.json({ success: false, message: 'Missing required fields' }, { status: 400 });
@@ -36,6 +37,9 @@ export async function POST(request: Request) {
       service: serviceId,
       description,
       coverImage,
+      beforeImages: beforeImages || [],
+      productionImages: productionImages || [],
+      installationImages: installationImages || [],
       gallery: gallery || [],
       clientName: clientName || '',
       completionDate: completionDate ? new Date(completionDate) : undefined,
