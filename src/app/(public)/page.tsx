@@ -137,11 +137,12 @@ export default async function HomePage() {
             className="object-cover object-center md:object-right"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black md:bg-gradient-to-r md:from-black md:via-black/75 md:to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent z-10" />
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 w-full mt-8 md:mt-12">
           <ScrollReveal>
+
             <div className="max-w-2xl space-y-5">
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-light text-white tracking-wide uppercase leading-tight drop-shadow-md">
                 Welcome to{" "}
