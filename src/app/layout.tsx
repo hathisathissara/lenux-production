@@ -45,6 +45,9 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: logoUrl,
       apple: logoUrl,
     },
+    verification: {
+      google: "I1hW3W_RUL-5fgeKdm6qdG-ZrFP5pSUVx_ibnFak5QI",
+    },
     // 🌟 WhatsApp සහ Facebook OpenGraph (OG) Tags
     openGraph: {
       title: `${companyTitle} | Design, Print & Production`,
