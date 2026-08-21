@@ -159,6 +159,7 @@ export default function QuotesManagement() {
           </div>
         ) : (
           <div className="overflow-x-auto">
+          <div className="overflow-x-auto whitespace-nowrap">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-gray-100 text-xs text-lenux-darkGray uppercase font-bold bg-gray-50/50">
@@ -202,6 +203,7 @@ export default function QuotesManagement() {
                 ))}
               </tbody>
             </table>
+          </div>
           </div>
         )}
       </div>

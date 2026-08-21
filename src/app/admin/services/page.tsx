@@ -324,6 +324,7 @@ export default function ServicesManagement() {
                 <p className="text-gray-400 text-sm">No services added yet.</p>
               ) : (
                 <div className="overflow-x-auto">
+                <div className="overflow-x-auto whitespace-nowrap">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-gray-100 text-xs text-lenux-darkGray uppercase font-bold">
@@ -363,6 +364,7 @@ export default function ServicesManagement() {
                       ))}
                     </tbody>
                   </table>
+                </div>
                 </div>
               )}
             </div>

@@ -174,11 +174,11 @@ export default function SettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-gray-200 p-1 rounded-xl w-fit">
+      <div className="flex flex-col sm:flex-row bg-gray-200 p-1 rounded-xl w-full sm:w-fit gap-1">
         <button
           type="button"
           onClick={() => setActiveTab("company")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+          className={`flex items-center justify-center sm:justify-start gap-2 w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
             activeTab === "company" ? "bg-white text-lenux-deep shadow" : "text-lenux-darkGray hover:text-lenux-deep"
           }`}
         >
@@ -187,7 +187,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={() => setActiveTab("contact")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+          className={`flex items-center justify-center sm:justify-start gap-2 w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
             activeTab === "contact" ? "bg-white text-lenux-deep shadow" : "text-lenux-darkGray hover:text-lenux-deep"
           }`}
         >
@@ -196,7 +196,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={() => setActiveTab("socials")}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+          className={`flex items-center justify-center sm:justify-start gap-2 w-full sm:w-auto px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
             activeTab === "socials" ? "bg-white text-lenux-deep shadow" : "text-lenux-darkGray hover:text-lenux-deep"
           }`}
         >
