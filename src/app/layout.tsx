@@ -4,7 +4,9 @@ import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 
 // 🌟 .env.local එකෙන් SITE_URL ලබාගැනීම (නැතහොත් Default Vercel URL එක)
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+// Vercel හි ඇති Environment Variables වල http:// ලෙස සටහන් වී ඇති නිසා Sitemap එකේ http හැදේ.
+// ඒක මගහරවා ගැනීමට මෙතන කෙලින්ම https://lenux-production.vercel.app ලබා දී ඇත.
+const SITE_URL = 'https://lenux-production.vercel.app';
 
 // 🌟 WhatsApp සහ Social Media වල Link Preview පෙන්වීම සඳහා Metadata ජනනය කිරීම
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     await connectDB();
     const settings = await ContactInformation.findOne().lean();
-    
+
     if (settings) {
       if (settings.companyName) {
         companyTitle = settings.companyName;
@@ -22,8 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
       if (settings.logo?.url) {
         const rawLogo = settings.logo.url;
         // Absolute URL එකක් බවට පත් කිරීම (WhatsApp වලට Absolute URL අත්‍යවශ්‍ය වේ)
-        logoUrl = rawLogo.startsWith("http") 
-          ? rawLogo 
+        logoUrl = rawLogo.startsWith("http")
+          ? rawLogo
           : `${SITE_URL}${rawLogo.startsWith("/") ? "" : "/"}${rawLogo}`;
       }
     }
