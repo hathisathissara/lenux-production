@@ -32,6 +32,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.v
 
 export async function generateMetadata(): Promise<Metadata> {
   await connectDB();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const settings = await ContactInformation.findOne().lean() as any;
 
   const companyTitle = settings?.companyName || "Lenux Production";
@@ -361,6 +362,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {categories.map((cat: any) => (
               <ScrollReveal key={cat._id}>
                 <div className="bg-[#0c0c0c] rounded-2xl border border-white/5 overflow-hidden hover:border-lenux-emerald/50 transition-all duration-500 group flex flex-col justify-between h-full shadow-lg">
@@ -452,6 +454,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {featuredProjects.map((proj: any) => (
               <ScrollReveal key={proj._id}>
                 <Link 
@@ -494,6 +497,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {featuredStaff.map((member: any) => (
               <ScrollReveal key={member._id}>
                 <StaffCard member={member} />

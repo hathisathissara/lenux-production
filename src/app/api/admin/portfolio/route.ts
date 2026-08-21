@@ -10,6 +10,7 @@ export async function GET() {
     await connectDB();
     const projects = await Portfolio.find().populate('service', 'title').sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: projects });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: newProject }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

@@ -14,6 +14,7 @@ export async function GET(request: Request) {
     const feedbackList = await Feedback.find(filter).sort({ createdAt: -1 });
 
     return NextResponse.json({ success: true, data: feedbackList });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
       message: 'Thank you for your valuable feedback! It will be displayed once approved.', 
       data: newFeedback 
     }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

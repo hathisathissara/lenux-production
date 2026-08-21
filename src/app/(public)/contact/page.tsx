@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 import { Service } from "@/models/Service";
@@ -10,15 +9,40 @@ import ContactQuoteForm from "@/components/ContactQuoteForm"; // Quotation Form
 import FeedbackForm from "@/components/FeedbackForm"; // 🌟 Feedback Review Form
 
 import { 
-  Phone, Mail, MapPin, Clock, MessageCircle, Sparkles, MessageSquare 
+  Phone, Mail, MapPin, Clock, MessageCircle, Sparkles 
 } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
 export const metadata = {
   title: "Get a Free Quote | Contact Lenux Production Colombo",
   description: "Contact Sri Lanka's leading branding and printing experts today. Request a free quote for signboards, embossed letters, logo boards, and digital print jobs.",
   keywords: "get a quote printing colombo, lenux contact number, banner printing price sri lanka",
+  openGraph: {
+    title: "Contact Us | Lenux Production - Get a Free Quote",
+    description: "Contact Sri Lanka's leading branding and printing experts today. Request a free quote for signboards, embossed letters, logo boards, and digital print jobs.",
+    url: `${SITE_URL}/contact`,
+    siteName: "Lenux Production",
+    images: [
+      {
+        url: `${SITE_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: "Lenux Production - Contact Us",
+      }
+    ],
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Us | Lenux Production - Get a Free Quote",
+    description: "Contact Sri Lanka's leading branding and printing experts. Request a free quote for signboards, embossed letters, and digital print jobs.",
+    images: [`${SITE_URL}/images/logo.png`],
+  },
 };
 async function getContactData() {
   await connectDB();

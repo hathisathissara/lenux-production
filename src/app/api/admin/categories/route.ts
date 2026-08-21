@@ -12,6 +12,7 @@ export async function GET() {
     await connectDB();
     const categories = await ServiceCategory.find().sort({ sortOrder: 1 });
     return NextResponse.json({ success: true, data: categories });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: newCategory }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

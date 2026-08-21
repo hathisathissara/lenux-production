@@ -15,7 +15,8 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
 
     // 🌟 Cloudinary Upload Stream with Forced WebP Conversion & Lossy Compression
-    const uploadResult = await new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const uploadResult = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         {
           folder: `lenux/${folder}`,
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
           else resolve(result);
         }
       ).end(buffer);
-    }) as any;
+    });
 
     return NextResponse.json({
       success: true,
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
       publicId: uploadResult.public_id
     });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Upload Error:', error);
     return NextResponse.json({ success: false, message: 'Upload failed', error: error.message }, { status: 500 });

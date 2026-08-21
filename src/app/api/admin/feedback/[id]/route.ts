@@ -29,6 +29,7 @@ export async function PATCH(
       message: isApproved ? 'Feedback approved successfully!' : 'Feedback rejected!',
       data: updatedFeedback 
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -56,6 +57,7 @@ export async function DELETE(
     await Feedback.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true, message: 'Feedback and avatar image deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

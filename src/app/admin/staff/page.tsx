@@ -34,6 +34,7 @@ const WhatsappIcon = ({ className = "w-4 h-4" }) => (
 );
 
 export default function StaffManagement() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [team, setTeam] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,6 +53,7 @@ export default function StaffManagement() {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   // Edit Modal States
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editingStaff, setEditingStaff] = useState<any | null>(null);
   const [editName, setEditName] = useState("");
   const [editPosition, setEditPosition] = useState("");
@@ -83,6 +85,7 @@ export default function StaffManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchStaff();
   }, []);
 
@@ -91,6 +94,7 @@ export default function StaffManagement() {
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const uploadStaffPhoto = async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append("file", file);
@@ -112,6 +116,7 @@ export default function StaffManagement() {
         showNotification("Profile photo uploaded!", "success");
       }
     } catch (err) {
+      console.error(err);
       showNotification("Photo upload failed", "error");
     } finally {
       setUploadingPhoto(false);
@@ -152,6 +157,7 @@ export default function StaffManagement() {
         fetchStaff();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to add staff member", "error");
     }
   };
@@ -168,11 +174,13 @@ export default function StaffManagement() {
         fetchStaff();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to delete staff member", "error");
     }
   };
 
   // Open Edit Modal
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOpenEdit = (member: any) => {
     setEditingStaff(member);
     setEditName(member.name);
@@ -224,6 +232,7 @@ export default function StaffManagement() {
         showNotification(data.message || "Update failed", "error");
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to update staff member", "error");
     } finally {
       setUpdating(false);

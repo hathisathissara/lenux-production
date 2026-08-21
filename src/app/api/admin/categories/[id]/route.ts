@@ -29,6 +29,7 @@ export async function PUT(
     );
 
     return NextResponse.json({ success: true, message: 'Category updated successfully', data: updatedCat });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -55,6 +56,7 @@ export async function DELETE(
     await ServiceCategory.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true, message: 'Category and image deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

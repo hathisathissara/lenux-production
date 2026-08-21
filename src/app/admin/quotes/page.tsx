@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, AlertCircle, Eye, Trash, X, Calendar, Phone, Mail, Building, FileText, ChevronRight } from "lucide-react";
+import { Check, AlertCircle, Eye, Trash, X, Calendar, Phone, Mail, Building, FileText } from "lucide-react";
 
 export default function QuotesManagement() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [quotes, setQuotes] = useState<any[]>([]);
-  const [filteredQuotes, setFilteredQuotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Modal States
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedQuote, setSelectedQuote] = useState<any | null>(null);
   const [statusInput, setStatusInput] = useState("");
   const [adminNotesInput, setAdminNotesInput] = useState("");
@@ -22,7 +23,6 @@ export default function QuotesManagement() {
       const data = await res.json();
       if (data.success) {
         setQuotes(data.data);
-        setFilteredQuotes(data.data);
       }
     } catch (err) {
       console.error("Failed to load quotes", err);
@@ -32,17 +32,12 @@ export default function QuotesManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchQuotes();
   }, []);
 
   // Filtering Logic
-  useEffect(() => {
-    if (activeFilter === "All") {
-      setFilteredQuotes(quotes);
-    } else {
-      setFilteredQuotes(quotes.filter(q => q.status === activeFilter));
-    }
-  }, [activeFilter, quotes]);
+  const filteredQuotes = activeFilter === "All" ? quotes : quotes.filter(q => q.status === activeFilter);
 
   const showNotification = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
@@ -50,6 +45,7 @@ export default function QuotesManagement() {
   };
 
   // Open Modal with selected Quote details
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleViewQuote = (quote: any) => {
     setSelectedQuote(quote);
     setStatusInput(quote.status);
@@ -74,6 +70,7 @@ export default function QuotesManagement() {
         fetchQuotes();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to update quotation", "error");
     }
   };
@@ -90,12 +87,14 @@ export default function QuotesManagement() {
         fetchQuotes();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to delete quote request", "error");
     }
   };
 
   // Status Colors Helper
   const getStatusBadge = (status: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const badges: any = {
       New: "bg-blue-100 text-blue-800",
       Contacted: "bg-purple-100 text-purple-800",

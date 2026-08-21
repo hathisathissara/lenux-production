@@ -48,6 +48,7 @@ export async function POST(request: Request) {
     });
 
     return response;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Login error:', error);
     return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });

@@ -13,6 +13,36 @@ import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
+export const metadata = {
+  title: "Photo Gallery | Lenux Production Sri Lanka",
+  description: "Browse the official photo gallery of Lenux Production. See our completed signboards, vehicle branding, event setups, and creative branding projects in Sri Lanka.",
+  keywords: "lenux production gallery, signboard gallery sri lanka, branding photos colombo",
+  openGraph: {
+    title: "Gallery | Lenux Production - Visual Portfolio",
+    description: "Browse the official photo gallery of Lenux Production. See our completed signboards, vehicle branding, event setups, and creative branding projects in Sri Lanka.",
+    url: `${SITE_URL}/gallery`,
+    siteName: "Lenux Production",
+    images: [
+      {
+        url: `${SITE_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: "Lenux Production - Photo Gallery",
+      }
+    ],
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gallery | Lenux Production - Visual Portfolio",
+    description: "Browse the official photo gallery of Lenux Production Sri Lanka.",
+    images: [`${SITE_URL}/images/logo.png`],
+  },
+};
+
 async function getGalleryData() {
   await connectDB();
 
@@ -24,6 +54,7 @@ async function getGalleryData() {
   const settings = settingsDoc ? JSON.parse(JSON.stringify(settingsDoc)) : null;
   // VisualGallery එකට පහසුවෙන් දත්ත දෙන්න image object එක flatten කරමු
   const rawGallery = galleryDoc ? JSON.parse(JSON.stringify(galleryDoc)) : [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const galleryImages = rawGallery.map((item: any) => ({
     _id: item._id,
     title: item.title,
@@ -42,7 +73,6 @@ export default async function GalleryPage() {
   const phone = settings?.phone || "+94 77 123 4567";
   const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
   const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const email = settings?.email || "info@lenux.lk";
   const whatsapp = settings?.whatsapp || "+94 77 123 4567";
 
   return (

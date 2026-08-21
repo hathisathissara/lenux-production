@@ -28,6 +28,7 @@ export async function PUT(
     );
 
     return NextResponse.json({ success: true, message: 'Portfolio updated successfully', data: updatedProject });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -64,6 +65,7 @@ export async function DELETE(
     await Portfolio.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true, message: 'Portfolio project and all stage photos deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

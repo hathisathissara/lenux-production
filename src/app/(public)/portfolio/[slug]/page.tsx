@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -11,7 +10,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Footer from "@/components/Footer";
 import ProjectImageLightbox from "@/components/ProjectImageLightbox"; // 🌟 Lightbox Modal Popup Component
 
-import { Calendar, User, MessageCircle, ImageIcon, Sparkles } from "lucide-react";
+import { Calendar, User, MessageCircle, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
@@ -23,6 +22,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   await connectDB();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const project = await Portfolio.findOne({ slug, isPublished: true }).lean() as any;
 
   if (!project) return { title: "Project Not Found | Lenux Production" };
@@ -130,7 +130,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <h3 className="text-2xl font-bold text-white uppercase mt-2">Before Project Execution ({project.beforeImages.length} Photos)</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {project.beforeImages.map((img: any, i: number) => (
+                  {project.beforeImages.map((img: Record<string, string>, i: number) => (
                     <div key={i} className="relative w-full h-72 rounded-3xl overflow-hidden border border-white/10 bg-gray-950 shadow-xl">
                       <ProjectImageLightbox url={img.url} alt={`Before photo ${i + 1}`} />
                     </div>
@@ -149,7 +149,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <h3 className="text-2xl font-bold text-white uppercase mt-2">Workshop & Production Process ({project.productionImages.length} Photos)</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {project.productionImages.map((img: any, i: number) => (
+                  {project.productionImages.map((img: Record<string, string>, i: number) => (
                     <div key={i} className="relative w-full h-72 rounded-3xl overflow-hidden border border-white/10 bg-gray-950 shadow-xl">
                       <ProjectImageLightbox url={img.url} alt={`Production photo ${i + 1}`} />
                     </div>
@@ -168,7 +168,7 @@ export default async function PortfolioDetailPage({ params }: Props) {
                   <h3 className="text-2xl font-bold text-white uppercase mt-2">Final On-Site Installation ({project.installationImages.length} Photos)</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {project.installationImages.map((img: any, i: number) => (
+                  {project.installationImages.map((img: Record<string, string>, i: number) => (
                     <div key={i} className="relative w-full h-72 rounded-3xl overflow-hidden border border-white/10 bg-gray-950 shadow-xl">
                       <ProjectImageLightbox url={img.url} alt={`Installation photo ${i + 1}`} />
                     </div>

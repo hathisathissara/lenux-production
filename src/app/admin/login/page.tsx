@@ -33,6 +33,7 @@ export default function AdminLogin() {
         setError(data.message || "Invalid login credentials.");
       }
     } catch (err) {
+      console.error(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

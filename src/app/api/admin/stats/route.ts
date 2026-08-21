@@ -29,6 +29,7 @@ export async function GET() {
       }
     });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Stats fetch error:', error);
     return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });

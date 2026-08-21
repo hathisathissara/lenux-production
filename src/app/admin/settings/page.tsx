@@ -68,6 +68,7 @@ export default function SettingsPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchSettings();
   }, []);
 
@@ -104,6 +105,7 @@ export default function SettingsPage() {
         showNotification("Image uploaded to Cloud! Click 'Save Settings' below to save permanently.", "success");
       }
     } catch (err) {
+      console.error(err);
       showNotification("Upload failed", "error");
     } finally {
       setUploadingLogo(false);
@@ -151,6 +153,7 @@ export default function SettingsPage() {
         showNotification(data.message || "Failed to update settings", "error");
       }
     } catch (err) {
+      console.error(err);
       showNotification("Something went wrong while saving", "error");
     } finally {
       setSaving(false);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Briefcase, Users, Image as ImageIcon, FileText, ArrowUpRight, Plus, MessageSquare } from "lucide-react";
+import { Briefcase, Users, Image as ImageIcon, FileText, ArrowUpRight, Plus } from "lucide-react";
 
 interface Stats {
   totalServices: number;

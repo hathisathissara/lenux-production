@@ -43,6 +43,7 @@ export async function GET() {
       }
     });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Seed Error:', error);
     return NextResponse.json({ 

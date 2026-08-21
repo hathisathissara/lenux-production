@@ -8,6 +8,7 @@ export async function GET() {
     await connectDB();
     const images = await Gallery.find().sort({ sortOrder: 1, createdAt: -1 });
     return NextResponse.json({ success: true, data: images });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, count: createdImages.length, data: createdImages }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

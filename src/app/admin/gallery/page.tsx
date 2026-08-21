@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Upload, Trash, Check, AlertCircle, ImageIcon } from "lucide-react";
+import { Plus, Trash, Check, AlertCircle, ImageIcon } from "lucide-react";
 
 export default function GalleryManagement() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [gallery, setGallery] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +36,7 @@ export default function GalleryManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchGallery();
   }, []);
 
@@ -63,6 +65,7 @@ export default function GalleryManagement() {
       }
       showNotification("All photos uploaded successfully!", "success");
     } catch (err) {
+      console.error(err);
       showNotification("Some photo uploads failed", "error");
     } finally {
       setUploading(false);
@@ -105,6 +108,7 @@ export default function GalleryManagement() {
         fetchGallery();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to save photos", "error");
     }
   };
@@ -121,6 +125,7 @@ export default function GalleryManagement() {
         fetchGallery();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to delete image", "error");
     }
   };

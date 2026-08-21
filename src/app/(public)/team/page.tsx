@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import StaffCard from "@/components/StaffCard"; // අපි කලින් හැදූ Interactive Staff Card එක
 
-import { Sparkles, MessageCircle, Award, Users } from "lucide-react";
+import { Sparkles, MessageCircle, Award } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
@@ -80,6 +80,7 @@ export default async function TeamPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {staffList.map((member: any) => (
                 <ScrollReveal key={member._id}>
                   <StaffCard member={member} />

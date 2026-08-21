@@ -13,10 +13,35 @@ import {
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
 export const metadata = {
   title: "About Our Studio | Advertising & Branding Sri Lanka",
   description: "Learn more about Lenux Production, a premier creative advertising and branding company in Sri Lanka. Specialists in sign boards, light boards, and full-scale print production.",
   keywords: "advertising agency sri lanka, sign boards colombo, branding company sri lanka, lenux production",
+  openGraph: {
+    title: "About Lenux Production | Creative Advertising & Branding Sri Lanka",
+    description: "Learn more about Lenux Production, a premier creative advertising and branding company in Sri Lanka. Specialists in sign boards, light boards, and full-scale print production.",
+    url: `${SITE_URL}/about`,
+    siteName: "Lenux Production",
+    images: [
+      {
+        url: `${SITE_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: "Lenux Production - About Us",
+      }
+    ],
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Lenux Production | Creative Advertising & Branding Sri Lanka",
+    description: "Learn more about Lenux Production, a premier creative advertising and branding company in Sri Lanka.",
+    images: [`${SITE_URL}/images/logo.png`],
+  },
 };
 async function getAboutData() {
   await connectDB();

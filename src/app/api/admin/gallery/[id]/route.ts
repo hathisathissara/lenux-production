@@ -25,6 +25,7 @@ export async function DELETE(
     await Gallery.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true, message: 'Gallery image deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

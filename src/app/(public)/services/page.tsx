@@ -12,10 +12,34 @@ import ServicesFilterSection from "@/components/ServicesFilterSection"; // 🌟 
 import { Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
 export const metadata = {
   title: "Our Services | Printing, Embossed Letters & Light Boards Sri Lanka",
   description: "Explore Lenux Production services: Digital and Offset printing, custom logo boards, shop branding, vehicle branding, and illuminated light boards in Colombo.",
   keywords: "digital printing colombo, offset printing sri lanka, shop branding sri lanka, embossed letters colombo, light boards sri lanka",
+  openGraph: {
+    title: "Services | Lenux Production - Printing & Branding Sri Lanka",
+    description: "Explore Lenux Production services: Digital and Offset printing, custom logo boards, shop branding, vehicle branding, and illuminated light boards in Colombo.",
+    url: `${SITE_URL}/services`,
+    siteName: "Lenux Production",
+    images: [
+      {
+        url: `${SITE_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: "Lenux Production - Our Services",
+      }
+    ],
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services | Lenux Production - Printing & Branding Sri Lanka",
+    description: "Explore Lenux Production services: Digital and Offset printing, custom logo boards, shop branding, vehicle branding, and illuminated light boards.",
+    images: [`${SITE_URL}/images/logo.png`],
+  },
 };
 async function getServicesPageData() {
   await connectDB();

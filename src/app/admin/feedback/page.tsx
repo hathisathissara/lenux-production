@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Check, AlertCircle, Trash, Star, MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react";
 
 export default function FeedbackManagement() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -24,6 +25,7 @@ export default function FeedbackManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchFeedbacks();
   }, []);
 
@@ -46,6 +48,7 @@ export default function FeedbackManagement() {
         fetchFeedbacks();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to update status", "error");
     }
   };
@@ -64,6 +67,7 @@ export default function FeedbackManagement() {
         fetchFeedbacks();
       }
     } catch (err) {
+      console.error(err);
       showNotification("Failed to delete feedback", "error");
     }
   };
@@ -150,7 +154,7 @@ export default function FeedbackManagement() {
                 <div className="space-y-2">
                   {renderStars(item.rating)}
                   <p className="text-sm text-lenux-charcoal leading-relaxed italic">
-                    "{item.comment}"
+                    &quot;{item.comment}&quot;
                   </p>
                 </div>
               </div>

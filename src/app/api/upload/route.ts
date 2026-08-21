@@ -39,6 +39,7 @@ export async function POST(request: Request) {
       publicId: uploadResult.public_id
     });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Public Upload Error:', error);
     return NextResponse.json({ success: false, message: 'Upload failed', error: error.message }, { status: 500 });
@@ -62,6 +63,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Image deleted' });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Public Delete Error:', error);
     return NextResponse.json({ success: false, message: 'Delete failed', error: error.message }, { status: 500 });

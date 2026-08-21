@@ -9,6 +9,7 @@ export async function GET() {
     // sortOrder එකට අනුව (MD, Directors මුලින්ම එන විදියට) සහ අලුතෙන්ම දාපු අනුපිළිවෙලට ගන්නවා
     const team = await Staff.find().sort({ sortOrder: 1, createdAt: -1 });
     return NextResponse.json({ success: true, data: team });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, data: newMember }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

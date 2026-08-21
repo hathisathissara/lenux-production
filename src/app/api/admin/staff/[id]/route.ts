@@ -30,6 +30,7 @@ export async function PUT(
     );
 
     return NextResponse.json({ success: true, message: 'Staff member updated successfully', data: updatedStaff });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -57,6 +58,7 @@ export async function DELETE(
     await Staff.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true, message: 'Staff member and photo deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

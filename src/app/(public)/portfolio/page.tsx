@@ -12,10 +12,34 @@ import { Sparkles, MessageCircle } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+
 export const metadata = {
   title: "Our Recent Work | Signboard & Visual Production Gallery",
   description: "Discover the latest visual production projects by Lenux Production in Sri Lanka. View our completed shop branding, vehicle graphics, and premium signboards.",
   keywords: "vehicle branding sri lanka, completed signboard projects colombo, creative portfolio sri lanka",
+  openGraph: {
+    title: "Portfolio | Lenux Production - Our Recent Work",
+    description: "Discover the latest visual production projects by Lenux Production in Sri Lanka. View our completed shop branding, vehicle graphics, and premium signboards.",
+    url: `${SITE_URL}/portfolio`,
+    siteName: "Lenux Production",
+    images: [
+      {
+        url: `${SITE_URL}/images/logo.png`,
+        width: 1200,
+        height: 630,
+        alt: "Lenux Production - Portfolio",
+      }
+    ],
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Portfolio | Lenux Production - Our Recent Work",
+    description: "Discover the latest visual production projects by Lenux Production in Sri Lanka.",
+    images: [`${SITE_URL}/images/logo.png`],
+  },
 };
 async function getPortfolioData() {
   await connectDB();

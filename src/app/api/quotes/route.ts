@@ -8,6 +8,7 @@ export async function GET() {
     await connectDB();
     const quotes = await QuoteRequest.find().sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: quotes });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, message: 'Quotation request submitted successfully!', data: newQuote }, { status: 201 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

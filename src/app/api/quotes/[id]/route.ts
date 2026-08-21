@@ -23,6 +23,7 @@ export async function PATCH(
     }
 
     return NextResponse.json({ success: true, message: 'Quotation updated successfully', data: updatedQuote });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
@@ -37,6 +38,7 @@ export async function DELETE(
     const { id } = await params;
     await QuoteRequest.findByIdAndDelete(id);
     return NextResponse.json({ success: true, message: 'Quotation deleted successfully' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
