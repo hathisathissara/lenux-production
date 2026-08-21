@@ -127,24 +127,24 @@ export default async function HomePage() {
             priority
           />
           {/* 🌟 Background Visibility එක වැඩි කර ඇති බව තහවුරු කරගන්න */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 md:bg-gradient-to-r md:from-black/80 md:via-black/50 md:to-transparent z-10" />
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 w-full mt-8 md:mt-12">
           <ScrollReveal>
             <div className="max-w-2xl space-y-5">
-              <h2 className="text-2xl sm:text-4xl md:text-5xl font-light text-white tracking-wide uppercase leading-tight drop-shadow-md">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white tracking-wide uppercase leading-tight drop-shadow-md">
                 Welcome to{" "}
-                <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent font-bold inline-block">
+                <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent font-bold block mt-2 sm:mt-0 sm:inline-block">
                   LENUX PRODUCTION
                 </span>
               </h2>
               
-              <p className="text-base sm:text-xl md:text-2xl text-white font-medium tracking-wide drop-shadow-lg leading-relaxed">
+              <p className="text-base sm:text-xl md:text-2xl text-white font-medium tracking-wide drop-shadow-2xl leading-relaxed">
                 Lenux is the ideal platform to take your business to the public and reach a wider audience.
               </p>
 
-              <p className="text-sm sm:text-base text-gray-200 font-light leading-relaxed drop-shadow-md max-w-xl">
+              <p className="text-sm sm:text-base text-gray-100 font-normal leading-relaxed drop-shadow-2xl max-w-xl">
                 Lenux Production is a creative advertising and branding company in Sri Lanka. We design, print, and build visual solutions that help businesses grow and get noticed.
               </p>
             </div>
@@ -508,16 +508,14 @@ export default async function HomePage() {
       </section>
 
       {/* ==========================================
-          🌟 TESTIMONIALS SLIDESHOW (පාරිභෝගික අදහස් ස්ලයිඩ්ෂෝව)
+          🌟 TESTIMONIALS SLIDESHOW
           ========================================== */}
       <TestimonialsSection feedbacks={feedbacks} />
 
       {/* ==========================================
           SECTION 09 — CLIENT CTA BANNER
           ========================================== */}
-      {/* ==========================================
-          🌟 HIGH-IMPACT CLIENT CTA BANNER
-          ========================================== */}
+      
       <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
         
