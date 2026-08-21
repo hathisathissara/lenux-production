@@ -169,7 +169,7 @@ export default async function ContactPage() {
               {/* Direct WhatsApp Quick Chat */}
               <div className="pt-2">
                 <a
-                  href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`}
+                  href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}?text=Hi%20Lenux%20Production%2C%20I%20need%20a%20quotation%20for...`}
                   target="_blank"
                   className="w-full py-4 border border-emerald-500/40 text-emerald-400 bg-emerald-950/30 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all flex items-center justify-center gap-2 shadow-lg"
                 >

@@ -16,7 +16,7 @@ function WhatsAppFloatingButton({ phone }: { phone: string }) {
 
   if (!phone) return null;
 
-  const cleanPhone = phone.replace(/[^0-9]/g, "");
+  const cleanPhone = phone.replace(/[^0-9]/g, "").replace(/^0/, "94");
   const autoMessage = encodeURIComponent("Hi Lenux Production, I need a quotation for...");
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${autoMessage}`;
 

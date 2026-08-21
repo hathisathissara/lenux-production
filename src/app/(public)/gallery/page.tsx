@@ -144,7 +144,7 @@ export default async function GalleryPage() {
               
               {/* බටන් 2: WhatsApp Us */}
               <a 
-                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} 
+                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}?text=Hi%20Lenux%20Production%2C%20I%20need%20a%20quotation%20for...`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2"

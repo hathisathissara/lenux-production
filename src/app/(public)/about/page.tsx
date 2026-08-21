@@ -296,7 +296,7 @@ export default async function AboutPage() {
               <Link href="/contact" className="w-full sm:w-auto px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-lg transition-all">
                 Get a Quote
               </Link>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" className="w-full sm:w-auto px-8 py-3.5 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex justify-center items-center gap-2">
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}?text=Hi%20Lenux%20Production%2C%20I%20need%20a%20quotation%20for...`} target="_blank" className="w-full sm:w-auto px-8 py-3.5 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex justify-center items-center gap-2">
                 <MessageCircle size={16} /> WhatsApp Us
               </a>
             </div>
