@@ -25,15 +25,15 @@ export default async function Footer() {
 
 
   return (
-    <footer className="bg-[#040404] border-t border-white/10 pt-16 pb-12 text-sm text-gray-400 font-sans">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/5">
+    <footer className="bg-[#040404] border-t border-white/10 pt-12 md:pt-16 pb-8 md:pb-12 text-sm text-gray-400 font-sans">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-10 pb-8 md:pb-12 border-b border-white/5">
         
         {/* Company Intro */}
         <div className="lg:col-span-2 space-y-4">
           <h4 className="text-xl font-bold text-white tracking-wider uppercase">{companyName}</h4>
           <p className="text-xs text-lenux-emerald font-semibold uppercase tracking-widest">Design, Print & Production</p>
           <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
-            Sri Lanka's leading visual advertising and branding partner, creating impactful printing, signboards, displays, and event solutions.
+            Sri Lanka&apos;s leading visual advertising and branding partner, creating impactful printing, signboards, displays, and event solutions.
           </p>
         </div>
 

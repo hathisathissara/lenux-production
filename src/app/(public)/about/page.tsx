@@ -71,7 +71,7 @@ export default async function AboutPage() {
       {/* ==========================================
           WHO WE ARE & COMPANY PROFILE
           ========================================== */}
-      <section className="py-28 bg-[#040404] relative overflow-hidden">
+      <section className="py-16 md:py-28 bg-[#040404] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-6 space-y-6">
@@ -106,7 +106,7 @@ export default async function AboutPage() {
 
           <div className="lg:col-span-6 w-full">
             <ScrollReveal>
-              <div className="relative w-full h-[450px] rounded-3xl overflow-hidden border border-white/10 bg-[#080808] shadow-2xl flex items-center justify-center p-8 group">
+              <div className="relative w-full h-64 sm:h-[450px] rounded-3xl overflow-hidden border border-white/10 bg-[#080808] shadow-2xl flex items-center justify-center p-8 group">
                 {logoUrl ? (
                   <div className="relative w-full h-full max-w-[340px] max-h-[340px]">
                     <Image 
@@ -139,7 +139,7 @@ export default async function AboutPage() {
       {/* ==========================================
           OUR 4-STEP PRODUCTION APPROACH
           ========================================== */}
-      <section className="py-28 bg-black border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -185,7 +185,7 @@ export default async function AboutPage() {
       {/* ==========================================
           VISION & MISSION SECTION
           ========================================== */}
-      <section className="py-28 bg-[#050505] border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-[#050505] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-14">
           <ScrollReveal>
             <div className="text-center space-y-3">
@@ -198,7 +198,7 @@ export default async function AboutPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Vision */}
-            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between h-[520px]">
+            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between min-h-[400px] lg:h-[520px] h-auto">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="w-12 h-12 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -207,7 +207,7 @@ export default async function AboutPage() {
                   <span className="px-4 py-1 rounded-full bg-[#091a13] border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase">Vision</span>
                 </div>
                 <h4 className="text-2xl font-bold text-white">Our Vision</h4>
-                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">"{visionText}"</p>
+                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">&quot;{visionText}&quot;</p>
               </div>
               <div className="relative w-full h-44 rounded-2xl overflow-hidden mt-6">
                 <Image src={visionImg} alt="Vision" fill className="object-cover" />
@@ -215,7 +215,7 @@ export default async function AboutPage() {
             </div>
 
             {/* Mission */}
-            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between h-[520px]">
+            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl p-8 sm:p-10 flex flex-col justify-between min-h-[400px] lg:h-[520px] h-auto">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="w-12 h-12 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -224,7 +224,7 @@ export default async function AboutPage() {
                   <span className="px-4 py-1 rounded-full bg-[#091a13] border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase">Mission</span>
                 </div>
                 <h4 className="text-2xl font-bold text-white">Our Mission</h4>
-                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">"{missionText}"</p>
+                <p className="text-gray-300 text-sm sm:text-base font-light italic leading-relaxed">&quot;{missionText}&quot;</p>
               </div>
               <div className="relative w-full h-44 rounded-2xl overflow-hidden mt-6">
                 <Image src={missionImg} alt="Mission" fill className="object-cover" />
@@ -237,7 +237,7 @@ export default async function AboutPage() {
       {/* ==========================================
           🌟 REDIRECT TO TEAM PAGE BANNER (အစား Team Grid)
           ========================================== */}
-      <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
+      <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
           <ScrollReveal>
             <div className="w-16 h-16 rounded-2xl bg-lenux-emerald/20 border border-lenux-emerald/40 flex items-center justify-center text-lenux-emerald mx-auto mb-2">
@@ -261,17 +261,17 @@ export default async function AboutPage() {
       {/* ==========================================
           CTA BANNER
           ========================================== */}
-      <section className="py-20 bg-black border-t border-white/5 text-center">
+      <section className="py-16 md:py-20 bg-black border-t border-white/5 text-center">
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
           <ScrollReveal>
             <h3 className="text-3xl sm:text-4xl font-extrabold text-white">
               Ready to Start Your <span className="text-lenux-emerald">Next Project?</span>
             </h3>
             <div className="flex flex-wrap justify-center gap-4 pt-2">
-              <Link href="/contact" className="px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-lg transition-all">
+              <Link href="/contact" className="w-full sm:w-auto px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-lg transition-all">
                 Get a Quote
               </Link>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" className="px-8 py-3.5 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex items-center gap-2">
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" className="w-full sm:w-auto px-8 py-3.5 border border-emerald-400/40 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all inline-flex justify-center items-center gap-2">
                 <MessageCircle size={16} /> WhatsApp Us
               </a>
             </div>

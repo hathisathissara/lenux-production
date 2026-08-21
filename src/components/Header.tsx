@@ -130,7 +130,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
       {/* ==========================================
           MOBILE DRAWER MENU
           ========================================== */}
-      <div className={`fixed inset-y-0 right-0 z-50 w-72 bg-[#080808] border-l border-white/5 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
+      <div className={`fixed inset-y-0 right-0 z-50 w-[85vw] sm:w-80 bg-[#080808] border-l border-white/5 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
         isMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}>
         <div className="space-y-8 pt-20">

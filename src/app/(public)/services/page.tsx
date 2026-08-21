@@ -47,7 +47,7 @@ export default async function ServicesPage() {
       <Header phone={phone} hours={hours} companyName={companyName} />
 
       {/* Services Hero Banner */}
-      <section className="relative w-full pt-40 pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
+      <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-25">
           <Image src="/images/hero-bg.jpg" alt="Services Hero" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
@@ -82,7 +82,7 @@ export default async function ServicesPage() {
           </div>
           <Link
             href="/contact"
-            className="px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark transition-all shrink-0 shadow-lg"
+            className="w-full sm:w-auto text-center px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark transition-all shrink-0 shadow-lg"
           >
             Request Custom Spec
           </Link>

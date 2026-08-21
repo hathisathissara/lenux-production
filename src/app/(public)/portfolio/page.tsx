@@ -51,7 +51,7 @@ export default async function PortfolioPage() {
       {/* ==========================================
           PORTFOLIO HERO BANNER
           ========================================== */}
-      <section className="relative w-full pt-40 pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
+      <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-25">
           <Image src="/images/hero-bg.jpg" alt="Portfolio Hero" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
@@ -75,7 +75,7 @@ export default async function PortfolioPage() {
       {/* ==========================================
           🌟 INTERACTIVE PORTFOLIO GRID & LIGHTBOX
           ========================================== */}
-      <section className="py-24 bg-[#040404] relative">
+      <section className="py-16 md:py-24 bg-[#040404] relative">
         <div className="max-w-7xl mx-auto px-6">
           <PortfolioGallery projects={projects} />
         </div>
@@ -87,7 +87,7 @@ export default async function PortfolioPage() {
       {/* ==========================================
           🌟 HIGH-IMPACT CLIENT CTA BANNER
           ========================================== */}
-      <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
+      <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
         
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
@@ -104,7 +104,7 @@ export default async function PortfolioPage() {
               {/* බටන් 1: Get a Free Quote */}
               <Link 
                 href="/contact" 
-                className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
+                className="w-full sm:w-auto px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
               >
                 Get a Free Quote
               </Link>
@@ -114,7 +114,7 @@ export default async function PortfolioPage() {
                 href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2"
               >
                 <MessageCircle size={16} /> WhatsApp Us
               </a>

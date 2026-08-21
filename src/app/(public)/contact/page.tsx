@@ -55,7 +55,7 @@ export default async function ContactPage() {
       {/* ==========================================
           CONTACT HERO BANNER
           ========================================== */}
-      <section className="relative w-full pt-40 pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
+      <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-25">
           <Image src="/images/hero-bg.jpg" alt="Contact Hero" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
@@ -79,7 +79,7 @@ export default async function ContactPage() {
       {/* ==========================================
           🌟 CONTACT INFO & QUOTE FORM CONTAINER
           ========================================== */}
-      <section className="py-24 bg-[#040404] relative">
+      <section className="py-16 md:py-24 bg-[#040404] relative">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Column: Direct Contact Info (5 Cols) */}
@@ -169,7 +169,7 @@ export default async function ContactPage() {
       {/* ==========================================
           🌟 FEEDBACK SUBMISSION SECTION (Contact Page එක යටින් එකතු කර ඇත)
           ========================================== */}
-      <section className="py-24 bg-[#070707] border-t border-white/5 relative">
+      <section className="py-16 md:py-24 bg-[#070707] border-t border-white/5 relative">
         <div className="max-w-3xl mx-auto px-6">
           <ScrollReveal>
             <FeedbackForm />

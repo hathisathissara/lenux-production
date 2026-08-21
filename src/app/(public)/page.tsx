@@ -139,20 +139,20 @@ export default async function HomePage() {
                 </span>
               </h2>
               
-              <p className="text-sm sm:text-lg md:text-xl text-white font-medium tracking-wide drop-shadow leading-relaxed">
+              <p className="text-base sm:text-xl md:text-2xl text-white font-medium tracking-wide drop-shadow-lg leading-relaxed">
                 Lenux is the ideal platform to take your business to the public and reach a wider audience.
               </p>
 
-              <p className="text-xs sm:text-sm text-gray-200 font-light leading-relaxed drop-shadow-sm max-w-xl">
+              <p className="text-sm sm:text-base text-gray-200 font-light leading-relaxed drop-shadow-md max-w-xl">
                 Lenux Production is a creative advertising and branding company in Sri Lanka. We design, print, and build visual solutions that help businesses grow and get noticed.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-4 pt-6">
-              <Link href="/services" className="px-7 py-3 border border-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:shadow-lg hover:shadow-lenux-emerald/30 transition-all duration-300">
+              <Link href="/services" className="w-full sm:w-auto text-center px-7 py-3 border border-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:shadow-lg hover:shadow-lenux-emerald/30 transition-all duration-300">
                 Explore Services
               </Link>
-              <Link href="/contact" className="px-7 py-3 border border-white/30 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:border-lenux-emerald hover:bg-lenux-emerald/10 transition-all duration-300">
+              <Link href="/contact" className="w-full sm:w-auto text-center px-7 py-3 border border-white/30 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:border-lenux-emerald hover:bg-lenux-emerald/10 transition-all duration-300">
                 Get a Quote
               </Link>
             </div>
@@ -190,7 +190,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 02 — VISION & MISSION
           ========================================== */}
-      <section className="relative w-full bg-[#050505] text-white py-28 overflow-hidden border-t border-white/5">
+      <section className="relative w-full bg-[#050505] text-white py-16 md:py-28 overflow-hidden border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 space-y-14 relative z-10">
           <ScrollReveal>
             <div className="flex flex-col items-center text-center space-y-4">
@@ -211,7 +211,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Vision */}
             <ScrollReveal>
-              <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl overflow-hidden flex flex-col justify-between h-[580px] p-8 sm:p-10 relative group hover:border-emerald-500/50 transition-all duration-500">
+              <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl overflow-hidden flex flex-col justify-between min-h-[400px] lg:h-[580px] h-auto p-8 sm:p-10 relative group hover:border-emerald-500/50 transition-all duration-500">
                 <div className="space-y-6 relative z-10">
                   <div className="flex items-center justify-between">
                     <div className="w-14 h-14 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -234,7 +234,7 @@ export default async function HomePage() {
 
             {/* Mission */}
             <ScrollReveal>
-              <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl overflow-hidden flex flex-col justify-between h-[580px] p-8 sm:p-10 relative group hover:border-emerald-500/50 transition-all duration-500">
+              <div className="rounded-[2.5rem] bg-gradient-to-b from-[#0d1c15] via-[#08120d] to-[#040806] border border-emerald-900/60 shadow-2xl overflow-hidden flex flex-col justify-between min-h-[400px] lg:h-[580px] h-auto p-8 sm:p-10 relative group hover:border-emerald-500/50 transition-all duration-500">
                 <div className="space-y-6 relative z-10">
                   <div className="flex items-center justify-between">
                     <div className="w-14 h-14 rounded-full bg-[#0d221a] border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -261,7 +261,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 03 — 5 CORE VALUES
           ========================================== */}
-      <section className="relative w-full py-32 overflow-hidden bg-black flex items-center border-t border-white/5">
+      <section className="relative w-full py-20 md:py-32 overflow-hidden bg-black flex items-center border-t border-white/5">
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/values-man-bg.jpeg" 
@@ -310,7 +310,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 04 — WHO WE ARE
           ========================================== */}
-      <section className="py-28 bg-[#070707] border-t border-white/5 relative overflow-hidden">
+      <section className="py-16 md:py-28 bg-[#070707] border-t border-white/5 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
             <ScrollReveal>
@@ -349,7 +349,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 05 — OUR SERVICES
           ========================================== */}
-      <section className="py-28 bg-black border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -394,7 +394,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 06 — WHY CHOOSE LENUX
           ========================================== */}
-      <section className="py-28 bg-[#060606] border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-[#060606] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -434,7 +434,7 @@ export default async function HomePage() {
       {/* ==========================================
           🌟 SECTION 07 — FEATURED PORTFOLIO
           ========================================== */}
-      <section className="py-28 bg-black border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <ScrollReveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -479,7 +479,7 @@ export default async function HomePage() {
       {/* ==========================================
           🌟 SECTION 08 — MEET OUR TEAM
           ========================================== */}
-      <section className="py-28 bg-[#050505] border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-[#050505] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -514,7 +514,7 @@ export default async function HomePage() {
       {/* ==========================================
           🌟 HIGH-IMPACT CLIENT CTA BANNER
           ========================================== */}
-      <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
+      <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
         
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
@@ -531,7 +531,7 @@ export default async function HomePage() {
               {/* බටන් 1: Get a Free Quote */}
               <Link 
                 href="/contact" 
-                className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
+                className="w-full sm:w-auto px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
               >
                 Get a Free Quote
               </Link>
@@ -541,7 +541,7 @@ export default async function HomePage() {
                 href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2"
               >
                 <MessageCircle size={16} /> WhatsApp Us
               </a>
@@ -553,7 +553,7 @@ export default async function HomePage() {
       {/* ==========================================
           🌟 SECTION 10 — CONTACT PREVIEW & FULL COLOR MAP
           ========================================== */}
-      <section className="py-28 bg-black border-t border-white/5 relative">
+      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           <div className="lg:col-span-5 space-y-8">
