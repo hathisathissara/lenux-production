@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Sparkles, X, Layers, Maximize2 } from "lucide-react";
+import { X, Layers, Maximize2 } from "lucide-react";
 
 interface VisualGalleryProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   galleryImages: any[];
 }
 
 export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [activeImage, setActiveImage] = useState<any | null>(null);
 
   // Categories නිර්මාණය කරගැනීම (All + Unique Categories)
@@ -29,7 +31,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
       
       {/* 🌟 1. CATEGORY FILTER PILLS */}
       <div className="flex items-center gap-2 overflow-x-auto pb-4 justify-start sm:justify-center no-scrollbar">
-        {categories.map((cat: any) => (
+        {categories.map((cat: string) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}

@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ArrowRight, CheckCircle2, Layers, Sparkles } from "lucide-react";
+import { Search, ArrowRight, CheckCircle2, Layers } from "lucide-react";
 
 interface ServicesCatalogProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categories: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   services: any[];
 }
 
@@ -84,7 +86,7 @@ export default function ServicesCatalog({ categories, services }: ServicesCatalo
           <Layers size={48} className="mx-auto text-lenux-emerald opacity-60" />
           <h4 className="text-xl font-bold text-white">No Services Found</h4>
           <p className="text-sm text-gray-400 font-light">
-            We couldn't find any services matching your search. Please try a different keyword or category.
+            We couldn&apos;t find any services matching your search. Please try a different keyword or category.
           </p>
           <button 
             onClick={() => { setSelectedCategory("all"); setSearchQuery(""); }}

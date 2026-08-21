@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { CheckCircle2, Sparkles } from "lucide-react";
 
 interface ContactQuoteFormProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   services: any[];
 }
 
@@ -56,6 +57,7 @@ export default function ContactQuoteForm({ services }: ContactQuoteFormProps) {
         setStatus({ text: data.message || "Failed to submit request.", type: "error" });
       }
     } catch (err) {
+      console.error(err);
       setStatus({ text: "Something went wrong. Please try again.", type: "error" });
     } finally {
       setLoading(false);

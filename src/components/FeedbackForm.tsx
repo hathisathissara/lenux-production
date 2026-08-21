@@ -43,6 +43,7 @@ export default function FeedbackForm() {
         setStatus({ text: data.message || "Image conversion failed", type: "error" });
       }
     } catch (err) {
+      console.error(err);
       setStatus({ text: "Image upload failed. Please try again.", type: "error" });
     } finally {
       setUploadingAvatar(false);
@@ -70,6 +71,7 @@ export default function FeedbackForm() {
         setStatus({ text: data.message || "Failed to remove image", type: "error" });
       }
     } catch (err) {
+      console.error(err);
       setStatus({ text: "Failed to remove image. Please try again.", type: "error" });
     } finally {
       setDeletingAvatar(false);
@@ -100,6 +102,7 @@ export default function FeedbackForm() {
         setStatus({ text: data.message || "Failed to submit feedback", type: "error" },);
       }
     } catch (err) {
+      console.error(err);
       setStatus({ text: "Something went wrong. Please try again.", type: "error" });
     } finally {
       setLoading(false);

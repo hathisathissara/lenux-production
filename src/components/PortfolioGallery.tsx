@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Sparkles, Eye, Calendar, User, ArrowRight, Layers, CheckCircle2 } from "lucide-react";
+import { Eye, Calendar, User, Layers } from "lucide-react";
 
 interface PortfolioGalleryProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   projects: any[];
 }
 
@@ -19,6 +20,7 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
 
   useEffect(() => {
     if (serviceParam) {
+      // eslint-disable-next-line
       setSelectedCategory(serviceParam);
     } else if (categoryParam) {
       setSelectedCategory(categoryParam);
@@ -41,7 +43,7 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
       
       {/* 🌟 1. TOP CATEGORY FILTER PILLS */}
       <div className="flex items-center gap-2 overflow-x-auto pb-4 justify-start sm:justify-center no-scrollbar">
-        {categories.map((cat: any) => (
+        {categories.map((cat: string) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}

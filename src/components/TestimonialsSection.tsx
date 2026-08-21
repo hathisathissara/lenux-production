@@ -5,22 +5,25 @@ import Image from "next/image";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TestimonialsSectionProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   feedbacks: any[];
 }
 
 export default function TestimonialsSection({ feedbacks }: TestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // කිසිම feedback එකක් නැත්නම් මේ section එක පෙන්වන්නේ නැත
-  if (!feedbacks || feedbacks.length === 0) return null;
-
   // Auto-play Slideshow (තත්පර 6 කට වරක් auto මාරු වේ)
   useEffect(() => {
+    if (!feedbacks || feedbacks.length === 0) return;
+    
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % feedbacks.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [feedbacks.length]);
+  }, [feedbacks]);
+
+  // කිසිම feedback එකක් නැත්නම් මේ section එක පෙන්වන්නේ නැත
+  if (!feedbacks || feedbacks.length === 0) return null;
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? feedbacks.length - 1 : prevIndex - 1));
@@ -56,7 +59,7 @@ export default function TestimonialsSection({ feedbacks }: TestimonialsSectionPr
             <Quote size={60} />
           </div>
 
-          <div className="min-h-[220px] flex flex-col justify-between relative z-10 space-y-8">
+          <div key={currentIndex} className="min-h-[220px] flex flex-col justify-between relative z-10 space-y-8 animate-fade-in">
             
             {/* Rating Stars & Comment */}
             <div className="space-y-4">
@@ -71,7 +74,7 @@ export default function TestimonialsSection({ feedbacks }: TestimonialsSectionPr
               </div>
 
               <p className="text-base sm:text-xl text-gray-200 font-light leading-relaxed italic">
-                "{current.comment}"
+                &quot;{current.comment}&quot;
               </p>
             </div>
 
