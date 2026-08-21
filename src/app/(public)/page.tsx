@@ -18,7 +18,6 @@ import { Feedback } from "@/models/Feedback";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/Footer";
 import StaffCard from "@/components/StaffCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -26,8 +25,9 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import { 
   Target, Eye, ArrowRight, ShieldCheck, Award, Zap, 
   DollarSign, Clock4, ThumbsUp, Phone, Mail, MapPin, 
-  Clock, Sparkles, MessageCircle 
+  Clock, Sparkles, MessageCircle, Globe, Wrench 
 } from "lucide-react";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: companyTitle,
       images: [
         {
-          url: logoUrl, // 🌟 Home Page එකේදී Company Logo එක හෝ Brand Image එක පෙන්වයි
+          url: logoUrl,
           width: 1200,
           height: 630,
           alt: `${companyTitle} - Creative Advertising & Production`,
@@ -68,18 +68,6 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   };
 }
-// Build-Safe SVGs
-const FacebookIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
-);
-const InstagramIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
-);
-const LinkedinIcon = ({ className = "w-4 h-4" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-);
-
-export const dynamic = "force-dynamic";
 
 async function getHomeData() {
   await connectDB();
@@ -89,7 +77,7 @@ async function getHomeData() {
     ServiceCategory.find({ isActive: true }).sort({ sortOrder: 1 }).limit(8).lean(),
     Portfolio.find({ isFeatured: true, isPublished: true }).populate('service', 'title').limit(6).lean(),
     Staff.find({ isFeatured: true, isActive: true }).sort({ sortOrder: 1 }).limit(4).lean(),
-    Feedback.find({ isApproved: true }).sort({ createdAt: -1 }).lean(), // 🌟 Approved Feedbacks
+    Feedback.find({ isApproved: true }).sort({ createdAt: -1 }).lean(),
   ]);
 
   return {
@@ -97,7 +85,7 @@ async function getHomeData() {
     categories: categoriesDoc ? JSON.parse(JSON.stringify(categoriesDoc)) : [],
     featuredProjects: projectsDoc ? JSON.parse(JSON.stringify(projectsDoc)) : [],
     featuredStaff: staffDoc ? JSON.parse(JSON.stringify(staffDoc)) : [],
-    feedbacks: feedbackDoc ? JSON.parse(JSON.stringify(feedbackDoc)) : [], // 🌟 Pass to page
+    feedbacks: feedbackDoc ? JSON.parse(JSON.stringify(feedbackDoc)) : [],
   };
 }
 
@@ -126,7 +114,7 @@ export default async function HomePage() {
       <Header phone={phone} hours={hours} companyName={companyName} />
 
       {/* ==========================================
-          SECTION 01 — HERO SECTION
+          SECTION 01 — HERO SECTION (Optimized Background Visibility)
           ========================================== */}
       <section className="relative w-full min-h-screen flex items-center justify-start overflow-hidden pt-20 pb-16">
         <div className="absolute inset-0 z-0">
@@ -137,12 +125,12 @@ export default async function HomePage() {
             className="object-cover object-center md:object-right"
             priority
           />
+          {/* 🌟 Background Visibility එක වැඩි කර ඇති බව තහවුරු කරගන්න */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent z-10" />
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 w-full mt-8 md:mt-12">
           <ScrollReveal>
-
             <div className="max-w-2xl space-y-5">
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-light text-white tracking-wide uppercase leading-tight drop-shadow-md">
                 Welcome to{" "}
@@ -169,6 +157,33 @@ export default async function HomePage() {
               </Link>
             </div>
           </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          🌟 NEW SECTION — COMPANY HIGHLIGHTS
+          ========================================== */}
+      <section className="py-16 bg-[#040404] border-t border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { value: "9+ Years", label: "Industry Experience", icon: Award, color: "text-amber-400" },
+            { value: "Premium", label: "Quality Production", icon: Sparkles, color: "text-lenux-emerald" },
+            { value: "Islandwide", label: "Service & Delivery", icon: Globe, color: "text-blue-400" },
+            { value: "End-to-End", label: "Design to Installation", icon: Wrench, color: "text-purple-400" }
+          ].map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <ScrollReveal key={i}>
+                <div className="p-6 rounded-2xl bg-[#080808] border border-white/5 hover:border-lenux-emerald/30 transition-all duration-500 flex flex-col justify-center items-center text-center space-y-2 h-full shadow-lg group">
+                  <div className={`p-3 rounded-xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform ${item.color}`}>
+                    <Icon size={24} />
+                  </div>
+                  <h4 className="text-lg sm:text-2xl font-black text-white tracking-wide">{item.value}</h4>
+                  <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">{item.label}</p>
+                </div>
+              </ScrollReveal>
+            )
+          })}
         </div>
       </section>
 
@@ -369,7 +384,7 @@ export default async function HomePage() {
           </div>
 
           <div className="text-center pt-6">
-            <Link href="/services" className="px-8 py-3.5 border border-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald transition-all duration-300 inline-flex items-center gap-2">
+            <Link href="/services" className="px-8 py-3.5 border border-lenux-emerald transition-all duration-300 inline-flex items-center gap-2">
               View All Services <ArrowRight size={16} />
             </Link>
           </div>
@@ -613,11 +628,11 @@ export default async function HomePage() {
 
         </div>
       </section>
-      
-      <Footer />
 
-      <ScrollToTop />
+      <Footer />
 
     </div>
   );
 }
+
+

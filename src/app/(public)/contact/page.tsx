@@ -6,7 +6,6 @@ import { Service } from "@/models/Service";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import ContactQuoteForm from "@/components/ContactQuoteForm"; // Quotation Form
 import FeedbackForm from "@/components/FeedbackForm"; // 🌟 Feedback Review Form
 
@@ -193,10 +192,7 @@ export default async function ContactPage() {
         )}
       </section>
 
-     <Footer />
-
-      {/* Floating Scroll To Top */}
-      <ScrollToTop />
+      <Footer />
 
     </div>
   );

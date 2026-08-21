@@ -6,7 +6,6 @@ import { ServiceCategory } from "@/models/ServiceCategory";
 import { Service } from "@/models/Service";
 
 import Header from "@/components/Header";
-import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/Footer";
 import ServicesFilterSection from "@/components/ServicesFilterSection"; // 🌟 Interactive Client Filter Component
 
@@ -88,8 +87,6 @@ export default async function ServicesPage() {
 
       {/* Footer */}
       <Footer />
-
-      <ScrollToTop />
 
     </div>
   );

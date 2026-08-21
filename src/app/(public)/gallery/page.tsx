@@ -6,7 +6,6 @@ import { Gallery } from "@/models/Gallery"; // 🌟 අපේ Admin වලින
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import VisualGallery from "@/components/VisualGallery"; // 🌟 Interactive Gallery Component
 
 import { Sparkles, MessageCircle } from "lucide-react";
@@ -128,9 +127,6 @@ export default async function GalleryPage() {
       </section>
 
      <Footer />
-
-      {/* Floating Scroll To Top */}
-      <ScrollToTop />
 
     </div>
   );

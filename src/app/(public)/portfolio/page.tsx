@@ -6,7 +6,6 @@ import { Portfolio } from "@/models/Portfolio";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import PortfolioGallery from "@/components/PortfolioGallery"; // 🌟 Interactive Gallery Component
 
 import { Sparkles, MessageCircle } from "lucide-react";
@@ -121,9 +120,6 @@ export default async function PortfolioPage() {
       </section>
 
       <Footer />
-
-      {/* Floating Scroll To Top */}
-      <ScrollToTop />
 
     </div>
   );

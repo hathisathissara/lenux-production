@@ -8,7 +8,6 @@ import { Portfolio } from "@/models/Portfolio";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/Footer";
 import ProjectImageLightbox from "@/components/ProjectImageLightbox"; // 🌟 Lightbox Modal Popup Component
 
@@ -202,7 +201,6 @@ export default async function PortfolioDetailPage({ params }: Props) {
       </section>
 
       <Footer />
-      <ScrollToTop />
     </div>
   );
 }

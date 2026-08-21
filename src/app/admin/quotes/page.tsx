@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Check, AlertCircle, Eye, Trash, X, Calendar, Phone, Mail, Building, FileText, ChevronRight } from "lucide-react";
 
 export default function QuotesManagement() {
@@ -79,6 +78,22 @@ export default function QuotesManagement() {
     }
   };
 
+  // Delete Quote Request
+  const handleDeleteQuote = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this quote request?")) return;
+
+    try {
+      const res = await fetch(`/api/quotes/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        showNotification("Quote request deleted successfully!", "success");
+        fetchQuotes();
+      }
+    } catch (err) {
+      showNotification("Failed to delete quote request", "error");
+    }
+  };
+
   // Status Colors Helper
   const getStatusBadge = (status: string) => {
     const badges: any = {
@@ -101,7 +116,7 @@ export default function QuotesManagement() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-sans">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-lenux-deep">Quotation Requests</h1>
@@ -139,7 +154,7 @@ export default function QuotesManagement() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {filteredQuotes.length === 0 ? (
           <div className="p-12 text-center text-gray-400">
-            <FileText size={48} className="mx-auto mb-3 opacity-50" />
+            <FileText size={48} className="mx-auto mb-3 opacity-50 text-lenux-deep" />
             <p className="text-sm font-medium">No quote requests found in this status.</p>
           </div>
         ) : (
@@ -160,7 +175,7 @@ export default function QuotesManagement() {
                     <td className="p-4">
                       <div>
                         <p className="font-bold text-lenux-charcoal">{quote.fullName}</p>
-                        <p className="text-xs text-gray-400">{quote.email}</p>
+                        {quote.email && <p className="text-xs text-gray-400">{quote.email}</p>}
                       </div>
                     </td>
                     <td className="p-4 font-semibold text-lenux-deep">{quote.requiredService}</td>
@@ -168,12 +183,19 @@ export default function QuotesManagement() {
                     <td className="p-4">
                       <span className={getStatusBadge(quote.status)}>{quote.status}</span>
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="p-4 text-right space-x-2">
                       <button 
                         onClick={() => handleViewQuote(quote)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-lenux-soft text-lenux-deep hover:bg-lenux-emerald hover:text-white rounded-lg text-xs font-bold transition-all"
                       >
-                        <Eye size={14} /> Review Request <ChevronRight size={12} />
+                        <Eye size={14} /> Review
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteQuote(quote._id)}
+                        className="inline-flex items-center p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all"
+                        title="Delete Quote"
+                      >
+                        <Trash size={14} />
                       </button>
                     </td>
                   </tr>
@@ -184,15 +206,15 @@ export default function QuotesManagement() {
         )}
       </div>
 
-      {/* DETAIL VIEW MODAL */}
+      {/* DETAIL VIEW MODAL (Updated Clean Version) */}
       {selectedQuote && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col justify-between">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col justify-between">
             
             {/* Modal Header */}
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-lenux-deep text-white">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-lenux-soft">Review Request</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-lenux-soft">Quotation Request Details</span>
                 <h3 className="text-xl font-bold">{selectedQuote.fullName}</h3>
               </div>
               <button onClick={() => setSelectedQuote(null)} className="text-white/80 hover:text-white p-1 hover:bg-white/10 rounded-lg">
@@ -208,40 +230,24 @@ export default function QuotesManagement() {
                 {selectedQuote.companyName && (
                   <p className="flex items-center gap-2"><Building size={14} className="text-lenux-deep" /> <span className="font-semibold">Company:</span> {selectedQuote.companyName}</p>
                 )}
-                <p className="flex items-center gap-2"><Phone size={14} className="text-lenux-deep" /> <span className="font-semibold">Phone:</span> {selectedQuote.phoneNumber}</p>
-                <p className="flex items-center gap-2"><Mail size={14} className="text-lenux-deep" /> <span className="font-semibold">Email:</span> {selectedQuote.email}</p>
+                <p className="flex items-center gap-2"><Phone size={14} className="text-lenux-deep" /> <span className="font-semibold">Phone/WhatsApp:</span> {selectedQuote.phoneNumber}</p>
+                {selectedQuote.email && (
+                  <p className="flex items-center gap-2"><Mail size={14} className="text-lenux-deep" /> <span className="font-semibold">Email:</span> {selectedQuote.email}</p>
+                )}
                 <p className="flex items-center gap-2"><Calendar size={14} className="text-lenux-deep" /> <span className="font-semibold">Date Received:</span> {new Date(selectedQuote.createdAt).toLocaleDateString()}</p>
               </div>
 
               {/* Requirement Details */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-lenux-deep uppercase tracking-wide">Customer Requirements</h4>
+                <h4 className="text-xs font-bold text-lenux-deep uppercase tracking-wide">Project Scope</h4>
                 <div className="p-4 bg-gray-50 rounded-xl space-y-2 text-sm text-lenux-charcoal">
                   <p><span className="font-semibold">Requested Service:</span> {selectedQuote.requiredService}</p>
-                  {selectedQuote.quantity && <p><span className="font-semibold">Quantity:</span> {selectedQuote.quantity}</p>}
-                  {selectedQuote.budget && <p><span className="font-semibold">Budget (LKR):</span> {selectedQuote.budget}</p>}
-                  {selectedQuote.preferredDeliveryDate && <p><span className="font-semibold">Preferred Delivery:</span> {new Date(selectedQuote.preferredDeliveryDate).toLocaleDateString()}</p>}
                   <div className="pt-2 border-t border-gray-200 mt-2">
-                    <p className="font-semibold text-xs text-lenux-darkGray mb-1">Message:</p>
-                    <p className="italic bg-white p-3 rounded border border-gray-100">{selectedQuote.message}</p>
+                    <p className="font-semibold text-xs text-lenux-darkGray mb-1">Message / Requirements:</p>
+                    <p className="italic bg-white p-3 rounded border border-gray-100 whitespace-pre-line">{selectedQuote.message}</p>
                   </div>
                 </div>
               </div>
-
-              {/* File Attachment using next/image if it exists */}
-              {selectedQuote.fileAttachment?.url && (
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-lenux-deep uppercase tracking-wide">Attached Reference File</h4>
-                  <div className="relative w-full h-48 bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                    <Image 
-                      src={selectedQuote.fileAttachment.url} 
-                      alt="Attachment Reference" 
-                      fill 
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-              )}
 
               {/* Admin Panel Actions */}
               <form onSubmit={handleUpdateQuote} className="border-t border-gray-100 pt-4 space-y-4">

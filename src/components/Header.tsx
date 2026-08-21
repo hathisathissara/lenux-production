@@ -11,6 +11,8 @@ interface HeaderProps {
   companyName: string;
 }
 
+import GlobalFloatingActions from "@/components/GlobalFloatingActions";
+
 export default function Header({ phone, hours, companyName }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,6 +47,8 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
     return pathname.startsWith(href);
   };
 
+
+
   return (
     <>
       {/* ==========================================
@@ -68,7 +72,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
           </div>
         </div>
 
-        {/* 🌟 MAIN NAVBAR (උඩම ඉද්දී Transparent වේ. පහළට Scroll කළ විට Glassmorphic වේ) */}
+        {/* 🌟 MAIN NAVBAR (ඔයා හදපු ලස්සන style එක වෙනස් නොකර ඒ අයුරින්ම තබා ඇත) */}
         <nav className={`w-full transition-all duration-500 border-b ${
           isScrolled 
           ? "bg-black/50 backdrop-blur-md border-white/10 shadow-2xl py-3.5" // Scroll කරද්දී පමණක් Glass Effect
@@ -172,6 +176,9 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
           className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
         />
       )}
+
+      {/* 🌟 GLOBAL FLOATING WHATSAPP BUTTON & BACK TO TOP BUTTON */}
+      <GlobalFloatingActions />
     </>
   );
 }

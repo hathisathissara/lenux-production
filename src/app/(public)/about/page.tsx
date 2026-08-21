@@ -5,7 +5,6 @@ import { ContactInformation } from "@/models/ContactInformation";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/Footer"; // 🌟 අපේ අලුත් Reusable Footer එක
 
 import { 
@@ -278,9 +277,6 @@ export default async function AboutPage() {
 
       {/* 🌟 Reusable Footer Component */}
       <Footer />
-
-      {/* Floating Scroll To Top */}
-      <ScrollToTop />
 
     </div>
   );

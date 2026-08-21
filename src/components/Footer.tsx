@@ -80,16 +80,8 @@ export default async function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p>© {new Date().getFullYear()} Lenux Production. All Rights Reserved.</p>
-        
-        {/* 🌟 Admin Login Secure Link */}
-        <div className="flex items-center gap-4">
-          <Link href="/admin/login" className="text-gray-600 hover:text-lenux-emerald transition-colors text-[11px] uppercase tracking-wider">
-            Admin Portal
-          </Link>
-          <span className="text-gray-700">|</span>
           <p className="text-[11px]">Crafted with Premium Brand Precision.</p>
         </div>
-      </div>
     </footer>
   );
 }

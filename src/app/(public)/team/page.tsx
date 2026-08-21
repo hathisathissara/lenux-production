@@ -6,7 +6,6 @@ import { Staff } from "@/models/Staff";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import ScrollToTop from "@/components/ScrollToTop";
 import StaffCard from "@/components/StaffCard"; // අපි කලින් හැදූ Interactive Staff Card එක
 
 import { Sparkles, MessageCircle, Award, Users } from "lucide-react";
@@ -135,9 +134,6 @@ export default async function TeamPage() {
       </section>
 
      <Footer />
-
-      {/* Floating Scroll To Top */}
-      <ScrollToTop />
 
     </div>
   );
