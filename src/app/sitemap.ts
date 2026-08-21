@@ -28,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     await connectDB();
     const projects = await Portfolio.find({}).select('slug updatedAt').lean();
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dynamicRoutes = projects.map((project: any) => ({
       url: `${baseUrl}/portfolio/${project.slug}`,
       lastModified: project.updatedAt || new Date(),
