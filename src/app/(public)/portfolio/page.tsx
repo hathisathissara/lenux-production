@@ -12,7 +12,11 @@ import { Sparkles, MessageCircle } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
-
+export const metadata = {
+  title: "Our Recent Work | Signboard & Visual Production Gallery",
+  description: "Discover the latest visual production projects by Lenux Production in Sri Lanka. View our completed shop branding, vehicle graphics, and premium signboards.",
+  keywords: "vehicle branding sri lanka, completed signboard projects colombo, creative portfolio sri lanka",
+};
 async function getPortfolioData() {
   await connectDB();
 

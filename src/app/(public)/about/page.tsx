@@ -13,7 +13,11 @@ import {
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-
+export const metadata = {
+  title: "About Our Studio | Advertising & Branding Sri Lanka",
+  description: "Learn more about Lenux Production, a premier creative advertising and branding company in Sri Lanka. Specialists in sign boards, light boards, and full-scale print production.",
+  keywords: "advertising agency sri lanka, sign boards colombo, branding company sri lanka, lenux production",
+};
 async function getAboutData() {
   await connectDB();
   const settings = await ContactInformation.findOne().lean();

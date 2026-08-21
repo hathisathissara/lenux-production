@@ -12,7 +12,11 @@ import ServicesFilterSection from "@/components/ServicesFilterSection"; // 🌟 
 import { Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-
+export const metadata = {
+  title: "Our Services | Printing, Embossed Letters & Light Boards Sri Lanka",
+  description: "Explore Lenux Production services: Digital and Offset printing, custom logo boards, shop branding, vehicle branding, and illuminated light boards in Colombo.",
+  keywords: "digital printing colombo, offset printing sri lanka, shop branding sri lanka, embossed letters colombo, light boards sri lanka",
+};
 async function getServicesPageData() {
   await connectDB();
 

@@ -15,7 +15,11 @@ import {
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
-
+export const metadata = {
+  title: "Get a Free Quote | Contact Lenux Production Colombo",
+  description: "Contact Sri Lanka's leading branding and printing experts today. Request a free quote for signboards, embossed letters, logo boards, and digital print jobs.",
+  keywords: "get a quote printing colombo, lenux contact number, banner printing price sri lanka",
+};
 async function getContactData() {
   await connectDB();
 
