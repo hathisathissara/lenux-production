@@ -33,6 +33,7 @@ export default function ServicesManagement() {
   const [editShortDesc, setEditShortDesc] = useState("");
   const [editDesc, setEditDesc] = useState("");
   const [editImage, setEditImage] = useState<{ url: string; publicId: string } | null>(null);
+  const [editUploadingServiceImg, setEditUploadingServiceImg] = useState(false);
   const [updatingService, setUpdatingService] = useState(false);
 
   // 🌟 Edit Category Modal States
@@ -41,6 +42,7 @@ export default function ServicesManagement() {
   const [editCatName, setEditCatName] = useState("");
   const [editCatDesc, setEditCatDesc] = useState("");
   const [editCatImage, setEditCatImage] = useState<{ url: string; publicId: string } | null>(null);
+  const [editUploadingCatImg, setEditUploadingCatImg] = useState(false);
   const [updatingCategory, setUpdatingCategory] = useState(false);
 
   const [activeTab, setActiveTab] = useState<"services" | "categories">("services");
@@ -80,6 +82,8 @@ export default function ServicesManagement() {
 
     if (type === "category") setUploadingCatImg(true);
     else if (type === "service") setUploadingSerImg(true);
+    else if (type === "edit-service") setEditUploadingServiceImg(true);
+    else if (type === "edit-category") setEditUploadingCatImg(true);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -94,7 +98,6 @@ export default function ServicesManagement() {
         else if (type === "service") setSerImage(imgObj);
         else if (type === "edit-service") setEditImage(imgObj);
         else if (type === "edit-category") setEditCatImage(imgObj);
-        
         showNotification("Image uploaded successfully!", "success");
       }
     } catch (err) {
@@ -103,6 +106,8 @@ export default function ServicesManagement() {
     } finally {
       setUploadingCatImg(false);
       setUploadingSerImg(false);
+      setEditUploadingServiceImg(false);
+      setEditUploadingCatImg(false);
     }
   };
 
@@ -562,14 +567,46 @@ export default function ServicesManagement() {
 
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Service Image</label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
-                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(e, "edit-service")} />
-                  {editImage?.url ? (
-                    <div className="text-center relative w-16 h-16">
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all min-h-[80px]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer z-0"
+                    disabled={editUploadingServiceImg}
+                    onChange={(e) => handleImageUpload(e, "edit-service")}
+                  />
+                  {editUploadingServiceImg ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lenux-emerald" />
+                      <span className="text-xs font-medium text-gray-500">Uploading to Cloud...</span>
+                    </div>
+                  ) : editImage?.url ? (
+                    <div className="relative w-16 h-16 group/img">
                       <Image src={editImage.url} alt="Edit preview" fill className="object-cover rounded-lg" />
+                      <button
+                        type="button"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (editImage?.publicId) {
+                            await fetch('/api/admin/upload', {
+                              method: 'DELETE',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ publicId: editImage.publicId }),
+                            });
+                          }
+                          setEditImage(null);
+                        }}
+                        className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity duration-200"
+                        title="Remove image"
+                      >
+                        <Trash className="w-5 h-5 text-red-400" />
+                      </button>
                     </div>
                   ) : (
-                    <span className="text-xs text-gray-400">Upload new image</span>
+                    <div className="flex flex-col items-center gap-1 text-gray-400">
+                      <Upload size={20} />
+                      <span className="text-xs">Click to upload new image</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -611,14 +648,46 @@ export default function ServicesManagement() {
 
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Category Image</label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
-                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(e, "edit-category")} />
-                  {editCatImage?.url ? (
-                    <div className="text-center relative w-16 h-16">
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all min-h-[80px]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer z-0"
+                    disabled={editUploadingCatImg}
+                    onChange={(e) => handleImageUpload(e, "edit-category")}
+                  />
+                  {editUploadingCatImg ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lenux-emerald" />
+                      <span className="text-xs font-medium text-gray-500">Uploading to Cloud...</span>
+                    </div>
+                  ) : editCatImage?.url ? (
+                    <div className="relative w-16 h-16 group/catimg">
                       <Image src={editCatImage.url} alt="Edit category preview" fill className="object-cover rounded-lg" />
+                      <button
+                        type="button"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (editCatImage?.publicId) {
+                            await fetch('/api/admin/upload', {
+                              method: 'DELETE',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ publicId: editCatImage.publicId }),
+                            });
+                          }
+                          setEditCatImage(null);
+                        }}
+                        className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/60 opacity-0 group-hover/catimg:opacity-100 transition-opacity duration-200"
+                        title="Remove image"
+                      >
+                        <Trash className="w-5 h-5 text-red-400" />
+                      </button>
                     </div>
                   ) : (
-                    <span className="text-xs text-gray-400">Upload new image</span>
+                    <div className="flex flex-col items-center gap-1 text-gray-400">
+                      <Upload size={20} />
+                      <span className="text-xs">Click to upload new image</span>
+                    </div>
                   )}
                 </div>
               </div>
