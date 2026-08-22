@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
@@ -8,11 +7,11 @@ import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import PortfolioGallery from "@/components/PortfolioGallery"; // 🌟 Interactive Gallery Component
 
-import { Sparkles, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
   title: "Our Recent Work | Signboard & Visual Production Gallery",
@@ -47,7 +46,7 @@ async function getPortfolioData() {
   const [settingsDoc, projectsDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
     Portfolio.find({ isPublished: true })
-      .populate("service", "title")
+      .populate("service", "title image")
       .sort({ createdAt: -1 })
       .lean(),
   ]);
@@ -72,38 +71,8 @@ export default async function PortfolioPage() {
       {/* 🌟 1. Header */}
       <Header phone={phone} hours={hours} companyName={companyName} />
 
-      {/* ==========================================
-          PORTFOLIO HERO BANNER
-          ========================================== */}
-      <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-25">
-          <Image src="/images/hero-bg.jpg" alt="Portfolio Hero" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
-          <ScrollReveal>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
-              <Sparkles size={14} /> 100% Original Works
-            </div>
-            <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
-              Our Visual <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Portfolio</span>
-            </h1>
-            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              Explore our completed advertising, vehicle branding, signage, printing, and event production projects.
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ==========================================
-          🌟 INTERACTIVE PORTFOLIO GRID & LIGHTBOX
-          ========================================== */}
-      <section className="py-16 md:py-24 bg-[#040404] relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <PortfolioGallery projects={projects} />
-        </div>
-      </section>
+      {/* 🌟 2. PORTFOLIO HERO & GRID (Interactive) */}
+      <PortfolioGallery projects={projects} />
 
       {/* ==========================================
           CTA BANNER

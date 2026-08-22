@@ -12,7 +12,7 @@ import ServicesFilterSection from "@/components/ServicesFilterSection"; // 🌟 
 import { Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
   title: "Our Services | Printing, Embossed Letters & Light Boards Sri Lanka",

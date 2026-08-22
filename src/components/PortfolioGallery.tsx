@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, Calendar, User, Layers } from "lucide-react";
+import { Eye, Calendar, User, Layers, Sparkles } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 interface PortfolioGalleryProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,8 +39,54 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
     ? Array.from(new Set(projects.map((p) => p.service?.title || "Branding")))
     : [selectedCategory];
 
+  // Determine Hero Image based on selected category
+  let heroImage = "/images/hero-bg.jpg";
+  if (selectedCategory !== "all") {
+    const matchingProject = projects.find((p) => (p.service?.title || "Branding").toLowerCase() === selectedCategory.toLowerCase());
+    if (matchingProject && matchingProject.service?.image?.url) {
+      heroImage = matchingProject.service.image.url;
+    }
+  }
+
   return (
-    <div className="space-y-20">
+    <>
+      {/* ==========================================
+          PORTFOLIO HERO BANNER
+          ========================================== */}
+      <section className="relative w-full min-h-[40vh] md:min-h-[55vh] flex flex-col justify-center pt-32 pb-16 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden transition-all duration-700">
+        <div className="absolute inset-0 z-0 opacity-50">
+          <Image 
+            src={heroImage} 
+            alt="Portfolio Hero" 
+            fill 
+            className="object-cover object-[center_35%] transition-opacity duration-700" 
+            priority 
+          />
+          {/* Top and Bottom gradient fades for seamless blending without making the center too dark */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
+          <ScrollReveal>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
+              <Sparkles size={14} /> 100% Original Works
+            </div>
+            <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
+              Our Visual <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Portfolio</span>
+            </h1>
+            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+              Explore our completed advertising, vehicle branding, signage, printing, and event production projects.
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ==========================================
+          🌟 INTERACTIVE PORTFOLIO GRID & LIGHTBOX
+          ========================================== */}
+      <section className="py-16 md:py-24 bg-[#040404] relative min-h-[50vh]">
+        <div className="max-w-7xl mx-auto px-6 space-y-20">
       
       {/* 🌟 1. TOP CATEGORY FILTER PILLS */}
       <div className="flex items-center gap-2 overflow-x-auto pb-4 justify-start sm:justify-center no-scrollbar">
@@ -150,6 +197,8 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
         </div>
       )}
 
-    </div>
+        </div>
+      </section>
+    </>
   );
 }

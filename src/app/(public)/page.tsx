@@ -28,7 +28,7 @@ import {
   Clock, Sparkles, MessageCircle, Globe, Wrench 
 } from "lucide-react";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const dynamic = "force-dynamic";
 

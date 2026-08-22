@@ -13,7 +13,7 @@ import ProjectImageLightbox from "@/components/ProjectImageLightbox"; // 🌟 Li
 import { Calendar, User, MessageCircle, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 interface Props {
   params: Promise<{ slug: string }>;

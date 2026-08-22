@@ -15,7 +15,7 @@ import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
   title: "Get a Free Quote | Contact Lenux Production Colombo",
