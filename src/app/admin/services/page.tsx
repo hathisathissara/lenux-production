@@ -87,7 +87,13 @@ export default function ServicesManagement() {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("folder", "services");
+    
+    // Set folder based on upload type
+    if (type === "category" || type === "edit-category") {
+      formData.append("folder", "categories");
+    } else {
+      formData.append("folder", "services");
+    }
 
     try {
       // Edit එකේදී අලුත් image එකක් upload කරනවා නම්, පරණ එක (නව upload එකක් නම්) Cloudinary එකෙන් delete කරනවා
