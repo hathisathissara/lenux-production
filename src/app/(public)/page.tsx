@@ -498,12 +498,14 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="flex flex-wrap justify-center gap-8">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {featuredStaff.map((member: any) => (
-              <ScrollReveal key={member._id}>
-                <StaffCard member={member} />
-              </ScrollReveal>
+              <div key={member._id} className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]">
+                <ScrollReveal>
+                  <StaffCard member={member} />
+                </ScrollReveal>
+              </div>
             ))}
           </div>
         </div>
