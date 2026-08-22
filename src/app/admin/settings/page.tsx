@@ -26,6 +26,7 @@ export default function SettingsPage() {
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
   const [linkedin, setLinkedin] = useState("");
+  const [tiktok, setTiktok] = useState("");
 
   // Image States
   const [logo, setLogo] = useState<{ url: string; publicId: string } | null>(null);
@@ -55,6 +56,7 @@ export default function SettingsPage() {
         setFacebook(s.facebook || "");
         setInstagram(s.instagram || "");
         setLinkedin(s.linkedin || "");
+        setTiktok(s.tiktok || "");
 
         setLogo(s.logo || null);
         setVisionImage(s.visionImage || null);
@@ -134,6 +136,7 @@ export default function SettingsPage() {
         facebook,
         instagram,
         linkedin,
+        tiktok,
         logo,
         visionImage,
         missionImage
@@ -352,7 +355,7 @@ export default function SettingsPage() {
               <input type="url" className="admin-input" placeholder="https://www.google.com/maps/embed?pb=..." value={googleMapUrl} onChange={(e) => setGoogleMapUrl(e.target.value)} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-gray-50 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-50 pt-4">
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Facebook URL</label>
                 <input type="url" className="admin-input text-sm" placeholder="https://facebook.com/lenux" value={facebook} onChange={(e) => setFacebook(e.target.value)} />
@@ -364,6 +367,10 @@ export default function SettingsPage() {
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">LinkedIn URL</label>
                 <input type="url" className="admin-input text-sm" placeholder="https://linkedin.com/company/lenux" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">TikTok URL</label>
+                <input type="url" className="admin-input text-sm" placeholder="https://tiktok.com/@lenux" value={tiktok} onChange={(e) => setTiktok(e.target.value)} />
               </div>
             </div>
           </div>

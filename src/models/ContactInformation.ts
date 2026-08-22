@@ -26,6 +26,7 @@ const ContactInformationSchema = new Schema(
     facebook: { type: String, default: '' },
     instagram: { type: String, default: '' },
     linkedin: { type: String, default: '' },
+    tiktok: { type: String, default: '' },
     otherSocial: { type: String, default: '' },
   },
   // strict: false දැමීමෙන් කිසිදු field එකක් Mongoose මඟින් discard නොවේ
