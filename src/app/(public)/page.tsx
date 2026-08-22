@@ -30,6 +30,8 @@ import {
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   await connectDB();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
