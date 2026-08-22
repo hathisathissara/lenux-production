@@ -66,6 +66,7 @@ export default function StaffManagement() {
   const [editLinkedin, setEditLinkedin] = useState("");
   const [editWhatsapp, setEditWhatsapp] = useState("");
   const [editPhoto, setEditPhoto] = useState<{ url: string; publicId: string } | null>(null);
+  const [editUploadingPhoto, setEditUploadingPhoto] = useState(false);
   const [updating, setUpdating] = useState(false);
 
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -200,6 +201,10 @@ export default function StaffManagement() {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingStaff) return;
+    if (!editPhoto?.url) {
+      showNotification("Please upload a profile photo before saving.", "error");
+      return;
+    }
     setUpdating(true);
 
     try {
@@ -276,8 +281,12 @@ export default function StaffManagement() {
               {team.map((member) => (
                 <div key={member._id} className="border border-gray-100 rounded-2xl p-5 flex gap-4 hover:shadow-md transition-all relative">
                   
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0">
-                    <Image src={member.photo.url} alt={member.name} fill className="object-cover" sizes="80px" />
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 shrink-0 flex items-center justify-center">
+                    {member.photo?.url ? (
+                      <Image src={member.photo.url} alt={member.name} fill className="object-cover" sizes="80px" />
+                    ) : (
+                      <span className="text-xs text-gray-400 text-center px-1">No Photo</span>
+                    )}
                   </div>
 
                   <div className="space-y-1.5 flex-1 pr-12">
@@ -457,20 +466,58 @@ export default function StaffManagement() {
 
               <div>
                 <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Profile Photo</label>
-                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all">
-                  <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if(file) {
-                      const data = await	uploadStaffPhoto(file);
-                      if(data.success) setEditPhoto({ url: data.url, publicId: data.publicId });
-                    }
-                  }} />
-                  {editPhoto?.url ? (
-                    <div className="text-center relative w-16 h-16">
+                <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all min-h-[80px]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer z-0"
+                    disabled={editUploadingPhoto}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setEditUploadingPhoto(true);
+                        try {
+                          const data = await uploadStaffPhoto(file);
+                          if (data.success) setEditPhoto({ url: data.url, publicId: data.publicId });
+                        } finally {
+                          setEditUploadingPhoto(false);
+                        }
+                      }
+                    }}
+                  />
+                  {editUploadingPhoto ? (
+                    <div className="flex flex-col items-center gap-2 text-lenux-emerald">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lenux-emerald" />
+                      <span className="text-xs font-medium text-gray-500">Uploading to Cloud...</span>
+                    </div>
+                  ) : editPhoto?.url ? (
+                    <div className="relative w-16 h-16 group/photo">
                       <Image src={editPhoto.url} alt="Edit preview" fill className="object-cover rounded-full" />
+                      {/* Hover Delete Overlay */}
+                      <button
+                        type="button"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (editPhoto?.publicId) {
+                            await fetch('/api/admin/upload', {
+                              method: 'DELETE',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ publicId: editPhoto.publicId }),
+                            });
+                          }
+                          setEditPhoto(null);
+                        }}
+                        className="absolute inset-0 z-10 flex items-center justify-center rounded-full bg-black/60 opacity-0 group-hover/photo:opacity-100 transition-opacity duration-200"
+                        title="Remove photo"
+                      >
+                        <Trash className="w-5 h-5 text-red-400" />
+                      </button>
                     </div>
                   ) : (
-                    <span className="text-xs text-gray-400">Upload new photo</span>
+                    <div className="flex flex-col items-center gap-1 text-gray-400">
+                      <Upload size={20} />
+                      <span className="text-xs">Click to upload new photo</span>
+                    </div>
                   )}
                 </div>
               </div>

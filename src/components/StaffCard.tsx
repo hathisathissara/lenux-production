@@ -22,6 +22,9 @@ export default function StaffCard({ member }: { member: any }) {
   // Mobile එකේදී Touch කළ විට විස්තර toggle වීමට state එකක්
   const [isActive, setIsActive] = useState(false);
 
+  // Photo නැති member-ව render නොකිරීම (crash වීම වළක්වා ගැනීම)
+  if (!member?.photo?.url) return null;
+
   return (
     <div 
       onClick={() => setIsActive(!isActive)}

@@ -47,3 +47,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: 'Upload failed', error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { publicId } = await request.json();
+    if (!publicId) {
+      return NextResponse.json({ success: false, message: 'publicId is required' }, { status: 400 });
+    }
+    await cloudinary.uploader.destroy(publicId);
+    return NextResponse.json({ success: true, message: 'Image deleted from Cloudinary' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error('Cloudinary Delete Error:', error);
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
