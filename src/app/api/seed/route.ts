@@ -5,11 +5,8 @@ import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
-    // 1. Database එකට connect වෙනවා
     await connectDB();
-
-    // 2. දැනටමත් admin@lenux.lk කියලා කෙනෙක් ඉන්නවද බලනවා
-    const existingAdmin = await Admin.findOne({ email: 'hathisathissara01@gmail.com' });
+    const existingAdmin = await Admin.findOne({ email: '[EMAIL_ADDRESS]' });
 
     if (existingAdmin) {
       return NextResponse.json({ 
@@ -18,15 +15,12 @@ export async function GET() {
       });
     }
 
-    // 3. අලුත් Password එක Hash කරනවා 
-    // (මෙතන ලොග් වෙන්න තියෙන password එක 'Lenux@2026')
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash('admin123', saltRounds);
+    const hashedPassword = await bcrypt.hash('[password]', saltRounds);
 
-    // 4. අලුත් Admin කෙනෙක් DB එකට Save කරනවා
     const newAdmin = await Admin.create({
       name: 'Super Admin',
-      email: 'hathisathissara01@gmail.com',
+      email: '[EMAIL_ADDRESS]',
       password: hashedPassword,
       role: 'admin',
     });
@@ -39,7 +33,6 @@ export async function GET() {
         name: newAdmin.name,
         email: newAdmin.email,
         role: newAdmin.role
-        // Password එක කවදාවත් return කරන්නේ නෑ
       }
     });
 
