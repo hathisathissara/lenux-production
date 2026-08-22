@@ -18,14 +18,17 @@ export async function PUT(
       return NextResponse.json({ success: false, message: 'Category not found' }, { status: 404 });
     }
 
-    if (body.image?.publicId && existingCat.image?.publicId && body.image.publicId !== existingCat.image.publicId) {
-      await cloudinary.uploader.destroy(existingCat.image.publicId).catch(console.error);
+    // පින්තූරය මාරු කරලා හෝ delete කරලා නම්, පරණ පින්තූරය Cloudinary එකෙන් delete කරනවා
+    if (existingCat.image?.publicId) {
+      if (!body.image || (body.image.publicId && body.image.publicId !== existingCat.image.publicId)) {
+        await cloudinary.uploader.destroy(existingCat.image.publicId).catch(console.error);
+      }
     }
 
     const updatedCat = await ServiceCategory.findByIdAndUpdate(
       id,
       { $set: body },
-      {returnDocument: 'after' }
+      { returnDocument: 'after' }
     );
 
     return NextResponse.json({ success: true, message: 'Category updated successfully', data: updatedCat });

@@ -18,9 +18,12 @@ export async function PUT(
       return NextResponse.json({ success: false, message: 'Service not found' }, { status: 404 });
     }
 
-    // පින්තූරය මාරු කරලා නම්, පරණ පින්තූරය Cloudinary එකෙන් delete කරනවා
-    if (body.image?.publicId && existingService.image?.publicId && body.image.publicId !== existingService.image.publicId) {
-      await cloudinary.uploader.destroy(existingService.image.publicId).catch(console.error);
+    // පින්තූරය මාරු කරලා හෝ delete කරලා නම්, පරණ පින්තූරය Cloudinary එකෙන් delete කරනවා
+    if (existingService.image?.publicId) {
+      // image එක null (delete කරලා) හෝ වෙනස් publicId එකක් (replace කරලා) නම්
+      if (!body.image || (body.image.publicId && body.image.publicId !== existingService.image.publicId)) {
+        await cloudinary.uploader.destroy(existingService.image.publicId).catch(console.error);
+      }
     }
 
     const updatedService = await Service.findByIdAndUpdate(

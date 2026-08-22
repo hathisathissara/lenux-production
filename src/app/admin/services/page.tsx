@@ -90,6 +90,23 @@ export default function ServicesManagement() {
     formData.append("folder", "services");
 
     try {
+      // Edit එකේදී අලුත් image එකක් upload කරනවා නම්, පරණ එක (නව upload එකක් නම්) Cloudinary එකෙන් delete කරනවා
+      // (original image එක backend එකෙන් handle වෙනවා save කරනකොට)
+      if (type === "edit-service" && editImage?.publicId && editImage.publicId !== editingService?.image?.publicId) {
+        await fetch('/api/admin/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId: editImage.publicId }),
+        }).catch(console.error);
+      }
+      if (type === "edit-category" && editCatImage?.publicId && editCatImage.publicId !== editingCategory?.image?.publicId) {
+        await fetch('/api/admin/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId: editCatImage.publicId }),
+        }).catch(console.error);
+      }
+
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (data.success) {
@@ -587,13 +604,15 @@ export default function ServicesManagement() {
                         type="button"
                         onClick={async (e) => {
                           e.stopPropagation();
-                          if (editImage?.publicId) {
+                          // නව upload කරපු image එකක් නම් (original එක නෙවෙයි) Cloudinary එකෙන් delete කරනවා
+                          if (editImage?.publicId && editImage.publicId !== editingService?.image?.publicId) {
                             await fetch('/api/admin/upload', {
                               method: 'DELETE',
                               headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify({ publicId: editImage.publicId }),
-                            });
+                            }).catch(console.error);
                           }
+                          // Original image එක නම් backend එකෙන් save කරනකොට Cloudinary delete වෙනවා
                           setEditImage(null);
                         }}
                         className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity duration-200"
@@ -668,13 +687,15 @@ export default function ServicesManagement() {
                         type="button"
                         onClick={async (e) => {
                           e.stopPropagation();
-                          if (editCatImage?.publicId) {
+                          // නව upload කරපු image එකක් නම් (original එක නෙවෙයි) Cloudinary එකෙන් delete කරනවා
+                          if (editCatImage?.publicId && editCatImage.publicId !== editingCategory?.image?.publicId) {
                             await fetch('/api/admin/upload', {
                               method: 'DELETE',
                               headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify({ publicId: editCatImage.publicId }),
-                            });
+                            }).catch(console.error);
                           }
+                          // Original image එක නම් backend එකෙන් save කරනකොට Cloudinary delete වෙනවා
                           setEditCatImage(null);
                         }}
                         className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/60 opacity-0 group-hover/catimg:opacity-100 transition-opacity duration-200"
