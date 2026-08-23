@@ -86,7 +86,7 @@ export default async function GalleryDetailPage({ params }: PageProps) {
         <div className="max-w-5xl mx-auto space-y-12">
           
           {/* Back button */}
-          <Link href="/" className="inline-flex items-center gap-2 text-lenux-emerald hover:text-white transition-colors text-sm font-semibold uppercase tracking-wider">
+          <Link href="/#featured-gallery" className="inline-flex items-center gap-2 text-lenux-emerald hover:text-white transition-colors text-sm font-semibold uppercase tracking-wider">
             <ArrowLeft size={16} /> Back to Home
           </Link>
 

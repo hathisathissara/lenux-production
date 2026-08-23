@@ -41,7 +41,7 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
   if (!images || images.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-28 bg-[#030303] border-t border-white/5 relative overflow-hidden">
+    <section id="featured-gallery" className="py-16 md:py-28 bg-[#030303] border-t border-white/5 relative overflow-hidden">
       {/* Decorative Glow */}
       <div className="absolute -top-32 left-1/3 w-96 h-96 bg-lenux-emerald/5 rounded-full blur-[150px] pointer-events-none" />
 
