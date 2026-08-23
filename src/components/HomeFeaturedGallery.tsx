@@ -112,7 +112,10 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
                     )}
 
                     <div className="pt-4">
-                      <Link href="/gallery" className="inline-block px-6 py-2.5 bg-lenux-emerald text-white rounded-sm text-xs font-bold uppercase tracking-wide hover:bg-lenux-emerald/90 transition-all shadow-lg shadow-lenux-emerald/20">
+                      <Link 
+                        href={`/gallery/${(item.title || item.category || 'gallery-item').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')}-${item._id}`} 
+                        className="inline-block px-6 py-2.5 bg-lenux-emerald text-white rounded-sm text-xs font-bold uppercase tracking-wide hover:bg-lenux-emerald/90 transition-all shadow-lg shadow-lenux-emerald/20"
+                      >
                         Learn More
                       </Link>
                     </div>
