@@ -53,7 +53,7 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
       {/* ==========================================
           PORTFOLIO HERO BANNER
           ========================================== */}
-      <section className="relative w-full min-h-[40vh] md:min-h-[55vh] flex flex-col justify-center pt-32 pb-16 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden transition-all duration-700">
+      <section className="relative w-full min-h-[45vh] md:min-h-[55vh] flex flex-col justify-center pt-32 pb-16 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden transition-all duration-700">
         <div className="absolute inset-0 z-0 opacity-50">
           <Image 
             src={heroImage} 
@@ -67,17 +67,19 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <ScrollReveal>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
-              <Sparkles size={14} /> 100% Original Works
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
+                <Sparkles size={14} /> 100% Original Works
+              </div>
+              <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
+                Our Visual <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Portfolio</span>
+              </h1>
+              <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+                Explore our completed advertising, vehicle branding, signage, printing, and event production projects.
+              </p>
             </div>
-            <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
-              Our Visual <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Portfolio</span>
-            </h1>
-            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              Explore our completed advertising, vehicle branding, signage, printing, and event production projects.
-            </p>
           </ScrollReveal>
         </div>
       </section>

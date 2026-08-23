@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 
 interface ServicesFilterProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,8 +77,39 @@ export default function ServicesFilterSection({ categories, services }: Services
     ? categories 
     : categories.filter((cat) => cat._id.toString() === selectedCatId);
 
+  const selectedCategory = selectedCatId === "all" ? null : categories.find(c => c._id.toString() === selectedCatId);
+  const heroImage = selectedCategory?.image?.url || "/images/hero-bg.jpg";
+
   return (
-    <div className="bg-[#030303] py-16 space-y-20">
+    <div className="w-full">
+      {/* Services Hero Banner */}
+      <section className="relative w-full min-h-[45vh] md:min-h-[55vh] flex flex-col justify-center pt-32 pb-16 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-50">
+          <Image 
+            key={heroImage}
+            src={heroImage} 
+            alt={selectedCategory?.name || "Services Hero"} 
+            fill 
+            className="object-cover animate-fade-in" 
+            priority 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
+            <Sparkles size={14} /> Full Visual Solutions
+          </div>
+          <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
+            Design, Print & <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Production</span>
+          </h1>
+          <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+            Complete advertising, printing, branding, and manufacturing solutions categorized under one roof.
+          </p>
+        </div>
+      </section>
+
+      <div className="bg-[#030303] py-16 space-y-20">
       
       {/* 🌟 Custom Keyframe Animations CSS (100% Build-Safe) */}
       <style dangerouslySetInnerHTML={{__html: `
@@ -94,6 +125,13 @@ export default function ServicesFilterSection({ categories, services }: Services
         }
         .animate-fade-up {
           animation: customFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes customFadeIn {
+          from { opacity: 0.5; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: customFadeIn 0.5s ease-in-out forwards;
         }
         div::-webkit-scrollbar {
           display: none !important;
@@ -228,6 +266,7 @@ export default function ServicesFilterSection({ categories, services }: Services
         })}
       </div>
 
+    </div>
     </div>
   );
 }

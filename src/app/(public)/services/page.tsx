@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
@@ -70,25 +70,7 @@ export default async function ServicesPage() {
       {/* Header */}
       <Header phone={phone} hours={hours} companyName={companyName} />
 
-      {/* Services Hero Banner */}
-      <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-25">
-          <Image src="/images/hero-bg.jpg" alt="Services Hero" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-        </div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
-            <Sparkles size={14} /> Full Visual Solutions
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase leading-tight">
-            Design, Print & <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent">Production</span>
-          </h1>
-          <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-            Complete advertising, printing, branding, and manufacturing solutions categorized under one roof.
-          </p>
-        </div>
-      </section>
 
       {/* 🌟 Interactive Filter & Categorized Sections Component */}
       <ServicesFilterSection categories={categories} services={services} />
