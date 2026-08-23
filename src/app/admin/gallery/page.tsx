@@ -4,9 +4,23 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Plus, Trash, Check, AlertCircle, ImageIcon, Star } from "lucide-react";
 
+interface GalleryItem {
+  _id: string;
+  title?: string;
+  description?: string;
+  category: string;
+  image: { url: string; publicId: string };
+  isFeaturedOnHome?: boolean;
+}
+
+interface CategoryItem {
+  _id: string;
+  name: string;
+}
+
 export default function GalleryManagement() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [gallery, setGallery] = useState<any[]>([]);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form States
@@ -21,15 +35,31 @@ export default function GalleryManagement() {
 
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  const fetchGallery = async () => {
+  const fetchGalleryAndCategories = async () => {
     try {
-      const res = await fetch("/api/admin/gallery");
-      const data = await res.json();
-      if (data.success) {
-        setGallery(data.data);
+      const [galleryRes, categoriesRes] = await Promise.all([
+        fetch("/api/admin/gallery"),
+        fetch("/api/admin/categories")
+      ]);
+      
+      const galleryData = await galleryRes.json();
+      const categoriesData = await categoriesRes.json();
+      
+      if (galleryData.success) {
+        setGallery(galleryData.data);
+      }
+      
+      if (categoriesData.success && categoriesData.data.length > 0) {
+        setCategoriesList(categoriesData.data);
+        // If the current category state is not in the fetched list, set it to the first category
+        const firstCategoryName = categoriesData.data[0].name;
+        setCategory((prevCat) => {
+          const exists = categoriesData.data.some((c: CategoryItem) => c.name === prevCat);
+          return exists ? prevCat : firstCategoryName;
+        });
       }
     } catch (err) {
-      console.error("Failed to load gallery", err);
+      console.error("Failed to load data", err);
     } finally {
       setLoading(false);
     }
@@ -37,7 +67,7 @@ export default function GalleryManagement() {
 
   useEffect(() => {
     // eslint-disable-next-line
-    fetchGallery();
+    fetchGalleryAndCategories();
   }, []);
 
   const showNotification = (text: string, type: "success" | "error") => {
@@ -105,7 +135,7 @@ export default function GalleryManagement() {
         setCategory("Production");
         setSortOrder(0);
         setSelectedImages([]);
-        fetchGallery();
+        fetchGalleryAndCategories();
       }
     } catch (err) {
       console.error(err);
@@ -127,7 +157,7 @@ export default function GalleryManagement() {
           !currentValue ? "Image featured on Home Page!" : "Image removed from Home Page.",
           "success"
         );
-        fetchGallery();
+        fetchGalleryAndCategories();
       }
     } catch (err) {
       console.error(err);
@@ -144,7 +174,7 @@ export default function GalleryManagement() {
       const data = await res.json();
       if (data.success) {
         showNotification("Image deleted successfully!", "success");
-        fetchGallery();
+        fetchGalleryAndCategories();
       }
     } catch (err) {
       console.error(err);
@@ -185,51 +215,59 @@ export default function GalleryManagement() {
           {gallery.length === 0 ? (
             <p className="text-gray-400 text-sm">No gallery photos uploaded yet.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {gallery.map((item) => (
-                <div key={item._id} className={`border rounded-2xl overflow-hidden bg-gray-50 flex flex-col justify-between group ${
-                  item.isFeaturedOnHome ? "border-amber-400 ring-2 ring-amber-200" : "border-gray-100"
-                }`}>
-                  <div className="relative w-full h-44 bg-gray-200">
-                    <Image src={item.image.url} alt={item.title || "Gallery"} fill className="object-cover" />
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 bg-black/70 text-lenux-emerald text-[10px] font-bold uppercase rounded-full backdrop-blur-sm">
-                      {item.category}
-                    </span>
-                    {/* 🌟 Featured Badge */}
-                    {item.isFeaturedOnHome && (
-                      <span className="absolute top-3 right-3 px-2.5 py-0.5 bg-amber-500 text-white text-[10px] font-bold uppercase rounded-full flex items-center gap-1">
-                        <Star size={10} fill="white" /> Home
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4 space-y-1">
-                    <h4 className="font-bold text-lenux-charcoal text-sm truncate">{item.title || "Untitled"}</h4>
-                    {item.description && <p className="text-xs text-gray-400 truncate">{item.description}</p>}
-                  </div>
-                  <div className="p-3 bg-white border-t border-gray-100 flex justify-between items-center">
-                    {/* 🌟 Feature on Home Toggle Button */}
-                    <button 
-                      onClick={() => handleToggleFeatured(item._id, item.isFeaturedOnHome || false)}
-                      className={`p-1.5 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold ${
-                        item.isFeaturedOnHome 
-                          ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50" 
-                          : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"
-                      }`}
-                      title={item.isFeaturedOnHome ? "Remove from Home Page" : "Feature on Home Page"}
-                    >
-                      <Star size={14} fill={item.isFeaturedOnHome ? "currentColor" : "none"} /> 
-                      {item.isFeaturedOnHome ? "On Home" : "Feature on Home"}
-                    </button>
-
-                    <button 
-                      onClick={() => handleDelete(item._id)}
-                      className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold"
-                    >
-                      <Trash size={14} /> Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto border border-gray-100 rounded-xl">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-100 text-xs text-lenux-darkGray uppercase tracking-wider">
+                    <th className="p-4 font-bold">Image</th>
+                    <th className="p-4 font-bold">Details</th>
+                    <th className="p-4 font-bold text-center">Home</th>
+                    <th className="p-4 font-bold text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {gallery.map((item) => (
+                    <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="p-4 align-top w-28">
+                        <div className="relative w-24 h-16 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
+                          <Image src={item.image.url} alt={item.title || "Gallery"} fill className="object-cover" />
+                        </div>
+                      </td>
+                      <td className="p-4 align-top">
+                        <div className="space-y-1.5">
+                          <h4 className="font-bold text-lenux-charcoal text-sm">{item.title || "Untitled"}</h4>
+                          <span className="inline-block px-2 py-0.5 bg-gray-100 border border-gray-200 text-gray-600 text-[10px] font-bold uppercase rounded-md">
+                            {item.category}
+                          </span>
+                          {item.description && <p className="text-xs text-gray-500 line-clamp-2 max-w-sm mt-1">{item.description}</p>}
+                        </div>
+                      </td>
+                      <td className="p-4 align-middle text-center w-24">
+                        <button 
+                          onClick={() => handleToggleFeatured(item._id, item.isFeaturedOnHome || false)}
+                          className={`p-2 rounded-full transition-all mx-auto flex items-center justify-center shadow-sm ${
+                            item.isFeaturedOnHome 
+                              ? "bg-amber-100 border border-amber-200 text-amber-600 hover:bg-amber-200" 
+                              : "bg-white border border-gray-200 text-gray-400 hover:bg-gray-100 hover:text-amber-500"
+                          }`}
+                          title={item.isFeaturedOnHome ? "Remove from Home Page" : "Feature on Home Page"}
+                        >
+                          <Star size={16} fill={item.isFeaturedOnHome ? "currentColor" : "none"} /> 
+                        </button>
+                      </td>
+                      <td className="p-4 align-middle text-right w-24">
+                        <button 
+                          onClick={() => handleDelete(item._id)}
+                          className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg transition-all inline-flex items-center justify-center"
+                          title="Delete Image"
+                        >
+                          <Trash size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
@@ -247,11 +285,12 @@ export default function GalleryManagement() {
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Category</label>
               <select className="admin-input" value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="Production">Production</option>
-                <option value="Printing">Printing</option>
-                <option value="Branding">Branding</option>
-                <option value="Events">Events</option>
-                <option value="Behind The Scenes">Behind The Scenes</option>
+                {categoriesList.length === 0 && <option value="Production">Production</option>}
+                {categoriesList.map((cat) => (
+                  <option key={cat._id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
