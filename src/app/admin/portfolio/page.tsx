@@ -11,6 +11,10 @@ export default function PortfolioManagement() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   // Form States (Create)
   const [title, setTitle] = useState("");
   const [selectedService, setSelectedService] = useState("");
@@ -152,6 +156,7 @@ export default function PortfolioManagement() {
         setTitle(""); setSelectedService(""); setDescription(""); setClientName(""); setCompletionDate("");
         setCoverImage(null); setBeforeImages([]); setProductionImages([]); setInstallationImages([]); setIsFeatured(false);
         fetchData();
+        setCurrentPage(1);
       }
     } catch (err) {
       console.error(err);
@@ -264,51 +269,90 @@ export default function PortfolioManagement() {
           {projects.length === 0 ? (
             <p className="text-gray-400 text-sm">No portfolio projects added yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {projects.map((proj) => (
-                <div key={proj._id} className="border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all flex flex-col justify-between">
-                  <div>
-                    <div className="relative w-full h-48 bg-gray-100">
-                      <Image src={proj.coverImage.url} alt={proj.title} fill className="object-cover" />
-                    </div>
-                    <div className="p-5 space-y-3">
-                      <div className="flex justify-between items-start gap-2">
-                        <h4 className="font-bold text-lenux-charcoal text-base">{proj.title}</h4>
-                        {proj.isFeatured && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Featured</span>
-                        )}
-                      </div>
-                      
-                      <span className="inline-block text-xs font-semibold px-2.5 py-1 bg-lenux-soft text-lenux-deep rounded-md">
-                        {proj.service?.title || "Linked Service"}
-                      </span>
-
-                      <div className="flex items-center gap-4 text-xs text-lenux-darkGray pt-2 border-t border-gray-50">
-                        {proj.clientName && <span className="flex items-center gap-1"><User size={14} /> {proj.clientName}</span>}
-                        {proj.completionDate && <span className="flex items-center gap-1"><Calendar size={14} /> {new Date(proj.completionDate).toLocaleDateString()}</span>}
-                      </div>
-
-                      {/* Stage Photos count indicators */}
-                      <div className="flex gap-2 text-[10px] text-gray-500 font-medium pt-1">
-                        {proj.beforeImages?.length > 0 && <span className="bg-gray-100 px-2 py-0.5 rounded">Before: {proj.beforeImages.length}</span>}
-                        {proj.productionImages?.length > 0 && <span className="bg-gray-100 px-2 py-0.5 rounded">Prod: {proj.productionImages.length}</span>}
-                        {proj.installationImages?.length > 0 && <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">Final: {proj.installationImages.length}</span>}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Actions */}
-                  <div className="p-4 bg-gray-50 border-t border-gray-50 flex justify-end gap-2">
-                    <button onClick={() => handleOpenEdit(proj)} className="text-blue-500 hover:text-blue-700 p-1.5 hover:bg-blue-50 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold">
-                      <Edit size={14} /> Edit
+              <div className="overflow-x-auto border border-gray-100 rounded-xl">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100 text-xs text-lenux-darkGray uppercase tracking-wider">
+                      <th className="p-4 font-bold w-32">Cover</th>
+                      <th className="p-4 font-bold">Project Details</th>
+                      <th className="p-4 font-bold">Stages</th>
+                      <th className="p-4 font-bold text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-sm">
+                    {projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((proj) => (
+                      <tr key={proj._id} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="p-4 align-top">
+                          <div className="relative w-28 h-20 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                            <Image src={proj.coverImage.url} alt={proj.title} fill className="object-cover" />
+                          </div>
+                        </td>
+                        <td className="p-4 align-top space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-lenux-charcoal text-base">{proj.title}</h4>
+                            {proj.isFeatured && (
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Featured</span>
+                            )}
+                          </div>
+                          <span className="inline-block text-[10px] font-bold px-2 py-0.5 bg-lenux-soft text-lenux-deep rounded-md uppercase tracking-wider">
+                            {proj.service?.title || "Linked Service"}
+                          </span>
+                          <div className="flex items-center gap-4 text-xs text-lenux-darkGray pt-1">
+                            {proj.clientName && <span className="flex items-center gap-1"><User size={12} /> {proj.clientName}</span>}
+                            {proj.completionDate && <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(proj.completionDate).toLocaleDateString()}</span>}
+                          </div>
+                        </td>
+                        <td className="p-4 align-top">
+                          <div className="flex flex-col gap-1 text-[10px] text-gray-500 font-medium">
+                            <span className={`px-2 py-0.5 rounded w-fit ${proj.beforeImages?.length > 0 ? "bg-gray-100" : "text-gray-300"}`}>Before: {proj.beforeImages?.length || 0}</span>
+                            <span className={`px-2 py-0.5 rounded w-fit ${proj.productionImages?.length > 0 ? "bg-gray-100" : "text-gray-300"}`}>Prod: {proj.productionImages?.length || 0}</span>
+                            <span className={`px-2 py-0.5 rounded w-fit ${proj.installationImages?.length > 0 ? "bg-emerald-50 text-emerald-700 font-bold" : "text-gray-300"}`}>Final: {proj.installationImages?.length || 0}</span>
+                          </div>
+                        </td>
+                        <td className="p-4 align-middle text-right space-x-1 whitespace-nowrap">
+                          <button 
+                            onClick={() => handleOpenEdit(proj)}
+                            className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-all inline-flex items-center justify-center"
+                            title="Edit Project"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(proj._id)}
+                            className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all inline-flex items-center justify-center"
+                            title="Delete Project"
+                          >
+                            <Trash size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                
+                {/* Pagination Controls */}
+                {Math.ceil(projects.length / itemsPerPage) > 1 && (
+                  <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                    >
+                      Previous
                     </button>
-                    <button onClick={() => handleDelete(proj._id)} className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold">
-                      <Trash size={14} /> Delete
+                    <span className="text-xs text-gray-500 font-semibold bg-white px-3 py-1.5 rounded-md border border-gray-100 shadow-sm">
+                      Page {currentPage} of {Math.ceil(projects.length / itemsPerPage)}
+                    </span>
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.min(Math.ceil(projects.length / itemsPerPage), p + 1))}
+                      disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
+                      className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                    >
+                      Next
                     </button>
                   </div>
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
           )}
         </div>
 

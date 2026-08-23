@@ -10,6 +10,10 @@ export default function FeedbackManagement() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ text: "", type: "" });
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   const fetchFeedbacks = async () => {
     try {
       const res = await fetch("/api/feedback");
@@ -120,82 +124,99 @@ export default function FeedbackManagement() {
           <p className="text-sm font-medium">No customer feedback received yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {feedbacks.map((item) => (
-            <div 
-              key={item._id} 
-              className={`bg-white p-6 rounded-2xl border transition-all flex flex-col justify-between ${
-                item.isApproved 
-                ? "border-emerald-100 shadow-sm hover:shadow-md" 
-                : "border-gray-200 bg-gray-50/30 shadow-none opacity-85"
-              }`}
-            >
-              <div className="space-y-4">
-                {/* Header info (Avatar + Name) */}
-                <div className="flex items-center gap-3">
-                  <div className="relative w-11 h-11 bg-gray-100 rounded-full overflow-hidden shrink-0 border border-gray-100">
-                    <Image 
-                      src={item.avatar?.url || "/images/default-avatar.png"} // Default avatar if client hasn't added one
-                      alt={item.name} 
-                      fill 
-                      className="object-cover"
-                      sizes="44px"
-                    />
-                  </div>
-                  <div>
+        <div className="overflow-x-auto border border-gray-100 rounded-xl bg-white shadow-sm">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100 text-xs text-lenux-darkGray uppercase tracking-wider">
+                <th className="p-4 font-bold w-20">Avatar</th>
+                <th className="p-4 font-bold">Client Info</th>
+                <th className="p-4 font-bold">Feedback</th>
+                <th className="p-4 font-bold">Status</th>
+                <th className="p-4 font-bold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 text-sm">
+              {feedbacks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item) => (
+                <tr key={item._id} className={`transition-colors ${item.isApproved ? "hover:bg-gray-50/50" : "bg-gray-50/30 opacity-85 hover:opacity-100"}`}>
+                  <td className="p-4 align-top">
+                    <div className="relative w-11 h-11 bg-gray-100 rounded-full overflow-hidden border border-gray-100">
+                      <Image 
+                        src={item.avatar?.url || "/images/default-avatar.png"} 
+                        alt={item.name} 
+                        fill 
+                        className="object-cover"
+                        sizes="44px"
+                      />
+                    </div>
+                  </td>
+                  <td className="p-4 align-top">
                     <h4 className="font-bold text-lenux-charcoal text-sm">{item.name}</h4>
                     {item.designation && (
-                      <p className="text-xs text-lenux-darkGray">{item.designation}</p>
+                      <p className="text-xs text-lenux-darkGray mt-0.5">{item.designation}</p>
                     )}
-                  </div>
-                </div>
+                  </td>
+                  <td className="p-4 align-top max-w-sm">
+                    <div className="space-y-1.5">
+                      {renderStars(item.rating)}
+                      <p className="text-sm text-lenux-charcoal leading-relaxed italic line-clamp-3">
+                        &quot;{item.comment}&quot;
+                      </p>
+                    </div>
+                  </td>
+                  <td className="p-4 align-top">
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                      item.isApproved ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                    }`}>
+                      {item.isApproved ? "Approved" : "Pending"}
+                    </span>
+                  </td>
+                  <td className="p-4 align-top text-right space-x-1 whitespace-nowrap">
+                    <button 
+                      onClick={() => handleToggleApprove(item._id, item.isApproved)}
+                      className={`inline-flex items-center justify-center p-2 rounded-lg transition-all ${
+                        item.isApproved 
+                        ? "text-amber-500 hover:text-amber-700 hover:bg-amber-50" 
+                        : "text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50"
+                      }`}
+                      title={item.isApproved ? "Reject Feedback" : "Approve Feedback"}
+                    >
+                      {item.isApproved ? <ThumbsDown size={16} /> : <ThumbsUp size={16} />}
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteFeedback(item._id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all inline-flex items-center justify-center"
+                      title="Delete Feedback"
+                    >
+                      <Trash size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-                {/* Rating and Comment */}
-                <div className="space-y-2">
-                  {renderStars(item.rating)}
-                  <p className="text-sm text-lenux-charcoal leading-relaxed italic">
-                    &quot;{item.comment}&quot;
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Bar */}
-              <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-6">
-                {/* Status Indicator */}
-                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                  item.isApproved ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
-                }`}>
-                  {item.isApproved ? "Approved" : "Pending Review"}
-                </span>
-
-                {/* Action Buttons */}
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => handleToggleApprove(item._id, item.isApproved)}
-                    className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      item.isApproved 
-                      ? "bg-amber-50 text-amber-700 hover:bg-amber-100" 
-                      : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                    }`}
-                  >
-                    {item.isApproved ? (
-                      <><ThumbsDown size={14} /> Reject</>
-                    ) : (
-                      <><ThumbsUp size={14} /> Approve</>
-                    )}
-                  </button>
-
-                  <button 
-                    onClick={() => handleDeleteFeedback(item._id)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all"
-                  >
-                    <Trash size={14} />
-                  </button>
-                </div>
-              </div>
-
+          {/* Pagination Controls */}
+          {Math.ceil(feedbacks.length / itemsPerPage) > 1 && (
+            <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+              >
+                Previous
+              </button>
+              <span className="text-xs text-gray-500 font-semibold bg-white px-3 py-1.5 rounded-md border border-gray-100 shadow-sm">
+                Page {currentPage} of {Math.ceil(feedbacks.length / itemsPerPage)}
+              </span>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(feedbacks.length / itemsPerPage), p + 1))}
+                disabled={currentPage === Math.ceil(feedbacks.length / itemsPerPage)}
+                className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+              >
+                Next
+              </button>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>

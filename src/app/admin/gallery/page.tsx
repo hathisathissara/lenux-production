@@ -23,6 +23,10 @@ export default function GalleryManagement() {
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   // Form States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -136,6 +140,7 @@ export default function GalleryManagement() {
         setSortOrder(0);
         setSelectedImages([]);
         fetchGalleryAndCategories();
+        setCurrentPage(1); // Reset to first page after upload
       }
     } catch (err) {
       console.error(err);
@@ -226,7 +231,7 @@ export default function GalleryManagement() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {gallery.map((item) => (
+                  {gallery.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-4 align-top w-28">
                         <div className="relative w-24 h-16 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
@@ -268,6 +273,29 @@ export default function GalleryManagement() {
                   ))}
                 </tbody>
               </table>
+              
+              {/* Pagination Controls */}
+              {Math.ceil(gallery.length / itemsPerPage) > 1 && (
+                <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xs text-gray-500 font-semibold bg-white px-3 py-1.5 rounded-md border border-gray-100 shadow-sm">
+                    Page {currentPage} of {Math.ceil(gallery.length / itemsPerPage)}
+                  </span>
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(gallery.length / itemsPerPage), p + 1))}
+                    disabled={currentPage === Math.ceil(gallery.length / itemsPerPage)}
+                    className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

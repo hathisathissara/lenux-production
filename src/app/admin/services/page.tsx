@@ -11,6 +11,11 @@ export default function ServicesManagement() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Pagination states
+  const [currentServicePage, setCurrentServicePage] = useState(1);
+  const [currentCategoryPage, setCurrentCategoryPage] = useState(1);
+  const itemsPerPage = 5;
+
   // Form States (Category Create)
   const [catName, setCatName] = useState("");
   const [catDesc, setCatDesc] = useState("");
@@ -153,6 +158,7 @@ export default function ServicesManagement() {
         showNotification("Category added successfully!", "success");
         setCatName(""); setCatDesc(""); setCatImage(null);
         fetchData();
+        setCurrentCategoryPage(1);
       }
     } catch (err) {
       console.error(err);
@@ -242,6 +248,7 @@ export default function ServicesManagement() {
         showNotification("Service added successfully!", "success");
         setSerTitle(""); setSerCategory(""); setSerShortDesc(""); setSerDesc(""); setSerImage(null);
         fetchData();
+        setCurrentServicePage(1);
       }
     } catch (err) {
       console.error(err);
@@ -365,38 +372,37 @@ export default function ServicesManagement() {
               {services.length === 0 ? (
                 <p className="text-gray-400 text-sm">No services added yet.</p>
               ) : (
-                <div className="overflow-x-auto">
-                <div className="overflow-x-auto whitespace-nowrap">
+                <div className="overflow-x-auto border border-gray-100 rounded-xl">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-gray-100 text-xs text-lenux-darkGray uppercase font-bold">
-                        <th className="py-3">Image</th>
-                        <th className="py-3">Title</th>
-                        <th className="py-3">Category</th>
-                        <th className="py-3 text-right">Actions</th>
+                      <tr className="bg-gray-50 border-b border-gray-100 text-xs text-lenux-darkGray uppercase tracking-wider">
+                        <th className="p-4 font-bold w-20">Image</th>
+                        <th className="p-4 font-bold">Title</th>
+                        <th className="p-4 font-bold">Category</th>
+                        <th className="p-4 font-bold text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50 text-sm">
-                      {services.map((item) => (
-                        <tr key={item._id} className="hover:bg-gray-50/50">
-                          <td className="py-3">
-                            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
+                    <tbody className="divide-y divide-gray-100 text-sm">
+                      {services.slice((currentServicePage - 1) * itemsPerPage, currentServicePage * itemsPerPage).map((item) => (
+                        <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="p-4 align-middle">
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200 bg-white">
                               <Image src={item.image.url} alt={item.title} fill className="object-cover" />
                             </div>
                           </td>
-                          <td className="py-3 font-medium text-lenux-charcoal">{item.title}</td>
-                          <td className="py-3 text-lenux-darkGray">{item.category?.name || "Uncategorized"}</td>
-                          <td className="py-3 text-right space-x-1">
+                          <td className="p-4 align-middle font-medium text-lenux-charcoal">{item.title}</td>
+                          <td className="p-4 align-middle text-gray-500">{item.category?.name || "Uncategorized"}</td>
+                          <td className="p-4 align-middle text-right space-x-1">
                             <button 
                               onClick={() => handleOpenEditService(item)}
-                              className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-all inline-block"
+                              className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-all inline-flex items-center justify-center"
                               title="Edit Service"
                             >
                               <Edit size={16} />
                             </button>
                             <button 
                               onClick={() => handleDeleteService(item._id)}
-                              className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all inline-block"
+                              className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all inline-flex items-center justify-center"
                               title="Delete Service"
                             >
                               <Trash size={16} />
@@ -406,7 +412,29 @@ export default function ServicesManagement() {
                       ))}
                     </tbody>
                   </table>
-                </div>
+
+                  {/* Pagination Controls */}
+                  {Math.ceil(services.length / itemsPerPage) > 1 && (
+                    <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
+                      <button 
+                        onClick={() => setCurrentServicePage(p => Math.max(1, p - 1))}
+                        disabled={currentServicePage === 1}
+                        className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-xs text-gray-500 font-semibold bg-white px-3 py-1.5 rounded-md border border-gray-100 shadow-sm">
+                        Page {currentServicePage} of {Math.ceil(services.length / itemsPerPage)}
+                      </span>
+                      <button 
+                        onClick={() => setCurrentServicePage(p => Math.min(Math.ceil(services.length / itemsPerPage), p + 1))}
+                        disabled={currentServicePage === Math.ceil(services.length / itemsPerPage)}
+                        className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -416,40 +444,76 @@ export default function ServicesManagement() {
               {categories.length === 0 ? (
                 <p className="text-gray-400 text-sm">No categories added yet.</p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {categories.map((cat) => (
-                    <div key={cat._id} className="p-4 rounded-xl border border-gray-100 bg-lenux-offWhite flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        {cat.image?.url && (
-                          <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-gray-200 shrink-0">
-                            <Image src={cat.image.url} alt={cat.name} fill className="object-cover" />
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-bold text-lenux-charcoal text-sm">{cat.name}</p>
-                          <p className="text-xs text-gray-400">Slug: {cat.slug}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-1">
-                        {/* 🌟 Category Edit Button */}
-                        <button 
-                          onClick={() => handleOpenEditCategory(cat)}
-                          className="text-blue-500 hover:text-blue-700 p-1.5 hover:bg-blue-50 rounded-lg transition-all"
-                          title="Edit Category"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteCategory(cat._id)}
-                          className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all"
-                          title="Delete Category"
-                        >
-                          <Trash size={16} />
-                        </button>
-                      </div>
+                <div className="overflow-x-auto border border-gray-100 rounded-xl">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-100 text-xs text-lenux-darkGray uppercase tracking-wider">
+                        <th className="p-4 font-bold w-20">Image</th>
+                        <th className="p-4 font-bold">Category Details</th>
+                        <th className="p-4 font-bold text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 text-sm">
+                      {categories.slice((currentCategoryPage - 1) * itemsPerPage, currentCategoryPage * itemsPerPage).map((cat) => (
+                        <tr key={cat._id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="p-4 align-middle">
+                            {cat.image?.url ? (
+                              <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200 bg-white">
+                                <Image src={cat.image.url} alt={cat.name} fill className="object-cover" />
+                              </div>
+                            ) : (
+                              <div className="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center">
+                                <AlertCircle size={20} className="text-gray-400" />
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-4 align-middle">
+                            <p className="font-bold text-lenux-charcoal text-sm">{cat.name}</p>
+                            <p className="text-xs text-gray-500 mt-0.5">Slug: {cat.slug}</p>
+                          </td>
+                          <td className="p-4 align-middle text-right space-x-1">
+                            <button 
+                              onClick={() => handleOpenEditCategory(cat)}
+                              className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition-all inline-flex items-center justify-center"
+                              title="Edit Category"
+                            >
+                              <Edit size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteCategory(cat._id)}
+                              className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all inline-flex items-center justify-center"
+                              title="Delete Category"
+                            >
+                              <Trash size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  
+                  {/* Pagination Controls */}
+                  {Math.ceil(categories.length / itemsPerPage) > 1 && (
+                    <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
+                      <button 
+                        onClick={() => setCurrentCategoryPage(p => Math.max(1, p - 1))}
+                        disabled={currentCategoryPage === 1}
+                        className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-xs text-gray-500 font-semibold bg-white px-3 py-1.5 rounded-md border border-gray-100 shadow-sm">
+                        Page {currentCategoryPage} of {Math.ceil(categories.length / itemsPerPage)}
+                      </span>
+                      <button 
+                        onClick={() => setCurrentCategoryPage(p => Math.min(Math.ceil(categories.length / itemsPerPage), p + 1))}
+                        disabled={currentCategoryPage === Math.ceil(categories.length / itemsPerPage)}
+                        className="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-all shadow-sm"
+                      >
+                        Next
+                      </button>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
