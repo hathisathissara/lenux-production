@@ -25,7 +25,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'At least one image is required' }, { status: 400 });
     }
 
-    // එකපාර පින්තූර කිහිපයක් දී තිබේ නම්, ඒවා Loop කර එකින් එක Database එකට සේව් කරනවා
     const createdImages = [];
     for (const img of images) {
       const newItem = await Gallery.create({
@@ -34,6 +33,7 @@ export async function POST(request: Request) {
         category: category || 'Production',
         image: img,
         sortOrder: sortOrder || 0,
+        isFeaturedOnHome: false,
       });
       createdImages.push(newItem);
     }

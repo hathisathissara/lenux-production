@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Trash, Check, AlertCircle, ImageIcon } from "lucide-react";
+import { Plus, Trash, Check, AlertCircle, ImageIcon, Star } from "lucide-react";
 
 export default function GalleryManagement() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,7 +92,7 @@ export default function GalleryManagement() {
           title,
           description,
           category,
-          images: selectedImages, // 🌟 Array එකක් ලෙස යවයි
+          images: selectedImages,
           sortOrder,
         }),
       });
@@ -110,6 +110,28 @@ export default function GalleryManagement() {
     } catch (err) {
       console.error(err);
       showNotification("Failed to save photos", "error");
+    }
+  };
+
+  // 🌟 Toggle Feature on Home
+  const handleToggleFeatured = async (id: string, currentValue: boolean) => {
+    try {
+      const res = await fetch(`/api/admin/gallery/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeaturedOnHome: !currentValue }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showNotification(
+          !currentValue ? "Image featured on Home Page!" : "Image removed from Home Page.",
+          "success"
+        );
+        fetchGallery();
+      }
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to update feature status", "error");
     }
   };
 
@@ -165,18 +187,40 @@ export default function GalleryManagement() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {gallery.map((item) => (
-                <div key={item._id} className="border border-gray-100 rounded-2xl overflow-hidden bg-gray-50 flex flex-col justify-between group">
+                <div key={item._id} className={`border rounded-2xl overflow-hidden bg-gray-50 flex flex-col justify-between group ${
+                  item.isFeaturedOnHome ? "border-amber-400 ring-2 ring-amber-200" : "border-gray-100"
+                }`}>
                   <div className="relative w-full h-44 bg-gray-200">
                     <Image src={item.image.url} alt={item.title || "Gallery"} fill className="object-cover" />
                     <span className="absolute top-3 left-3 px-2.5 py-0.5 bg-black/70 text-lenux-emerald text-[10px] font-bold uppercase rounded-full backdrop-blur-sm">
                       {item.category}
                     </span>
+                    {/* 🌟 Featured Badge */}
+                    {item.isFeaturedOnHome && (
+                      <span className="absolute top-3 right-3 px-2.5 py-0.5 bg-amber-500 text-white text-[10px] font-bold uppercase rounded-full flex items-center gap-1">
+                        <Star size={10} fill="white" /> Home
+                      </span>
+                    )}
                   </div>
                   <div className="p-4 space-y-1">
                     <h4 className="font-bold text-lenux-charcoal text-sm truncate">{item.title || "Untitled"}</h4>
                     {item.description && <p className="text-xs text-gray-400 truncate">{item.description}</p>}
                   </div>
-                  <div className="p-3 bg-white border-t border-gray-100 flex justify-end">
+                  <div className="p-3 bg-white border-t border-gray-100 flex justify-between items-center">
+                    {/* 🌟 Feature on Home Toggle Button */}
+                    <button 
+                      onClick={() => handleToggleFeatured(item._id, item.isFeaturedOnHome || false)}
+                      className={`p-1.5 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold ${
+                        item.isFeaturedOnHome 
+                          ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50" 
+                          : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"
+                      }`}
+                      title={item.isFeaturedOnHome ? "Remove from Home Page" : "Feature on Home Page"}
+                    >
+                      <Star size={14} fill={item.isFeaturedOnHome ? "currentColor" : "none"} /> 
+                      {item.isFeaturedOnHome ? "On Home" : "Feature on Home"}
+                    </button>
+
                     <button 
                       onClick={() => handleDelete(item._id)}
                       className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-lg transition-all flex items-center gap-1 text-xs font-semibold"
@@ -225,7 +269,6 @@ export default function GalleryManagement() {
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1">Select Photos (Multiple)</label>
               <div className="relative border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center hover:border-lenux-emerald cursor-pointer transition-all mb-3">
-                {/* 🌟 multiple attribute එක එකතු කර ඇත */}
                 <input type="file" accept="image/*" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleMultipleImageUpload} />
                 <div className="text-center text-gray-400">
                   <ImageIcon size={24} className="mx-auto mb-1 text-lenux-emerald" />

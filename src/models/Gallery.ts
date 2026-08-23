@@ -15,6 +15,7 @@ const GallerySchema = new Schema(
     category: { type: String, default: 'Production' }, // e.g., Printing, Branding, Events, Behind The Scenes
     image: { type: ImageSchema, required: true },
     sortOrder: { type: Number, default: 0 },
+    isFeaturedOnHome: { type: Boolean, default: false },
   },
   { timestamps: true, strict: false }
 );

@@ -9,18 +9,21 @@ import "@/models/Service";
 import "@/models/Portfolio";
 import "@/models/Staff";
 import "@/models/Feedback";
+import "@/models/Gallery";
 
 import { ContactInformation } from "@/models/ContactInformation";
 import { ServiceCategory } from "@/models/ServiceCategory";
 import { Portfolio } from "@/models/Portfolio";
 import { Staff } from "@/models/Staff";
 import { Feedback } from "@/models/Feedback";
+import { Gallery } from "@/models/Gallery";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import Footer from "@/components/Footer";
 import StaffCard from "@/components/StaffCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import HomeFeaturedGallery from "@/components/HomeFeaturedGallery";
 
 import { 
   Target, Eye, ArrowRight, ShieldCheck, Award, Zap, 
@@ -75,12 +78,13 @@ export async function generateMetadata(): Promise<Metadata> {
 async function getHomeData() {
   await connectDB();
 
-  const [settingsDoc, categoriesDoc, projectsDoc, staffDoc, feedbackDoc] = await Promise.all([
+  const [settingsDoc, categoriesDoc, projectsDoc, staffDoc, feedbackDoc, featuredGalleryDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
     ServiceCategory.find({ isActive: true }).sort({ sortOrder: 1 }).limit(8).lean(),
     Portfolio.find({ isFeatured: true, isPublished: true }).populate('service', 'title').limit(6).lean(),
     Staff.find({ isFeatured: true, isActive: true }).sort({ sortOrder: 1 }).limit(4).lean(),
     Feedback.find({ isApproved: true }).sort({ createdAt: -1 }).lean(),
+    Gallery.find({ isFeaturedOnHome: true }).sort({ sortOrder: 1, createdAt: -1 }).lean(),
   ]);
 
   return {
@@ -89,11 +93,12 @@ async function getHomeData() {
     featuredProjects: projectsDoc ? JSON.parse(JSON.stringify(projectsDoc)) : [],
     featuredStaff: staffDoc ? JSON.parse(JSON.stringify(staffDoc)) : [],
     feedbacks: feedbackDoc ? JSON.parse(JSON.stringify(feedbackDoc)) : [],
+    featuredGallery: featuredGalleryDoc ? JSON.parse(JSON.stringify(featuredGalleryDoc)) : [],
   };
 }
 
 export default async function HomePage() {
-  const { settings, categories, featuredProjects, featuredStaff, feedbacks } = await getHomeData();
+  const { settings, categories, featuredProjects, featuredStaff, feedbacks, featuredGallery } = await getHomeData();
 
   const phone = settings?.phone || "+94 77 123 4567";
   const secondaryPhone = settings?.secondaryPhone || "+94 11 123 4567";
@@ -480,6 +485,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ==========================================
+          🌟 SECTION 07B — FEATURED GALLERY SLIDESHOW
+          ========================================== */}
+      <HomeFeaturedGallery images={featuredGallery} />
 
       {/* ==========================================
           🌟 SECTION 08 — MEET OUR TEAM
