@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 import { connectDB } from "@/lib/db";
 import { Portfolio } from "@/models/Portfolio";
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
   
