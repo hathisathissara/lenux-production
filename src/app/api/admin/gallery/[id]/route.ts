@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { Gallery } from '@/models/Gallery';
 import cloudinary from '@/lib/cloudinary';
+import { slugify } from '@/lib/slugify';
 
 // PUT Update Gallery Item (e.g. isFeaturedOnHome)
 export async function PUT(
@@ -12,6 +13,23 @@ export async function PUT(
     await connectDB();
     const { id } = await params;
     const body = await request.json();
+
+    // Home page එකේ feature කරනකොට, item එකට slug එකක් නැත්නම් generate කරනවා
+    if (body.isFeaturedOnHome === true) {
+      const existingItem = await Gallery.findById(id);
+      if (existingItem && !existingItem.slug) {
+        const base = slugify(existingItem.title || existingItem.category || 'gallery-item') || 'gallery-item';
+        let candidate = base;
+        let counter = 2;
+
+        while (await Gallery.exists({ slug: candidate, _id: { $ne: id } })) {
+          candidate = `${base}-${counter}`;
+          counter++;
+        }
+
+        body.slug = candidate;
+      }
+    }
 
     const updatedItem = await Gallery.findByIdAndUpdate(id, body, { new: true });
     if (!updatedItem) {

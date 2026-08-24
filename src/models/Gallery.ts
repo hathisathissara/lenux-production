@@ -1,4 +1,4 @@
-import mongoose, { Schema, models } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const ImageSchema = new Schema(
   {
@@ -12,8 +12,9 @@ const GallerySchema = new Schema(
   {
     title: { type: String },
     description: { type: String },
-    category: { type: String, default: 'Production' }, // e.g., Printing, Branding, Events, Behind The Scenes
+    category: { type: String, default: 'Production' },
     image: { type: ImageSchema, required: true },
+    slug: { type: String, unique: true, sparse: true }, // featured items වලට විතරක් set වෙනවා
     sortOrder: { type: Number, default: 0 },
     isFeaturedOnHome: { type: Boolean, default: false },
   },

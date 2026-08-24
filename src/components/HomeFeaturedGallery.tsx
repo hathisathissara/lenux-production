@@ -10,6 +10,7 @@ interface GalleryItem {
   title?: string;
   description?: string;
   category?: string;
+  slug?: string;
   image: { url: string; publicId?: string };
 }
 
@@ -113,7 +114,7 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
 
                     <div className="pt-4">
                       <Link 
-                        href={`/gallery/${(item.title || item.category || 'gallery-item').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')}-${item._id}`} 
+                        href={`/gallery/${item.slug || item._id}`} 
                         className="inline-block px-6 py-2.5 bg-lenux-emerald text-white rounded-sm text-xs font-bold uppercase tracking-wide hover:bg-lenux-emerald/90 transition-all shadow-lg shadow-lenux-emerald/20"
                       >
                         Learn More
@@ -124,8 +125,7 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
               ))}
             </div>
 
-            {/* Navigation Arrows (Optional, absolute positioning over container or sides) */}
-            {/* Can be kept or removed if dots are enough. Let's keep them on the sides on desktop */}
+            {/* Navigation Arrows */}
             <button
               onClick={handlePrev}
               className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/60 border border-white/10 hover:bg-lenux-emerald hover:border-lenux-emerald text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
