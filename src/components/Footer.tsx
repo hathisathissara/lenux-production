@@ -23,6 +23,7 @@ export default async function Footer() {
 
   const companyName = data?.companyName || "LENUX PRODUCTION (PVT) LTD";
   const phone = data?.phone || "+94 76 565 0798";
+  const secondaryPhone = data?.secondaryPhone || "+94 71 123 4567";
   const email = data?.email || "lenuxproduction12@gmail.com";
   const address = data?.address || "No:75/6 Dewala Road Moratuwa. Katubedda , Moratuwa Sri Lanka";
 
@@ -70,6 +71,7 @@ export default async function Footer() {
         <div className="space-y-3">
           <h5 className="text-white font-bold text-xs uppercase tracking-widest">Get In Touch</h5>
           <p className="text-xs">{phone}</p>
+          <p className="text-xs">{secondaryPhone}</p>
           <p className="text-xs">{email}</p>
           <p className="text-xs">{address}</p>
           <div className="flex gap-3 pt-2">

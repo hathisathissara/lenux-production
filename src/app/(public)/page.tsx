@@ -143,7 +143,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white tracking-wide uppercase leading-tight drop-shadow-md">
                 Welcome to{" "}
                 <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 bg-clip-text text-transparent font-bold block mt-2 sm:mt-0 sm:inline-block">
-                  LENUX PRODUCTION (PVT) LTD
+                  {companyName}
                 </span>
               </h2>
               
