@@ -23,10 +23,10 @@ import ScrollReveal from "@/components/ScrollReveal";
 import Footer from "@/components/Footer";
 import nextDynamic from "next/dynamic";
 
-// 🌟 Below-the-fold client components → dynamic imports (reduces initial JS bundle)
-const StaffCard = nextDynamic(() => import("@/components/StaffCard"), { ssr: false });
-const TestimonialsSection = nextDynamic(() => import("@/components/TestimonialsSection"), { ssr: false });
-const HomeFeaturedGallery = nextDynamic(() => import("@/components/HomeFeaturedGallery"), { ssr: false });
+// 🌟 Below-the-fold client components → dynamic imports (bundle splitting, SSR maintained)
+const StaffCard = nextDynamic(() => import("@/components/StaffCard"));
+const TestimonialsSection = nextDynamic(() => import("@/components/TestimonialsSection"));
+const HomeFeaturedGallery = nextDynamic(() => import("@/components/HomeFeaturedGallery"));
 
 import { 
   Target, Eye, ArrowRight, ShieldCheck, Award, Zap, 
