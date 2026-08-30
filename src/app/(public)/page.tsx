@@ -186,7 +186,7 @@ export default async function HomePage() {
                   <div className={`p-3 rounded-xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform ${item.color}`}>
                     <Icon size={24} />
                   </div>
-                  <h4 className="text-lg sm:text-2xl font-black text-white tracking-wide">{item.value}</h4>
+                  <p className="text-lg sm:text-2xl font-black text-white tracking-wide">{item.value}</p>
                   <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">{item.label}</p>
                 </div>
               </ScrollReveal>
@@ -587,7 +587,7 @@ export default async function HomePage() {
                     <Phone size={18} />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white">Call Us Directly</h5>
+                    <p className="font-bold text-white">Call Us Directly</p>
                     <p className="text-gray-400 mt-0.5">{phone}</p>
                     <p className="text-gray-400 mt-0.5">{secondaryPhone}</p>
                   </div>
@@ -598,7 +598,7 @@ export default async function HomePage() {
                     <Mail size={18} />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white">Email Address</h5>
+                    <p className="font-bold text-white">Email Address</p>
                     <p className="text-gray-400 mt-0.5">{email}</p>
                   </div>
                 </div>
@@ -608,7 +608,7 @@ export default async function HomePage() {
                     <MapPin size={18} />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white">Production Facility</h5>
+                    <p className="font-bold text-white">Production Facility</p>
                     <p className="text-gray-400 mt-0.5">{address}</p>
                   </div>
                 </div>
@@ -618,7 +618,7 @@ export default async function HomePage() {
                     <Clock size={18} />
                   </div>
                   <div>
-                    <h5 className="font-bold text-white">Business Hours</h5>
+                    <p className="font-bold text-white">Business Hours</p>
                     <p className="text-gray-400 mt-0.5">{hours}</p>
                   </div>
                 </div>
@@ -632,7 +632,8 @@ export default async function HomePage() {
                 src={mapUrl} 
                 className="w-full h-full border-0" 
                 allowFullScreen={false} 
-                loading="lazy" 
+                loading="lazy"
+                title="Lenux Production Location Map"
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 space-y-2">

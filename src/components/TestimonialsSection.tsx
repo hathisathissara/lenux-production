@@ -92,7 +92,7 @@ export default function TestimonialsSection({ feedbacks }: TestimonialsSectionPr
                   />
                 </div>
                 <div>
-                  <h5 className="font-bold text-white text-base">{current.name}</h5>
+                  <p className="font-bold text-white text-base">{current.name}</p>
                   {current.designation && <p className="text-xs text-gray-400">{current.designation}</p>}
                 </div>
               </div>
@@ -104,11 +104,13 @@ export default function TestimonialsSection({ feedbacks }: TestimonialsSectionPr
                     <button
                       key={idx}
                       onClick={() => setCurrentIndex(idx)}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        currentIndex === idx ? "w-6 bg-lenux-emerald" : "w-2 bg-white/20"
-                      }`}
+                      className={`relative flex items-center justify-center min-w-[24px] min-h-[24px] bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-lenux-emerald rounded-full transition-all duration-300`}
                       aria-label={`Go to slide ${idx + 1}`}
-                    />
+                    >
+                      <span className={`block h-2 rounded-full transition-all duration-300 ${
+                        currentIndex === idx ? "w-6 bg-lenux-emerald" : "w-2 bg-white/20"
+                      }`} />
+                    </button>
                   ))}
                 </div>
 

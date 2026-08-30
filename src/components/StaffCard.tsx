@@ -79,6 +79,7 @@ export default function StaffCard({ member }: { member: any }) {
                 href={member.socialLinks.facebook} 
                 target="_blank" 
                 onClick={(e) => e.stopPropagation()} 
+                aria-label={`${member.name}'s Facebook profile`}
                 className="w-8 h-8 rounded-xl bg-white/10 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all shadow-md"
               >
                 <FacebookIcon />
@@ -89,6 +90,7 @@ export default function StaffCard({ member }: { member: any }) {
                 href={member.socialLinks.instagram} 
                 target="_blank" 
                 onClick={(e) => e.stopPropagation()} 
+                aria-label={`${member.name}'s Instagram profile`}
                 className="w-8 h-8 rounded-xl bg-white/10 hover:bg-pink-600 hover:text-white flex items-center justify-center transition-all shadow-md"
               >
                 <InstagramIcon />
@@ -99,6 +101,7 @@ export default function StaffCard({ member }: { member: any }) {
                 href={member.socialLinks.linkedin} 
                 target="_blank" 
                 onClick={(e) => e.stopPropagation()} 
+                aria-label={`${member.name}'s LinkedIn profile`}
                 className="w-8 h-8 rounded-xl bg-white/10 hover:bg-blue-700 hover:text-white flex items-center justify-center transition-all shadow-md"
               >
                 <LinkedinIcon />
@@ -109,6 +112,7 @@ export default function StaffCard({ member }: { member: any }) {
                 href={`https://wa.me/${member.socialLinks.whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}`}
                 target="_blank" 
                 onClick={(e) => e.stopPropagation()} 
+                aria-label={`Chat with ${member.name} on WhatsApp`}
                 className="w-8 h-8 rounded-xl bg-white/10 hover:bg-green-500 hover:text-white flex items-center justify-center transition-all shadow-md"
               >
                 <WhatsAppIcon />

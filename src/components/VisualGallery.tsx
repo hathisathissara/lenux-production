@@ -50,7 +50,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
       {filteredImages.length === 0 ? (
         <div className="bg-[#0a0a0a] rounded-3xl p-16 text-center border border-white/5 space-y-4 max-w-xl mx-auto">
           <Layers size={48} className="mx-auto text-lenux-emerald opacity-60" />
-          <h4 className="text-xl font-bold text-white">No Gallery Photos</h4>
+          <p className="text-xl font-bold text-white">No Gallery Photos</p>
           <p className="text-sm text-gray-400 font-light">
             No images found in this gallery category yet.
           </p>
@@ -90,9 +90,9 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     {imgItem.title && (
-                      <h4 className="text-base font-bold text-white tracking-wide">
+                      <p className="text-base font-bold text-white tracking-wide">
                         {imgItem.title}
-                      </h4>
+                      </p>
                     )}
                     {imgItem.description && (
                       <p className="text-xs text-gray-300 font-light line-clamp-1 mt-0.5">
@@ -127,6 +127,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
             {/* Close Button */}
             <button
               onClick={() => setActiveImage(null)}
+              aria-label="Close image preview"
               className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-all border border-white/10"
             >
               <X size={20} />

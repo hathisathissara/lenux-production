@@ -75,20 +75,20 @@ export default async function Footer() {
           <p className="text-xs">{email}</p>
           <p className="text-xs">{address}</p>
           <div className="flex gap-3 pt-2">
-            <a href={data?.facebook || "#"} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><FacebookIcon /></a>
-            <a href={data?.instagram || "#"} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><InstagramIcon /></a>
-            <a href={data?.linkedin || "#"} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><LinkedinIcon /></a>
+            <a href={data?.facebook || "#"} target="_blank" rel="noreferrer" aria-label="Visit Lenux Production on Facebook" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><FacebookIcon /></a>
+            <a href={data?.instagram || "#"} target="_blank" rel="noreferrer" aria-label="Visit Lenux Production on Instagram" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><InstagramIcon /></a>
+            <a href={data?.linkedin || "#"} target="_blank" rel="noreferrer" aria-label="Visit Lenux Production on LinkedIn" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><LinkedinIcon /></a>
             {data?.tiktok && (
-              <a href={data.tiktok} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><TiktokIcon /></a>
+              <a href={data.tiktok} target="_blank" rel="noreferrer" aria-label="Visit Lenux Production on TikTok" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-lenux-emerald hover:text-white transition-all"><TiktokIcon /></a>
             )}
           </div>
         </div>
 
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-400 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p>© {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
-          <p className="text-[11px]">Crafted with Premium Brand Precision.</p>
+          <p className="text-[11px] text-gray-400">Crafted with Premium Brand Precision.</p>
         </div>
     </footer>
   );

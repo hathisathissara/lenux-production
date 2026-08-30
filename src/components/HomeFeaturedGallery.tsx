@@ -149,13 +149,15 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  currentIndex === idx
-                    ? "w-8 bg-lenux-emerald shadow-[0_0_8px_rgba(16,185,129,0.6)]"
-                    : "w-2 bg-gray-600 hover:bg-gray-400"
-                }`}
+                className={`relative flex items-center justify-center min-w-[24px] min-h-[24px] rounded-full transition-all duration-500 bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-lenux-emerald`}
                 aria-label={`Go to slide ${idx + 1}`}
-              />
+              >
+                <span className={`block rounded-full transition-all duration-500 ${
+                  currentIndex === idx
+                    ? "w-8 h-2 bg-lenux-emerald shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                    : "w-2 h-2 bg-gray-600 hover:bg-gray-400"
+                }`} />
+              </button>
             ))}
           </div>
         </div>
