@@ -113,13 +113,13 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
                     )}
 
                     <div className="pt-4">
-                     <Link 
-                        href={`/gallery/${item.slug || item._id}`} 
-                        aria-label={`Learn more about ${item.title || item.category || "this gallery item"}`}
+                      <Link 
+                        href={`/gallery/${item.slug || item._id}`}
                         className="inline-block px-6 py-2.5 bg-lenux-emerald text-white rounded-sm text-xs font-bold uppercase tracking-wide hover:bg-lenux-emerald/90 transition-all shadow-lg shadow-lenux-emerald/20"
                       >
                         Learn More
-                     </Link>
+                        <span className="sr-only"> about {item.title || item.category || "this gallery item"}</span>
+                      </Link>
                     </div>
                   </div>
                 </div>
