@@ -21,9 +21,12 @@ import { Gallery } from "@/models/Gallery";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import Footer from "@/components/Footer";
-import StaffCard from "@/components/StaffCard";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import HomeFeaturedGallery from "@/components/HomeFeaturedGallery";
+import nextDynamic from "next/dynamic";
+
+// 🌟 Below-the-fold client components → dynamic imports (reduces initial JS bundle)
+const StaffCard = nextDynamic(() => import("@/components/StaffCard"), { ssr: false });
+const TestimonialsSection = nextDynamic(() => import("@/components/TestimonialsSection"), { ssr: false });
+const HomeFeaturedGallery = nextDynamic(() => import("@/components/HomeFeaturedGallery"), { ssr: false });
 
 import { 
   Target, Eye, ArrowRight, ShieldCheck, Award, Zap, 
