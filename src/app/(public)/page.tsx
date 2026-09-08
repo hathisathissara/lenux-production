@@ -113,7 +113,7 @@ export default async function HomePage() {
   const visionText = settings?.vision || "To become Sri Lanka's leading creative and advertising agency, delivering innovative, high-quality, and impactful solutions that help businesses stand out and grow.";
   const missionText = settings?.mission || "To provide fair, fast, and reliable advertising and production services that help our clients connect with their customers effectively under one roof.";
   const visionImg = settings?.visionImage?.url || "/images/values-man-bg.jpeg";
-  const missionImg = settings?.missionImage?.url || "/images/hero-bg.jpg";
+  const missionImg = settings?.missionImage?.url || "/images/hero-bg.png";
   const logoImg = settings?.logo?.url || "/images/logo.png";
 
   return (

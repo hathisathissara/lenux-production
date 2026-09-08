@@ -81,7 +81,7 @@ export default async function ContactPage() {
           ========================================== */}
       <section className="relative w-full pt-32 md:pt-40 pb-16 md:pb-20 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-25">
-          <Image src="/images/hero-bg.jpg" alt="Contact Hero" fill className="object-cover" priority />
+          <Image src="/images/hero-bg.png" alt="Contact Hero" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
         </div>
 

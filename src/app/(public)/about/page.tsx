@@ -61,7 +61,7 @@ export default async function AboutPage() {
   const visionText = settings?.vision || "To become Sri Lanka's leading creative and advertising agency, delivering innovative, high-quality, and impactful solutions that help businesses stand out and grow.";
   const missionText = settings?.mission || "To provide fair, fast, and reliable advertising and production services that help our clients connect with their customers effectively under one roof.";
   const visionImg = settings?.visionImage?.url || "/images/values-man-bg.jpeg";
-  const missionImg = settings?.missionImage?.url || "/images/hero-bg.jpg";
+  const missionImg = settings?.missionImage?.url || "/images/hero-bg.png";
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">
@@ -74,7 +74,7 @@ export default async function AboutPage() {
           ========================================== */}
       <section className="relative w-full pt-40 pb-24 bg-gradient-to-b from-[#091712] via-black to-black border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-20">
-          <Image src="/images/hero-bg.jpg" alt="About Hero" fill className="object-cover" priority />
+          <Image src="/images/hero-bg.png" alt="About Hero" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
         </div>
 
@@ -146,7 +146,7 @@ export default async function AboutPage() {
                 ) : (
                   <div className="relative w-full h-full">
                     <Image 
-                      src="/images/hero-bg.jpg" 
+                      src="/images/hero-bg.png" 
                       alt="Production Facility" 
                       fill 
                       className="object-cover group-hover:scale-105 transition-transform duration-700" 

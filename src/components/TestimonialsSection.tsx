@@ -85,7 +85,7 @@ export default function TestimonialsSection({ feedbacks }: TestimonialsSectionPr
               <div className="flex items-center gap-4">
                 <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gray-800 border border-white/10 shrink-0">
                   <Image 
-                    src={current.avatar?.url || "/images/hero-bg.jpg"} 
+                    src={current.avatar?.url || "/images/hero-bg.png"} 
                     alt={current.name} 
                     fill 
                     className="object-cover" 

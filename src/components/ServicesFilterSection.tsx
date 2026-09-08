@@ -78,7 +78,7 @@ export default function ServicesFilterSection({ categories, services }: Services
     : categories.filter((cat) => cat._id.toString() === selectedCatId);
 
   const selectedCategory = selectedCatId === "all" ? null : categories.find(c => c._id.toString() === selectedCatId);
-  const heroImage = selectedCategory?.image?.url || "/images/hero-bg.jpg";
+  const heroImage = selectedCategory?.image?.url || "/images/hero-bg.png";
 
   return (
     <div className="w-full">

@@ -40,7 +40,7 @@ export default function PortfolioGallery({ projects }: PortfolioGalleryProps) {
     : [selectedCategory];
 
   // Determine Hero Image based on selected category
-  let heroImage = "/images/hero-bg.jpg";
+  let heroImage = "/images/hero-bg.png";
   if (selectedCategory !== "all") {
     const matchingProject = projects.find((p) => (p.service?.title || "Branding").toLowerCase() === selectedCategory.toLowerCase());
     if (matchingProject && matchingProject.service?.image?.url) {
