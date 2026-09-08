@@ -125,7 +125,7 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 01 — HERO SECTION (Optimized Background Visibility)
           ========================================== */}
-      <section className="relative w-full min-h-screen flex items-center justify-start overflow-hidden pt-20 pb-16">
+      <section className="relative w-full min-h-screen flex items-center justify-start overflow-hidden pt-24 sm:pt-28 pb-14 sm:pb-16">
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/hero-bg.png" 
@@ -134,85 +134,81 @@ export default async function HomePage() {
             className="object-cover object-center md:object-right"
             priority
           />
-          {/* 🌟 Background Visibility එක වැඩි කර ඇති බව තහවුරු කරගන්න */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 md:bg-gradient-to-r md:from-black/80 md:via-black/50 md:to-transparent z-10" />
+          {/* 🌟 Background Visibility & Contrast Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/90 md:bg-gradient-to-r md:from-black/90 md:via-black/60 md:to-transparent z-10" />
         </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-6 w-full mt-8 md:mt-12">
+        <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-6 w-full mt-4 sm:mt-8 md:mt-12">
           <ScrollReveal>
-            <div className="max-w-4xl lg:max-w-5xl space-y-5">
+            <div className="max-w-4xl lg:max-w-5xl space-y-4 sm:space-y-5">
               {/* Category Tagline */}
               <div className="flex items-center gap-2">
-                <span className="w-8 h-[2px] bg-lenux-emerald" />
-                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">
+                <span className="w-5 sm:w-8 h-[2px] bg-lenux-emerald shrink-0" />
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-[0.2em] text-emerald-400">
                   Creative • Printing • Branding • Visual Advertising
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-white tracking-tight leading-tight uppercase">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-white tracking-tight leading-[1.15] uppercase">
                 Welcome to{" "}
                 <span className="text-lenux-emerald block mt-1 whitespace-normal md:whitespace-nowrap">
                   {companyName.replace(/\(pvt\)\s+ltd/i, "(PVT)\u00A0LTD")}
                 </span>
               </h1>
               
-              <p className="text-base sm:text-lg md:text-xl text-gray-200 font-semibold tracking-wide">
+              <p className="text-sm sm:text-lg md:text-xl text-gray-200 font-semibold tracking-wide leading-snug">
                 Specialists in Design, Printing, Branding & Visual Advertising
               </p>
 
-              <p className="text-sm sm:text-base text-gray-300 font-light leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-sm md:text-base text-gray-300 font-light leading-relaxed max-w-xl">
                 Lenux is the ideal platform to take your business to the public and reach a wider audience.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-5 pt-3 sm:pt-4">
+              <div className="flex flex-wrap items-center gap-3.5 sm:gap-5 pt-2 sm:pt-4">
                 <Link 
                   href="/services" 
-                  className="inline-flex items-center gap-2 px-8 py-3.5 bg-lenux-emerald text-black font-extrabold rounded-full text-xs uppercase tracking-wider hover:bg-emerald-400 shadow-lg shadow-lenux-emerald/30 transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-lenux-emerald text-black font-extrabold rounded-full text-xs uppercase tracking-wider hover:bg-emerald-400 shadow-lg shadow-lenux-emerald/30 transition-all duration-300"
                 >
-                  Our Services <ArrowRight size={16} />
+                  Our Services <ArrowRight size={15} />
                 </Link>
                 <Link 
                   href="/portfolio" 
-                  className="inline-flex items-center gap-3 text-white hover:text-lenux-emerald transition-colors text-xs font-bold uppercase tracking-wider group"
+                  className="inline-flex items-center gap-2.5 sm:gap-3 text-white hover:text-lenux-emerald transition-colors text-xs font-bold uppercase tracking-wider group py-1.5"
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center group-hover:border-lenux-emerald group-hover:scale-105 transition-all">
-                    <Play size={12} className="fill-white text-white translate-x-0.5 group-hover:fill-lenux-emerald group-hover:text-lenux-emerald transition-colors" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 flex items-center justify-center group-hover:border-lenux-emerald group-hover:scale-105 transition-all shrink-0">
+                    <Play size={11} className="fill-white text-white translate-x-0.5 group-hover:fill-lenux-emerald group-hover:text-lenux-emerald transition-colors" />
                   </div>
                   <span>Watch Our Work</span>
                 </Link>
               </div>
 
-              {/* Quick Stats in Hero */}
-              <div className="pt-10 sm:pt-12 flex flex-wrap items-center gap-8 sm:gap-12">
+              {/* Quick Stats in Hero (Responsive 3-Column Grid) */}
+              <div className="pt-6 sm:pt-12 grid grid-cols-3 gap-2 sm:gap-6 md:gap-8 max-w-3xl border-t border-white/10 sm:border-t-0 mt-3 sm:mt-0">
                 {/* Stat 1 */}
-                <div className="flex items-center gap-4">
-                  <Briefcase size={32} className="text-lenux-emerald shrink-0" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 pr-2 sm:pr-6 border-r border-white/10">
+                  <Briefcase className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">10+</h4>
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium">Projects Completed</p>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">10+</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Projects Completed</p>
                   </div>
                 </div>
-
-                <div className="h-10 w-px bg-white/15 hidden sm:block" />
 
                 {/* Stat 2 */}
-                <div className="flex items-center gap-4">
-                  <Cog size={32} className="text-lenux-emerald shrink-0" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 px-2 sm:px-6 border-r border-white/10">
+                  <Cog className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">20+</h4>
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium">Services Available</p>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">20+</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Services Available</p>
                   </div>
                 </div>
 
-                <div className="h-10 w-px bg-white/15 hidden sm:block" />
-
                 {/* Stat 3 */}
-                <div className="flex items-center gap-4">
-                  <ThumbsUp size={32} className="text-lenux-emerald shrink-0" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 pl-2 sm:pl-6">
+                  <ThumbsUp className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">100%</h4>
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium">Customer Satisfaction</p>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">100%</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Customer Satisfaction</p>
                   </div>
                 </div>
               </div>
