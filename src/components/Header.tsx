@@ -54,11 +54,13 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
       {/* ==========================================
           🌟 FIXED HEADER CONTAINER (උඩම Fixed වී ඇත)
           ========================================== */}
-      <div className="fixed top-0 left-0 w-full z-50 font-sans transition-all duration-300">
+      <div className={`fixed top-0 left-0 w-full z-50 font-sans transition-all duration-300 ${
+        isMenuOpen ? "bg-[#060606] border-b border-white/10" : ""
+      }`}>
         
         {/* Top Bar */}
         <div className={`bg-[#0c0c0c]/90 border-b border-white/5 py-2 text-xs text-gray-300 transition-all duration-300 ${
-          isScrolled ? "hidden sm:block opacity-90" : "block"
+          isScrolled || isMenuOpen ? "hidden sm:block opacity-90" : "block"
         }`}>
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between sm:justify-start gap-6">
             <div className="flex items-center gap-2">
@@ -72,17 +74,17 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
           </div>
         </div>
 
-        {/* 🌟 MAIN NAVBAR (ඔයා හදපු ලස්සන style එක වෙනස් නොකර ඒ අයුරින්ම තබා ඇත) */}
+        {/* 🌟 MAIN NAVBAR */}
         <nav className={`w-full transition-all duration-500 border-b ${
-          isScrolled 
-          ? "bg-black/50 backdrop-blur-md border-white/10 shadow-2xl py-3.5" // Scroll කරද්දී පමණක් Glass Effect
-          : "bg-transparent border-transparent py-4" // උඩම ඉද්දී 100% Transparent (පසුබිමේ පින්තූරය පෙනේ)
+          isScrolled || isMenuOpen
+          ? "bg-black/90 backdrop-blur-md border-white/10 shadow-2xl py-3.5"
+          : "bg-transparent border-transparent py-4"
         }`}>
-          <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-2">
             
             {/* Company Name / Logo */}
-            <Link href="/" className="z-50">
-              <h1 className="text-base md:text-xl font-bold tracking-wider text-white uppercase transition-all drop-shadow-md">
+            <Link href="/" onClick={() => setIsMenuOpen(false)} className="z-50 shrink min-w-0">
+              <h1 className="text-[15px] xs:text-[13px] sm:text-base md:text-xl font-bold tracking-tight sm:tracking-wider text-white uppercase transition-all drop-shadow-md whitespace-nowrap">
                 {companyName}
               </h1>
             </Link>
@@ -115,30 +117,30 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
               Get a Quote
             </Link>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Hamburger / Close Button (Transforms Burger -> X) */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden z-50 text-white hover:text-lenux-emerald p-2 transition-all"
-              aria-label="Toggle Menu"
+              aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? (
+                <X size={26} className="text-lenux-emerald transition-transform duration-300 rotate-90" />
+              ) : (
+                <Menu size={26} className="text-white transition-transform duration-300" />
+              )}
             </button>
           </div>
         </nav>
       </div>
 
       {/* ==========================================
-          MOBILE DRAWER MENU
+          MOBILE DRAWER MENU (Navbar යටින් slide වේ)
           ========================================== */}
-      <div className={`fixed inset-y-0 right-0 z-50 w-[85vw] sm:w-80 bg-[#080808] border-l border-white/5 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
+      <div className={`fixed inset-y-0 right-0 z-40 w-[85vw] sm:w-80 bg-[#080808] border-l border-white/10 pt-24 sm:pt-28 pb-8 px-6 flex flex-col justify-between shadow-2xl transition-transform duration-500 ease-in-out lg:hidden ${
         isMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}>
-        <div className="space-y-8 pt-20">
-          <span className="block text-[10px] font-bold text-lenux-emerald uppercase tracking-widest border-b border-white/5 pb-2">
-            Navigation
-          </span>
-          
-          <nav className="flex flex-col gap-6 text-base font-normal">
+        <div className="space-y-6">
+          <nav className="flex flex-col gap-5 text-base font-normal">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               return (
@@ -146,7 +148,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
                   key={link.name}
                   onClick={() => setIsMenuOpen(false)}
                   href={link.href}
-                  className={`transition-all ${
+                  className={`transition-all py-1 ${
                     active ? "text-lenux-emerald font-semibold" : "text-gray-300 hover:text-lenux-emerald"
                   }`}
                 >
@@ -158,11 +160,11 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
         </div>
 
         {/* Mobile CTA Button */}
-        <div className="space-y-4">
+        <div className="pt-6">
           <Link 
             onClick={() => setIsMenuOpen(false)} 
             href="/contact" 
-            className="block text-center px-5 py-3.5 bg-lenux-emerald text-white rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-lenux-emerald/20 transition-all"
+            className="block text-center px-5 py-3.5 bg-lenux-emerald text-white rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-lenux-emerald/20 hover:bg-emerald-400 transition-all"
           >
             Get a Quote
           </Link>
@@ -173,7 +175,7 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
       {isMenuOpen && (
         <div 
           onClick={() => setIsMenuOpen(false)}
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-30 lg:hidden"
         />
       )}
 

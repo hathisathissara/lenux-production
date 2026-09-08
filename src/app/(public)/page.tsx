@@ -127,13 +127,28 @@ export default async function HomePage() {
           ========================================== */}
       <section className="relative w-full min-h-screen flex items-center justify-start overflow-hidden pt-24 sm:pt-28 pb-14 sm:pb-16">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/hero-bg.png" 
-            alt="Lenux Production Hero"
-            fill
-            className="object-cover object-center md:object-right"
-            priority
-          />
+          {/* Mobile Background Image (< md) */}
+          <div className="block md:hidden absolute inset-0">
+            <Image 
+              src="/images/hero-bg-mobile.png" 
+              alt="Lenux Production Hero Mobile"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          </div>
+
+          {/* Desktop Background Image (>= md) */}
+          <div className="hidden md:block absolute inset-0">
+            <Image 
+              src="/images/hero-bg.png" 
+              alt="Lenux Production Hero"
+              fill
+              className="object-cover object-center md:object-right"
+              priority
+            />
+          </div>
+
           {/* 🌟 Background Visibility & Contrast Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/90 md:bg-gradient-to-r md:from-black/90 md:via-black/60 md:to-transparent z-10" />
         </div>
