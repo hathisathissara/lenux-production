@@ -150,7 +150,7 @@ export default async function HomePage() {
           </div>
 
           {/* 🌟 Background Visibility & Contrast Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/90 md:bg-gradient-to-r md:from-black/90 md:via-black/60 md:to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/90 md:bg-gradient-to-r md:from-black/50 md:via-black/10 md:to-transparent z-10" />
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-6 w-full mt-4 sm:mt-8 md:mt-12">
@@ -159,7 +159,7 @@ export default async function HomePage() {
               {/* Category Tagline */}
               <div className="flex items-center gap-2">
                 <span className="w-5 sm:w-8 h-[2px] bg-lenux-emerald shrink-0" />
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-[0.2em] text-emerald-400">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-[0.2em] text-white">
                   Creative • Printing • Branding • Visual Advertising
                 </span>
               </div>
@@ -167,7 +167,7 @@ export default async function HomePage() {
               <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-white tracking-tight leading-[1.15] uppercase">
                 Welcome to{" "}
                 <span className="text-lenux-emerald block mt-1 whitespace-normal md:whitespace-nowrap">
-                  {companyName.replace(/\(pvt\)\s+ltd/i, "(PVT)\u00A0LTD")}
+                  LENUX PRODUCTION
                 </span>
               </h1>
               
@@ -194,7 +194,7 @@ export default async function HomePage() {
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 flex items-center justify-center group-hover:border-lenux-emerald group-hover:scale-105 transition-all shrink-0">
                     <Play size={11} className="fill-white text-white translate-x-0.5 group-hover:fill-lenux-emerald group-hover:text-lenux-emerald transition-colors" />
                   </div>
-                  <span>Watch Our Work</span>
+                  <span>Explore Our Work</span>
                 </Link>
               </div>
 
@@ -204,7 +204,7 @@ export default async function HomePage() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 pr-2 sm:pr-6 border-r border-white/10">
                   <Briefcase className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">10+</h4>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">20+</h4>
                     <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Projects Completed</p>
                   </div>
                 </div>
