@@ -338,14 +338,23 @@ export default async function HomePage() {
           ========================================== */}
       <section className="relative w-full py-20 md:py-32 overflow-hidden bg-black flex items-center border-t border-white/5">
         <div className="absolute inset-0 z-0">
+          {/* Mobile background */}
+          <Image 
+            src="/images/values-man-mobile-bg.png" 
+            alt="Core Values Background"
+            fill
+            className="object-cover object-center block md:hidden"
+            priority
+          />
+          {/* Desktop background */}
           <Image 
             src="/images/values-man-bg.jpeg" 
             alt="Core Values Background"
             fill
-            className="object-cover object-left md:object-center"
+            className="object-cover object-center hidden md:block"
             priority
           />
-          <div className="absolute inset-0 bg-black/65 md:bg-transparent md:bg-gradient-to-r md:from-black/10 md:to-black/90 z-10" />
+          <div className="absolute inset-0 bg-black/60 md:bg-transparent md:bg-gradient-to-r md:from-black/10 md:to-black/90 z-10" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-20 w-full">
