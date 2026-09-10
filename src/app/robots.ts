@@ -1,9 +1,8 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  // Vercel හි ඇති Environment Variables වල http:// ලෙස සටහන් වී ඇති නිසා Sitemap එකේ http හැදේ.
-  // ඒක මගහරවා ගැනීමට මෙතන කෙලින්ම https://lenux-production.vercel.app ලබා දී ඇත.
-  const baseUrl = 'https://lenux-production.vercel.app';
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
   return {
     rules: {
