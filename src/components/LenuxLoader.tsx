@@ -62,12 +62,12 @@ export default function LenuxLoader() {
 
         {/* LENUX letters row */}
         <div style={{
-          position: "relative",
           display: "flex",
           alignItems: "center",
           gap: "2px",
         }}>
-          {"LENU".split("").map((letter, i) => (
+          {/* L, E — plain white */}
+          {"LE".split("").map((letter, i) => (
             <span
               key={i}
               style={{
@@ -87,37 +87,44 @@ export default function LenuxLoader() {
             </span>
           ))}
 
-          {/* SVG X — image eke widiyata: bold solid-fill green geometric X */}
+          {/* N — plain green */}
           <span
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
+              fontFamily: "'Arial Black', 'Arial Bold', sans-serif",
+              fontWeight: 900,
               fontSize: "clamp(52px, 12vw, 96px)",
-              lineHeight: 1,
+              letterSpacing: "-2px",
+              color: "#22c55e",
+              textShadow: "0 0 16px rgba(34,197,94,0.8), 0 0 40px rgba(34,197,94,0.4)",
               animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
-              animationDelay: "0.4s",
+              animationDelay: "0.2s",
+              display: "inline-block",
+              lineHeight: 1,
             }}
           >
-            <svg
-              viewBox="0 0 100 100"
-              style={{
-                width: "0.82em",
-                height: "0.82em",
-                filter:
-                  "drop-shadow(0 0 12px rgba(34,197,94,0.9)) drop-shadow(0 0 32px rgba(34,197,94,0.5))",
-                overflow: "visible",
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* ╲ bar: top-left → bottom-right */}
-              <polygon points="0,0  28,0  100,100  72,100" fill="#22c55e" />
-              {/* ╱ bar: top-right → bottom-left */}
-              <polygon points="72,0 100,0  28,100   0,100" fill="#22c55e" />
-              {/* centre overlap — brighten the cross */}
-              <polygon points="40,36 60,36 60,64 40,64" fill="#6ee7a0" opacity="0.55" />
-            </svg>
+            N
           </span>
+
+          {/* U, X — plain white */}
+          {"UX".split("").map((letter, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: "'Arial Black', 'Arial Bold', sans-serif",
+                fontWeight: 900,
+                fontSize: "clamp(52px, 12vw, 96px)",
+                letterSpacing: "-2px",
+                color: "#ffffff",
+                textShadow: "0 0 20px rgba(255,255,255,0.15)",
+                animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
+                animationDelay: `${(i + 3) * 0.1}s`,
+                display: "inline-block",
+                lineHeight: 1,
+              }}
+            >
+              {letter}
+            </span>
+          ))}
         </div>
 
         {/* PRODUCTION — width 100% of wrapper = exactly LENUX word width */}
@@ -175,6 +182,7 @@ export default function LenuxLoader() {
           50%  { transform: scaleX(1);   opacity: 1;   }
           100% { transform: scaleX(0.2); opacity: 0.3; }
         }
+
       `}</style>
     </div>
   );
