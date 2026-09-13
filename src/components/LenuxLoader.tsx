@@ -53,50 +53,96 @@ export default function LenuxLoader() {
         animation: "pulseGlow 2s ease-in-out infinite",
       }} />
 
-      {/* LENUX letters */}
+      {/* LENUX + PRODUCTION wrapper — inline-flex column so PRODUCTION width = LENUX width */}
       <div style={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        gap: "2px",
+        display: "inline-flex",
+        flexDirection: "column",
+        alignItems: "stretch",
       }}>
-        {"LENUX".split("").map((letter, i) => (
+
+        {/* LENUX letters row */}
+        <div style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "2px",
+        }}>
+          {"LENU".split("").map((letter, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: "'Arial Black', 'Arial Bold', sans-serif",
+                fontWeight: 900,
+                fontSize: "clamp(52px, 12vw, 96px)",
+                letterSpacing: "-2px",
+                color: "#ffffff",
+                textShadow: "0 0 20px rgba(255,255,255,0.15)",
+                animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
+                animationDelay: `${i * 0.1}s`,
+                display: "inline-block",
+                lineHeight: 1,
+              }}
+            >
+              {letter}
+            </span>
+          ))}
+
+          {/* SVG X — image eke widiyata: bold solid-fill green geometric X */}
           <span
-            key={i}
             style={{
-              fontFamily: "'Arial Black', 'Arial Bold', sans-serif",
-              fontWeight: 900,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               fontSize: "clamp(52px, 12vw, 96px)",
-              letterSpacing: "-2px",
-              color: letter === "X" ? "transparent" : "#ffffff",
-              WebkitTextStroke: letter === "X" ? "2.5px #22c55e" : "none",
-              textShadow: letter === "X"
-                ? "0 0 30px rgba(34,197,94,0.8), 0 0 60px rgba(34,197,94,0.4)"
-                : "0 0 20px rgba(255,255,255,0.15)",
-              animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
-              animationDelay: `${i * 0.1}s`,
-              display: "inline-block",
               lineHeight: 1,
+              animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
+              animationDelay: "0.4s",
             }}
           >
-            {letter}
+            <svg
+              viewBox="0 0 100 100"
+              style={{
+                width: "0.82em",
+                height: "0.82em",
+                filter:
+                  "drop-shadow(0 0 12px rgba(34,197,94,0.9)) drop-shadow(0 0 32px rgba(34,197,94,0.5))",
+                overflow: "visible",
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* ╲ bar: top-left → bottom-right */}
+              <polygon points="0,0  28,0  100,100  72,100" fill="#22c55e" />
+              {/* ╱ bar: top-right → bottom-left */}
+              <polygon points="72,0 100,0  28,100   0,100" fill="#22c55e" />
+              {/* centre overlap — brighten the cross */}
+              <polygon points="40,36 60,36 60,64 40,64" fill="#6ee7a0" opacity="0.55" />
+            </svg>
           </span>
-        ))}
-      </div>
+        </div>
 
-      {/* PRODUCTION subtitle */}
-      <div style={{
-        marginTop: "6px",
-        fontFamily: "'Arial', sans-serif",
-        fontWeight: 400,
-        fontSize: "clamp(10px, 2.5vw, 16px)",
-        letterSpacing: "8px",
-        color: "rgba(255,255,255,0.55)",
-        textTransform: "uppercase" as const,
-        animation: "fadeInUp 0.7s ease both",
-        animationDelay: "0.65s",
-      }}>
-        PRODUCTION
+        {/* PRODUCTION — width 100% of wrapper = exactly LENUX word width */}
+        <div
+          style={{
+            marginTop: "5px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontFamily: "'Arial', sans-serif",
+            fontWeight: 400,
+            fontSize: "clamp(9px, 2vw, 13px)",
+            color: "rgba(255,255,255,0.55)",
+            letterSpacing: "0px",
+            textTransform: "uppercase" as const,
+            animation: "fadeInUp 0.7s ease both",
+            animationDelay: "0.65s",
+          }}
+        >
+          {"PRODUCTION".split("").map((ch, i) => (
+            <span key={i} style={{ display: "inline-block" }}>{ch}</span>
+          ))}
+        </div>
+
       </div>
 
       {/* Green scanning line */}
