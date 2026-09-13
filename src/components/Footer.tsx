@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
@@ -26,6 +27,7 @@ export default async function Footer() {
   const secondaryPhone = data?.secondaryPhone || "+94 71 123 4567";
   const email = data?.email || "lenuxproduction12@gmail.com";
   const address = data?.address || "No:75/6 Dewala Road Moratuwa. Katubedda , Moratuwa Sri Lanka";
+  const logo = data?.logo?.url || "/images/logo.png";
 
 
   return (
@@ -34,8 +36,20 @@ export default async function Footer() {
         
         {/* Company Intro */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-xl font-bold text-white tracking-wider uppercase">{companyName}</h4>
-          <p className="text-xs text-lenux-emerald font-semibold uppercase tracking-widest">Design, Print & Production</p>
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="relative h-11 w-11 shrink-0">
+              <Image
+                src={logo}
+                alt={companyName}
+                fill
+                className="object-contain group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div>
+              <h4 className="text-lg sm:text-xl font-bold text-white tracking-wider uppercase group-hover:text-lenux-emerald transition-colors">{companyName}</h4>
+              <p className="text-xs text-lenux-emerald font-semibold uppercase tracking-widest">Design, Print & Production</p>
+            </div>
+          </Link>
           <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
             Sri Lanka&apos;s leading visual advertising and branding partner, creating impactful printing, signboards, displays, and event solutions.
           </p>

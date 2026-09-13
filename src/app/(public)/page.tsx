@@ -196,8 +196,8 @@ export default async function HomePage() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 px-2 sm:px-6 border-r border-white/10">
                   <Award className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">9+ Years</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Industry Experience</p>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">9+</h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Years Of Experience</p>
                   </div>
                 </div>
 
@@ -451,7 +451,7 @@ export default async function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-      
+
       <Footer />
 
     </div>
