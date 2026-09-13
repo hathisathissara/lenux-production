@@ -260,6 +260,86 @@ export default async function AboutPage() {
       </section>
 
       {/* ==========================================
+          5 CORE VALUES
+          ========================================== */}
+      <section className="relative w-full py-20 md:py-32 overflow-hidden bg-black border-t border-white/5">
+        <div className="absolute inset-0 z-0">
+          {/* Mobile background */}
+          <Image
+            src="/images/values-man-mobile-bg.png"
+            alt="Core Values Background"
+            fill
+            className="object-cover object-center block md:hidden"
+          />
+          {/* Desktop background */}
+          <Image
+            src="/images/values-man-bg.jpeg"
+            alt="Core Values Background"
+            fill
+            className="object-cover object-center hidden md:block"
+          />
+          <div className="absolute inset-0 bg-black/60 md:bg-gradient-to-r md:from-black/10 md:to-black/90 z-10" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-20 w-full">
+          <div className="hidden lg:block lg:col-span-5 h-[500px]" />
+
+          <div className="lg:col-span-7 space-y-8 my-auto">
+            <ScrollReveal>
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Our Foundation</span>
+                <h3 className="text-3xl md:text-4xl font-extrabold tracking-wide text-white">
+                  Lenux Production —{" "}
+                  <span className="text-lenux-emerald">5 Core Values</span>
+                </h3>
+              </div>
+
+              <div className="relative pl-8 space-y-8 py-2 mt-6">
+                <div className="absolute left-0 top-1 bottom-1 w-[4px] bg-gradient-to-b from-lenux-emerald via-lenux-emerald/80 to-lenux-emerald/10 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.7)]" />
+
+                {[
+                  {
+                    id: "1",
+                    title: "Trustworthiness",
+                    desc: "We deliver every project with honesty and integrity.",
+                  },
+                  {
+                    id: "2",
+                    title: "Quality",
+                    desc: "Excellence in design, printing, and production.",
+                  },
+                  {
+                    id: "3",
+                    title: "Creativity",
+                    desc: "Innovative ideas that make your brand stand out.",
+                  },
+                  {
+                    id: "4",
+                    title: "Customer Focus",
+                    desc: "Putting clients and their customers first.",
+                  },
+                  {
+                    id: "5",
+                    title: "Efficiency",
+                    desc: "Timely delivery and smooth processes for every project.",
+                  },
+                ].map((val) => (
+                  <div key={val.id} className="space-y-1 relative group">
+                    <h4 className="text-lg font-bold text-gray-100 tracking-wide group-hover:text-lenux-emerald transition-colors duration-300">
+                      {val.id}. {val.title}
+                    </h4>
+                    <p className="text-sm text-gray-400 font-light leading-relaxed">
+                      {val.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ==========================================
           🌟 REDIRECT TO TEAM PAGE BANNER (အစား Team Grid)
           ========================================== */}
       <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">

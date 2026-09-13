@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LenuxLoader from "@/components/LenuxLoader";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 
-// 🌟 .env.local එකෙන් SITE_URL ලබාගැනීම (නැතහොත් Default Vercel URL එක)
-// Vercel හි ඇති Environment Variables වල http:// ලෙස සටහන් වී ඇති නිසා Sitemap එකේ http හැදේ.
-// ඒක මගහරවා ගැනීමට මෙතන කෙලින්ම https://lenux-production.vercel.app ලබා දී ඇත.
-const SITE_URL = 'https://lenux-production.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
-// 🌟 WhatsApp සහ Social Media වල Link Preview පෙන්වීම සඳහා Metadata ජනනය කිරීම
 export async function generateMetadata(): Promise<Metadata> {
   let companyTitle = "Lenux Production";
   let logoUrl = `${SITE_URL}/images/logo.png`; // Fallback image
@@ -36,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteDescription = "Lenux Production is Sri Lanka's leading creative advertising and branding partner, providing high-quality digital printing, signboards, displays, and event solutions.";
 
   return {
-    metadataBase: new URL(SITE_URL),
+    metadataBase: SITE_URL ? new URL(SITE_URL) : null,
     title: {
       default: `${companyTitle} | Design, Print & Production`,
       template: `%s | ${companyTitle}`
@@ -86,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <LenuxLoader />
         {children}
       </body>
     </html>

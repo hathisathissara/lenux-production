@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, Image as ImageIcon, FileText, Settings, LogOut, Briefcase, MessageSquare, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, Image as ImageIcon, FileText, Settings, LogOut, Briefcase, MessageSquare, Menu, X, Building2 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,6 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Services', href: '/admin/services', icon: Briefcase },
     { name: 'Portfolio', href: '/admin/portfolio', icon: ImageIcon },
     { name: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
+    { name: 'Client Logos', href: '/admin/client-logos', icon: Building2 },
     { name: 'Team / Staff', href: '/admin/staff', icon: Users },
     { name: 'Quote Requests', href: '/admin/quotes', icon: FileText },
     { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },

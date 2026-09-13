@@ -88,7 +88,6 @@ export default async function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 pt-8 text-xs text-gray-400 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p>© {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
-          <p className="text-[11px] text-gray-400">Crafted with Premium Brand Precision.</p>
         </div>
     </footer>
   );

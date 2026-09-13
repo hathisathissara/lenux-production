@@ -143,6 +143,16 @@ export default function DashboardHome() {
             </div>
             <ArrowUpRight size={16} className="text-gray-400 group-hover:text-lenux-emerald transition-all" />
           </Link>
+
+          <Link href="/admin/client-logos" className="flex items-center justify-between p-4 rounded-xl border border-dashed border-gray-200 hover:border-lenux-emerald hover:bg-lenux-soft/10 transition-all group">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-lenux-soft text-lenux-deep rounded-lg group-hover:bg-lenux-emerald group-hover:text-white transition-all">
+                <Plus size={20} />
+              </div>
+              <span className="font-medium text-sm text-lenux-charcoal">Manage Client Logos</span>
+            </div>
+            <ArrowUpRight size={16} className="text-gray-400 group-hover:text-lenux-emerald transition-all" />
+          </Link>
         </div>
       </div>
 

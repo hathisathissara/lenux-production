@@ -8,7 +8,7 @@ export default function NotFound() {
       {/* Background Deep Green Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lenux-emerald/5 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* 🌟 Background Giant Watermark "404" (පෙනෙන ප්‍රමාණය 4% දක්වා වැඩි කර ඇත) */}
+      {/* 🌟 Background Giant Watermark "404"*/}
       <span className="absolute text-[13rem] md:text-[22rem] font-black text-white/[0.04] select-none pointer-events-none z-0 tracking-wider">
         404
       </span>
