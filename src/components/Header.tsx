@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Phone, Clock, Menu, X } from "lucide-react";
 
@@ -82,11 +83,25 @@ export default function Header({ phone, hours, companyName }: HeaderProps) {
         }`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-2">
             
-            {/* Company Name / Logo */}
-            <Link href="/" onClick={() => setIsMenuOpen(false)} className="z-50 shrink min-w-0">
-              <h1 className="text-[15px] xs:text-[13px] sm:text-base md:text-xl font-bold tracking-tight sm:tracking-wider text-white uppercase transition-all drop-shadow-md whitespace-nowrap">
-                {companyName}
-              </h1>
+            {/* Company Logo */}
+            <Link href="/" onClick={() => setIsMenuOpen(false)} className="z-50 shrink-0 flex items-center gap-1.5 sm:gap-2">
+              <Image
+                src="/images/logo.png"
+                alt={companyName}
+                width={140}
+                height={48}
+                className="h-9 sm:h-11 w-auto object-contain"
+                style={{ mixBlendMode: "screen" }}
+                priority
+              />
+              <div className="flex flex-col leading-none gap-0.5">
+                <span className="text-[16px] sm:text-[18px] md:text-[20px] font-black tracking-[0.15em] text-lenux-emerald uppercase whitespace-nowrap drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]">
+                  {companyName.split(" ")[0]}
+                </span>
+                <span className="text-[7px] sm:text-[8px] md:text-[9px] font-bold tracking-[0.25em] text-gray-300 uppercase whitespace-nowrap">
+                  {companyName.split(" ").slice(1).join(" ")}
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Nav Links */}
