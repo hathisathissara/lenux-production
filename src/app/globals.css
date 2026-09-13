@@ -26,7 +26,8 @@
   }
 }
 
-.pause-hover:hover {
+.pause-hover:hover,
+.pause-hover:active {
   animation-play-state: paused;
 }
 

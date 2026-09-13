@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -15,6 +18,8 @@ interface TrustedBySectionProps {
 }
 
 export default function TrustedBySection({ logos }: TrustedBySectionProps) {
+  const [activeLogoId, setActiveLogoId] = useState<string | null>(null);
+
   // If no logos are configured yet in the admin panel, do not render an empty section
   if (!logos || logos.length === 0) {
     return null;
@@ -36,7 +41,6 @@ export default function TrustedBySection({ logos }: TrustedBySectionProps) {
           <div className="inline-flex items-center px-5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-gray-300 text-sm sm:text-base font-semibold tracking-wider uppercase mb-2">
             Trusted by
           </div>
-
         </ScrollReveal>
       </div>
 
@@ -49,9 +53,11 @@ export default function TrustedBySection({ logos }: TrustedBySectionProps) {
         {/* Marquee Container */}
         <div className="flex w-max animate-marquee pause-hover items-center gap-6 sm:gap-10 py-2">
           {displayLogos.map((item, index) => {
+            const isSelected = activeLogoId === item._id;
+
             const logoContent = (
               <div
-                className="group/logo relative h-16 sm:h-20 px-6 sm:px-10 flex items-center justify-center transition-all duration-300 shrink-0"
+                className="group/logo relative h-16 sm:h-20 px-6 sm:px-10 flex items-center justify-center transition-all duration-300 shrink-0 cursor-pointer select-none"
               >
                 <div className="relative h-12 sm:h-16 w-full flex items-center justify-center">
                   <Image
@@ -59,7 +65,11 @@ export default function TrustedBySection({ logos }: TrustedBySectionProps) {
                     alt={item.companyName}
                     width={220}
                     height={75}
-                    className="max-h-12 sm:max-h-16 w-auto max-w-[170px] sm:max-w-[220px] object-contain opacity-70 grayscale brightness-95 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 group-hover/logo:brightness-100 group-hover/logo:scale-110 transition-all duration-300"
+                    className={`max-h-12 sm:max-h-16 w-auto max-w-[170px] sm:max-w-[220px] object-contain transition-all duration-300 group-hover/logo:grayscale-0 group-hover/logo:opacity-100 group-hover/logo:brightness-100 group-hover/logo:scale-105 sm:group-hover/logo:scale-110 group-active/logo:grayscale-0 group-active/logo:opacity-100 group-active/logo:brightness-100 group-active/logo:scale-105 sm:group-active/logo:scale-110 active:grayscale-0 active:opacity-100 active:brightness-100 ${
+                      isSelected
+                        ? "opacity-100 grayscale-0 brightness-100 scale-105 sm:scale-110"
+                        : "opacity-70 grayscale brightness-95"
+                    }`}
                   />
                 </div>
               </div>
@@ -74,6 +84,8 @@ export default function TrustedBySection({ logos }: TrustedBySectionProps) {
                   rel="noopener noreferrer"
                   title={item.companyName}
                   className="cursor-pointer outline-none"
+                  onTouchStart={() => {}}
+                  onClick={() => setActiveLogoId(item._id)}
                 >
                   {logoContent}
                 </a>
@@ -81,7 +93,24 @@ export default function TrustedBySection({ logos }: TrustedBySectionProps) {
             }
 
             return (
-              <div key={`${item._id}-${index}`} title={item.companyName}>
+              <div
+                key={`${item._id}-${index}`}
+                title={item.companyName}
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer outline-none"
+                onTouchStart={() => {}}
+                onClick={() =>
+                  setActiveLogoId((prev) => (prev === item._id ? null : item._id))
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setActiveLogoId((prev) =>
+                      prev === item._id ? null : item._id
+                    );
+                  }
+                }}
+              >
                 {logoContent}
               </div>
             );
