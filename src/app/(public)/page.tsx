@@ -197,7 +197,7 @@ export default async function HomePage() {
                   <Award className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
                     <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">9+</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Years Of Experience</p>
+                    <p className="text-[10px] sm:text-xs text-white font-medium leading-tight mt-0.5">Years Of Experience</p>
                   </div>
                 </div>
 
@@ -206,7 +206,7 @@ export default async function HomePage() {
                   <Briefcase className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
                     <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">20+</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Projects Completed</p>
+                    <p className="text-[10px] sm:text-xs text-white font-medium leading-tight mt-0.5">Projects Completed</p>
                   </div>
                 </div>
 
@@ -215,7 +215,7 @@ export default async function HomePage() {
                   <ThumbsUp className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
                     <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">100%</h4>
-                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium leading-tight mt-0.5">Customer Satisfaction</p>
+                    <p className="text-[10px] sm:text-xs text-white font-medium leading-tight mt-0.5">Customer Satisfaction</p>
                   </div>
                 </div>
               </div>
