@@ -3,6 +3,24 @@ import { connectDB } from '@/lib/db';
 import { Portfolio } from '@/models/Portfolio';
 import cloudinary from '@/lib/cloudinary';
 
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    await connectDB();
+    const { id } = await params;
+    const project = await Portfolio.findById(id).populate('service', 'title');
+    if (!project) {
+      return NextResponse.json({ success: false, message: 'Portfolio project not found' }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: project });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

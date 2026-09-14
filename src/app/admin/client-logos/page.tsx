@@ -364,9 +364,6 @@ export default function ClientLogosPage() {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-lenux-emerald uppercase tracking-wider">
-            <Building2 size={16} /> Admin Management
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-lenux-charcoal mt-1">
             Client Logos & Partners
           </h1>
