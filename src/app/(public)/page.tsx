@@ -244,7 +244,7 @@ export default async function HomePage() {
                 Turning Ideas Into <span className="text-lenux-emerald">Powerful Brand Visuals</span>
               </h3>
               <p className="text-gray-300 text-base md:text-lg font-light leading-relaxed">
-                Lenux Production is a creative advertising and branding company in Sri Lanka. We design, print, and build visual solutions that help businesses grow and get noticed.
+                With over 9 years of industry experience, <strong className="text-white font-medium">Lenux Production (Pvt) Ltd</strong> is a premier branding, signage, and visual communication specialist in Sri Lanka. From innovative indoor &amp; outdoor signboards to large-format digital printing and corporate branding, we engineer durable, high-impact solutions that make every brand stand out and leave a lasting impression.
               </p>
               <div className="pt-4">
                 <Link href="/about" className="inline-flex items-center gap-2 px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-lenux-dark transition-all duration-300 shadow-lg shadow-lenux-emerald/20">

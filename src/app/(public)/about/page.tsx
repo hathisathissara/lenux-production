@@ -105,12 +105,23 @@ export default async function AboutPage() {
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
                 Your Complete <span className="text-lenux-emerald">Visual Advertising Partner</span>
               </h2>
-              <p className="text-gray-300 text-base font-light leading-relaxed">
-                Lenux Production is a premier creative advertising and branding company in Sri Lanka. We specialize in conceptual design, precision digital & offset printing, vehicle branding, display units, signage, and end-to-end production setups.
-              </p>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
-                “Lenux is the ideal platform to take your business to the public and reach a wider audience.” We work closely with businesses of all sizes to understand their requirements and deliver results that truly represent their brand identity.
-              </p>
+              <div className="space-y-4 text-gray-300 text-sm sm:text-base font-light leading-relaxed">
+                <p>
+                  <strong className="text-white font-semibold">Lenux Production (Pvt) Ltd</strong> is a professionally managed company specializing in Branding, Advertising, Signage, Printing, and Visual Communication Solutions across Sri Lanka. We are committed to delivering innovative, high-quality, and reliable branding solutions that help businesses strengthen their identity and create a lasting impression.
+                </p>
+                <p>
+                  With over 9 years of industry experience, our journey began with a passion for creativity, quality craftsmanship, and customer satisfaction. Before officially registering our business, we spent several years providing branding and advertising solutions, gaining valuable hands-on experience and building strong client relationships.
+                </p>
+                <p>
+                  On 1st February 2020, we officially registered as an Individual Business, marking the beginning of our professional business journey. As our business continued to grow, we proudly achieved another milestone by incorporating as <strong className="text-white font-semibold">Lenux Production (Pvt) Ltd</strong> on 13th June 2026—reflecting our commitment to long-term growth, corporate excellence, and delivering greater value to our customers.
+                </p>
+                <p>
+                  Today, we provide complete branding and advertising solutions, including Indoor & Outdoor Signage, ACP Cladding, LED Signboards, Large Format Digital Printing, Vehicle Branding, Wall Graphics, Glass Branding, Office Branding, Exhibition Displays, Promotional Items, Corporate Branding, and Custom Fabrication. Our experienced team combines modern technology, premium materials, and skilled craftsmanship to deliver durable, creative, and high-quality solutions tailored to each client&apos;s needs.
+                </p>
+                <p className="text-gray-400 italic text-sm">
+                  &ldquo;At Lenux Production (Pvt) Ltd, we believe every brand deserves to stand out. By combining innovation, professionalism, and attention to detail, we strive to build long-term partnerships while helping businesses strengthen their brand presence and achieve lasting success.&rdquo;
+                </p>
+              </div>
 
               <div className="grid grid-cols-2 gap-4 pt-4 text-xs font-bold text-gray-200">
                 <div className="flex items-center gap-2 bg-[#0c0c0c] p-3 rounded-xl border border-white/5">
