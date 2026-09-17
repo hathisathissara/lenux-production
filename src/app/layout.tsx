@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: logoUrl,
     },
     verification: {
-      google: "I1hW3W_RUL-5fgeKdm6qdG-ZrFP5pSUVx_ibnFak5QI",
+      google: "ASitEfG2qmwSOoiEgQZ-rXRabhqA_g2S98s9B3K3Wy4",
     },
     // 🌟 WhatsApp සහ Facebook OpenGraph (OG) Tags
     openGraph: {
