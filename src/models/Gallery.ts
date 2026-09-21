@@ -12,10 +12,10 @@ const GallerySchema = new Schema(
   {
     title: { type: String },
     description: { type: String },
-    category: { type: String, default: 'Production' },
-    service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
+    category: { type: String, default: 'Production' }, // display label (category name)
+    serviceCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceCategory' }, // ObjectId ref
     image: { type: ImageSchema, required: true },
-    slug: { type: String, unique: true, sparse: true }, // featured items වලට විතරක් set වෙනවා
+    slug: { type: String, unique: true, sparse: true },
     sortOrder: { type: Number, default: 0 },
     isFeaturedOnHome: { type: Boolean, default: false },
   },

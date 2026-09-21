@@ -28,9 +28,9 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
-  const hasDragged = useRef(false); // true only when pointer moved > threshold
+  const hasDragged = useRef(false);
 
-  const DRAG_THRESHOLD = 5; // px
+  const DRAG_THRESHOLD = 5;
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = true;
@@ -51,22 +51,22 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
 
   const onPointerUp = () => { isDragging.current = false; };
 
-  // 🌟 Only show services that actually have at least one gallery image
+  // 🌟 Only show services/categories that actually have at least one gallery image
   const services = [
     "all",
     ...Array.from(
       new Set(
         galleryImages
-          .map((img) => (img.service || img.title || img.category || "Production").trim())
+          .map((img) => (img.service || img.category || "Production").trim())
           .filter(Boolean)
       )
     ),
   ];
 
-  // Filter images by selected service
+  // Filter images by selected service/category
   const filteredImages = galleryImages.filter((img) => {
     if (selectedService === "all") return true;
-    const itemService = (img.service || img.title || img.category || "Production").trim();
+    const itemService = (img.service || img.category || "Production").trim();
     return itemService.toLowerCase() === selectedService.toLowerCase();
   });
 
@@ -89,7 +89,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
               ? galleryImages.length
               : galleryImages.filter(
                   (img) =>
-                    (img.service || img.title || img.category || "Production")
+                    (img.service || img.category || "Production")
                       .trim()
                       .toLowerCase() === svc.toLowerCase()
                 ).length;
@@ -100,7 +100,6 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
             <button
               key={svc}
               onClick={() => {
-                // Only filter when user tapped/clicked — not when they dragged to scroll
                 if (!hasDragged.current) setSelectedService(svc);
               }}
               className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-300 shrink-0 ${
@@ -115,13 +114,13 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
         })}
       </div>
 
-      {/* 🌟 2. MASONRY / RESPONSIVE GALLERY GRID */}
+      {/* 🌟 2. GALLERY GRID */}
       {filteredImages.length === 0 ? (
         <div className="bg-[#0a0a0a] rounded-3xl p-16 text-center border border-white/5 space-y-4 max-w-xl mx-auto">
           <Layers size={48} className="mx-auto text-lenux-emerald opacity-60" />
           <p className="text-xl font-bold text-white">No Gallery Photos Found</p>
           <p className="text-sm text-gray-400 font-light">
-            No images found for this service yet.
+            No images found for this category yet.
           </p>
           <button
             onClick={() => setSelectedService("all")}
@@ -133,51 +132,48 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredImages.map((imgItem, index) => {
-            const displayBadge = imgItem.service || imgItem.title || imgItem.category || "Production";
+            const displayBadge = imgItem.service || imgItem.category || "Production";
 
             return (
               <div
                 key={imgItem._id || index}
                 onClick={() => setActiveImage(imgItem)}
-                className="relative group h-80 rounded-3xl overflow-hidden bg-[#090909] border border-white/5 hover:border-lenux-emerald/50 cursor-pointer shadow-xl transition-all duration-500"
+                className="group flex flex-col rounded-3xl overflow-hidden bg-[#090909] border border-white/5 hover:border-lenux-emerald/50 cursor-pointer shadow-xl transition-all duration-500"
               >
-                {/* Image */}
-                <Image
-                  src={imgItem.url}
-                  alt={imgItem.title || displayBadge}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+                {/* Image Area */}
+                <div className="relative h-64 overflow-hidden shrink-0">
+                  <Image
+                    src={imgItem.url}
+                    alt={imgItem.title || displayBadge}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
 
-                {/* Dark Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-6">
-                  
-                  {/* Top Service Badge */}
-                  <span className="self-start px-3 py-1 bg-black/70 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-lenux-emerald">
-                    {displayBadge}
-                  </span>
-
-                  {/* Bottom Details & Zoom Icon */}
-                  <div className="flex items-end justify-between gap-4">
-                    <div>
-                      {imgItem.title && (
-                        <p className="text-base font-bold text-white tracking-wide line-clamp-1">
-                          {imgItem.title}
-                        </p>
-                      )}
-                      {imgItem.description && (
-                        <p className="text-xs text-gray-300 font-light line-clamp-1 mt-0.5">
-                          {imgItem.description}
-                        </p>
-                      )}
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-lenux-emerald text-white flex items-center justify-center shrink-0 shadow-lg">
-                      <Maximize2 size={16} />
+                  {/* Hover Overlay — Category Badge + Zoom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
+                    <span className="self-start px-3 py-1 bg-black/70 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-lenux-emerald">
+                      {displayBadge}
+                    </span>
+                    <div className="self-end w-9 h-9 rounded-full bg-lenux-emerald text-white flex items-center justify-center shadow-lg">
+                      <Maximize2 size={15} />
                     </div>
                   </div>
-
                 </div>
+
+                {/* Always-Visible Title Strip */}
+                {imgItem.title && (
+                  <div className="px-4 py-3 bg-[#0d0d0d] border-t border-white/5">
+                    <p className="text-sm font-semibold text-white/90 line-clamp-1 tracking-wide">
+                      {imgItem.title}
+                    </p>
+                    {imgItem.description && (
+                      <p className="text-xs text-gray-500 font-light line-clamp-1 mt-0.5">
+                        {imgItem.description}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -188,15 +184,14 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
           🌟 3. FULLSCREEN LIGHTBOX MODAL
           ========================================== */}
       {activeImage && (
-        <div 
+        <div
           onClick={() => setActiveImage(null)}
           className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
         >
-          <div 
-            onClick={(e) => e.stopPropagation()} 
+          <div
+            onClick={(e) => e.stopPropagation()}
             className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center bg-[#0c0c0c] border border-white/10 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-300"
           >
-            
             {/* Close Button */}
             <button
               onClick={() => setActiveImage(null)}
@@ -235,7 +230,6 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
                 </div>
               </div>
             )}
-
           </div>
         </div>
       )}

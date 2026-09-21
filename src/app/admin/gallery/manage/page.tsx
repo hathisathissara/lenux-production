@@ -16,10 +16,9 @@ import {
   Loader2 
 } from "lucide-react";
 
-interface ServiceItem {
+interface CategoryItem {
   _id: string;
-  title: string;
-  category?: { _id: string; name: string };
+  name: string;
 }
 
 function GalleryManageFormContent() {
@@ -28,15 +27,15 @@ function GalleryManageFormContent() {
   const editId = searchParams.get("id");
   const isEdit = Boolean(editId);
 
-  const [servicesList, setServicesList] = useState<ServiceItem[]>([]);
-  const [loadingServices, setLoadingServices] = useState(true);
+  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingItem, setLoadingItem] = useState(isEdit);
 
   // Form States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [selectedServiceTitle, setSelectedServiceTitle] = useState("Production");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [selectedCategoryName, setSelectedCategoryName] = useState("Production");
   const [sortOrder, setSortOrder] = useState(0);
   const [isFeaturedOnHome, setIsFeaturedOnHome] = useState(false);
   
@@ -55,17 +54,17 @@ function GalleryManageFormContent() {
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
 
-  // 🌟 1. Fetch Services and (if Edit Mode) Existing Gallery Item
+  // 🌟 1. Fetch Categories and (if Edit Mode) Existing Gallery Item
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const serRes = await fetch("/api/admin/services");
-        const serData = await serRes.json();
+        const catRes = await fetch("/api/admin/categories");
+        const catData = await catRes.json();
         
-        let loadedServices: ServiceItem[] = [];
-        if (serData.success && serData.data.length > 0) {
-          loadedServices = serData.data;
-          setServicesList(loadedServices);
+        let loadedCategories: CategoryItem[] = [];
+        if (catData.success && catData.data.length > 0) {
+          loadedCategories = catData.data;
+          setCategoriesList(loadedCategories);
         }
 
         if (isEdit && editId) {
@@ -80,32 +79,32 @@ function GalleryManageFormContent() {
             setIsFeaturedOnHome(Boolean(item.isFeaturedOnHome));
             setSingleImage(item.image || null);
 
-            // Match Service by id or title
-            const matchingService = loadedServices.find(
-              (s) => s._id === item.service || s.title.toLowerCase() === (item.category || "").toLowerCase()
+            // Match Category by serviceCategory id or category name string
+            const matchingCat = loadedCategories.find(
+              (c) => c._id === item.serviceCategory || c.name.toLowerCase() === (item.category || "").toLowerCase()
             );
 
-            if (matchingService) {
-              setSelectedServiceId(matchingService._id);
-              setSelectedServiceTitle(matchingService.title);
-            } else if (loadedServices.length > 0) {
-              setSelectedServiceId(loadedServices[0]._id);
-              setSelectedServiceTitle(item.category || loadedServices[0].title);
+            if (matchingCat) {
+              setSelectedCategoryId(matchingCat._id);
+              setSelectedCategoryName(matchingCat.name);
+            } else if (loadedCategories.length > 0) {
+              setSelectedCategoryId(loadedCategories[0]._id);
+              setSelectedCategoryName(item.category || loadedCategories[0].name);
             }
           } else {
             showNotification("Could not load gallery item data", "error");
           }
         } else {
-          // Create Mode default service
-          if (loadedServices.length > 0) {
-            setSelectedServiceId(loadedServices[0]._id);
-            setSelectedServiceTitle(loadedServices[0].title);
+          // Create Mode — default to first category
+          if (loadedCategories.length > 0) {
+            setSelectedCategoryId(loadedCategories[0]._id);
+            setSelectedCategoryName(loadedCategories[0].name);
           }
         }
       } catch (err) {
         console.error("Failed to load initial data", err);
       } finally {
-        setLoadingServices(false);
+        setLoadingCategories(false);
         setLoadingItem(false);
       }
     };
@@ -176,7 +175,6 @@ function GalleryManageFormContent() {
     e.preventDefault();
 
     if (isEdit) {
-      // Edit Mode Submit
       if (!singleImage) {
         showNotification("Please upload or keep a valid image.", "error");
         return;
@@ -190,8 +188,8 @@ function GalleryManageFormContent() {
           body: JSON.stringify({
             title,
             description,
-            category: selectedServiceTitle || "Production",
-            service: selectedServiceId || null,
+            category: selectedCategoryName || "Production",
+            serviceCategory: selectedCategoryId || null,
             sortOrder,
             isFeaturedOnHome,
             image: singleImage,
@@ -215,7 +213,6 @@ function GalleryManageFormContent() {
         setSaving(false);
       }
     } else {
-      // Create Mode Submit
       if (selectedImages.length === 0) {
         showNotification("Please select and upload at least one photo.", "error");
         return;
@@ -229,8 +226,8 @@ function GalleryManageFormContent() {
           body: JSON.stringify({
             title,
             description,
-            category: selectedServiceTitle || "Production",
-            service: selectedServiceId || null,
+            category: selectedCategoryName || "Production",
+            serviceCategory: selectedCategoryId || null,
             images: selectedImages,
             sortOrder,
           }),
@@ -280,8 +277,8 @@ function GalleryManageFormContent() {
           </h1>
           <p className="text-lenux-darkGray mt-1">
             {isEdit
-              ? "Update photo details, assigned service, or replace the photo."
-              : "Select the related service and upload single or multiple photos to the visual gallery."}
+              ? "Update photo details, assigned category, or replace the photo."
+              : "Select the related category and upload single or multiple photos to the visual gallery."}
           </p>
         </div>
       </div>
@@ -316,25 +313,23 @@ function GalleryManageFormContent() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1.5">
-                Related Service
+                Category
               </label>
               <select 
                 className="admin-input" 
-                value={selectedServiceId} 
+                value={selectedCategoryId} 
                 onChange={(e) => {
-                  const sId = e.target.value;
-                  setSelectedServiceId(sId);
-                  const found = servicesList.find((s) => s._id === sId);
-                  if (found) {
-                    setSelectedServiceTitle(found.title);
-                  }
+                  const cId = e.target.value;
+                  setSelectedCategoryId(cId);
+                  const found = categoriesList.find((c) => c._id === cId);
+                  if (found) setSelectedCategoryName(found.name);
                 }}
-                disabled={loadingServices}
+                disabled={loadingCategories}
               >
-                {servicesList.length === 0 && <option value="">Loading services...</option>}
-                {servicesList.map((svc) => (
-                  <option key={svc._id} value={svc._id}>
-                    {svc.title} {svc.category?.name ? `(${svc.category.name})` : ""}
+                {categoriesList.length === 0 && <option value="">Loading categories...</option>}
+                {categoriesList.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
                   </option>
                 ))}
               </select>

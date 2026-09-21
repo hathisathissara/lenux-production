@@ -3,7 +3,7 @@ import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 import { Gallery } from "@/models/Gallery";
-import "@/models/Service";
+import "@/models/ServiceCategory";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import VisualGallery from "@/components/VisualGallery"; 
@@ -51,7 +51,7 @@ async function getGalleryData() {
 
   const [settingsDoc, galleryDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
-    Gallery.find().populate('service', 'title').sort({ sortOrder: 1, createdAt: -1 }).lean(),
+    Gallery.find().populate('serviceCategory', 'name').sort({ sortOrder: 1, createdAt: -1 }).lean(),
   ]);
 
   const settings = settingsDoc ? JSON.parse(JSON.stringify(settingsDoc)) : null;
@@ -60,9 +60,9 @@ async function getGalleryData() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const galleryImages = rawGallery.map((item: any) => {
     const serviceName =
-      (typeof item.service === "object" && item.service?.title)
-        ? item.service.title
-        : (item.title || item.category || "Production");
+      (typeof item.serviceCategory === "object" && item.serviceCategory?.name)
+        ? item.serviceCategory.name
+        : (item.category || "Production");
 
     return {
       _id: item._id,

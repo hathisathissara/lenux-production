@@ -16,15 +16,14 @@ interface GalleryItem {
   isFeaturedOnHome?: boolean;
 }
 
-interface ServiceItem {
+interface CategoryItem {
   _id: string;
-  title: string;
-  category?: { _id: string; name: string };
+  name: string;
 }
 
 export default function GalleryManagementPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
-  const [servicesList, setServicesList] = useState<ServiceItem[]>([]);
+  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Search & Filter States
@@ -37,22 +36,22 @@ export default function GalleryManagementPage() {
 
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  const fetchGalleryAndServices = async () => {
+  const fetchGalleryAndCategories = async () => {
     try {
-      const [galleryRes, servicesRes] = await Promise.all([
+      const [galleryRes, categoriesRes] = await Promise.all([
         fetch("/api/admin/gallery"),
-        fetch("/api/admin/services")
+        fetch("/api/admin/categories")
       ]);
       
       const galleryData = await galleryRes.json();
-      const servicesData = await servicesRes.json();
+      const categoriesData = await categoriesRes.json();
       
       if (galleryData.success) {
         setGallery(galleryData.data);
       }
       
-      if (servicesData.success && servicesData.data.length > 0) {
-        setServicesList(servicesData.data);
+      if (categoriesData.success && categoriesData.data.length > 0) {
+        setCategoriesList(categoriesData.data);
       }
     } catch (err) {
       console.error("Failed to load data", err);
@@ -63,7 +62,7 @@ export default function GalleryManagementPage() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchGalleryAndServices();
+    fetchGalleryAndCategories();
   }, []);
 
   const showNotification = (text: string, type: "success" | "error") => {
@@ -71,12 +70,12 @@ export default function GalleryManagementPage() {
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
 
-  // 🌟 Dynamic Filter Options (All Services from DB + existing gallery categories)
+  // 🌟 Dynamic Filter Options — from ServiceCategories DB + existing gallery category strings
   const filterOptions = useMemo(() => {
-    const serviceTitles = servicesList.map((s) => s.title);
+    const catNames = categoriesList.map((c) => c.name);
     const galleryCategories = gallery.map((g) => g.category).filter(Boolean);
-    return Array.from(new Set([...serviceTitles, ...galleryCategories]));
-  }, [servicesList, gallery]);
+    return Array.from(new Set([...catNames, ...galleryCategories]));
+  }, [categoriesList, gallery]);
 
   // 🌟 Filter & Search Logic
   const filteredGallery = useMemo(() => {
@@ -122,7 +121,7 @@ export default function GalleryManagementPage() {
           !currentValue ? "Image featured on Home Page!" : "Image removed from Home Page.",
           "success"
         );
-        fetchGalleryAndServices();
+        fetchGalleryAndCategories();
       }
     } catch (err) {
       console.error(err);
@@ -139,7 +138,7 @@ export default function GalleryManagementPage() {
       const data = await res.json();
       if (data.success) {
         showNotification("Image deleted successfully!", "success");
-        fetchGalleryAndServices();
+        fetchGalleryAndCategories();
       }
     } catch (err) {
       console.error(err);
@@ -211,7 +210,7 @@ export default function GalleryManagementPage() {
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full sm:w-64 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-lenux-emerald focus:border-transparent transition-all bg-white"
           >
-            <option value="all">All Services ({gallery.length})</option>
+            <option value="all">All Categories ({gallery.length})</option>
             {filterOptions.map((opt) => {
               const count = gallery.filter((i) => i.category.toLowerCase() === opt.toLowerCase()).length;
               return (

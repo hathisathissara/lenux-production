@@ -19,19 +19,20 @@ export async function POST(request: Request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { title, description, category, service, images, sortOrder } = body;
+    const { title, description, category, serviceCategory, images, sortOrder } = body;
 
     if (!images || !Array.isArray(images) || images.length === 0) {
       return NextResponse.json({ success: false, message: 'At least one image is required' }, { status: 400 });
     }
 
-    const createdImages = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const createdImages: any[] = [];
     for (const img of images) {
       const newItem = await Gallery.create({
         title: title || '',
         description: description || '',
         category: category || 'Production',
-        service: service || null,
+        serviceCategory: serviceCategory || null,
         image: img,
         sortOrder: sortOrder || 0,
         isFeaturedOnHome: false,
