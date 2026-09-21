@@ -3,25 +3,28 @@
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Trash, Check, AlertCircle, Star, Search, Filter } from "lucide-react";
+import { Plus, Trash, Check, AlertCircle, Star, Search, Filter, Edit } from "lucide-react";
 
 interface GalleryItem {
   _id: string;
   title?: string;
   description?: string;
   category: string;
+  service?: string;
   image: { url: string; publicId: string };
+  sortOrder?: number;
   isFeaturedOnHome?: boolean;
 }
 
-interface CategoryItem {
+interface ServiceItem {
   _id: string;
-  name: string;
+  title: string;
+  category?: { _id: string; name: string };
 }
 
 export default function GalleryManagementPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
-  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
+  const [servicesList, setServicesList] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Search & Filter States
@@ -34,22 +37,22 @@ export default function GalleryManagementPage() {
 
   const [message, setMessage] = useState({ text: "", type: "" });
 
-  const fetchGalleryAndCategories = async () => {
+  const fetchGalleryAndServices = async () => {
     try {
-      const [galleryRes, categoriesRes] = await Promise.all([
+      const [galleryRes, servicesRes] = await Promise.all([
         fetch("/api/admin/gallery"),
-        fetch("/api/admin/categories")
+        fetch("/api/admin/services")
       ]);
       
       const galleryData = await galleryRes.json();
-      const categoriesData = await categoriesRes.json();
+      const servicesData = await servicesRes.json();
       
       if (galleryData.success) {
         setGallery(galleryData.data);
       }
       
-      if (categoriesData.success && categoriesData.data.length > 0) {
-        setCategoriesList(categoriesData.data);
+      if (servicesData.success && servicesData.data.length > 0) {
+        setServicesList(servicesData.data);
       }
     } catch (err) {
       console.error("Failed to load data", err);
@@ -60,13 +63,20 @@ export default function GalleryManagementPage() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchGalleryAndCategories();
+    fetchGalleryAndServices();
   }, []);
 
   const showNotification = (text: string, type: "success" | "error") => {
     setMessage({ text, type });
     setTimeout(() => setMessage({ text: "", type: "" }), 5000);
   };
+
+  // 🌟 Dynamic Filter Options (All Services from DB + existing gallery categories)
+  const filterOptions = useMemo(() => {
+    const serviceTitles = servicesList.map((s) => s.title);
+    const galleryCategories = gallery.map((g) => g.category).filter(Boolean);
+    return Array.from(new Set([...serviceTitles, ...galleryCategories]));
+  }, [servicesList, gallery]);
 
   // 🌟 Filter & Search Logic
   const filteredGallery = useMemo(() => {
@@ -112,7 +122,7 @@ export default function GalleryManagementPage() {
           !currentValue ? "Image featured on Home Page!" : "Image removed from Home Page.",
           "success"
         );
-        fetchGalleryAndCategories();
+        fetchGalleryAndServices();
       }
     } catch (err) {
       console.error(err);
@@ -129,7 +139,7 @@ export default function GalleryManagementPage() {
       const data = await res.json();
       if (data.success) {
         showNotification("Image deleted successfully!", "success");
-        fetchGalleryAndCategories();
+        fetchGalleryAndServices();
       }
     } catch (err) {
       console.error(err);
@@ -157,10 +167,10 @@ export default function GalleryManagementPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-lenux-deep">Gallery Management</h1>
-          <p className="text-lenux-darkGray mt-1">Manage and organize visual showcase photos for the public gallery.</p>
+          <p className="text-lenux-darkGray mt-1">Manage, categorize by services, and organize visual showcase photos.</p>
         </div>
 
-        {/* 🌟 Manage / Upload Page Link */}
+        {/* 🌟 Upload Page Link */}
         <Link
           href="/admin/gallery/manage"
           className="btn-primary inline-flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all"
@@ -179,7 +189,7 @@ export default function GalleryManagementPage() {
         </div>
       )}
 
-      {/* 🌟 SEARCH & CATEGORY FILTER BAR */}
+      {/* 🌟 SEARCH & SERVICE FILTER BAR */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-4 items-center justify-between">
         {/* Search Input */}
         <div className="relative w-full sm:w-96">
@@ -193,20 +203,20 @@ export default function GalleryManagementPage() {
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
         </div>
 
-        {/* Category Filter Dropdown */}
+        {/* Service Filter Dropdown */}
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Filter size={16} className="text-gray-400 shrink-0" />
           <select
             value={selectedCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full sm:w-56 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-lenux-emerald focus:border-transparent transition-all bg-white"
+            className="w-full sm:w-64 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-lenux-emerald focus:border-transparent transition-all bg-white"
           >
-            <option value="all">All Categories ({gallery.length})</option>
-            {categoriesList.map((cat) => {
-              const count = gallery.filter((i) => i.category.toLowerCase() === cat.name.toLowerCase()).length;
+            <option value="all">All Services ({gallery.length})</option>
+            {filterOptions.map((opt) => {
+              const count = gallery.filter((i) => i.category.toLowerCase() === opt.toLowerCase()).length;
               return (
-                <option key={cat._id} value={cat.name}>
-                  {cat.name} ({count})
+                <option key={opt} value={opt}>
+                  {opt} ({count})
                 </option>
               );
             })}
@@ -279,14 +289,25 @@ export default function GalleryManagementPage() {
                         <Star size={16} fill={item.isFeaturedOnHome ? "currentColor" : "none"} /> 
                       </button>
                     </td>
-                    <td className="p-4 align-middle text-right w-24">
-                      <button 
-                        onClick={() => handleDelete(item._id)}
-                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg transition-all inline-flex items-center justify-center"
-                        title="Delete Image"
-                      >
-                        <Trash size={16} />
-                      </button>
+                    <td className="p-4 align-middle text-right w-32">
+                      <div className="flex items-center justify-end gap-1">
+                        {/* 🌟 Edit Button - Navigates to /admin/gallery/manage?id=... */}
+                        <Link
+                          href={`/admin/gallery/manage?id=${item._id}`}
+                          className="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 border border-transparent hover:border-blue-100 rounded-lg transition-all inline-flex items-center justify-center"
+                          title="Edit Photo Details"
+                        >
+                          <Edit size={16} />
+                        </Link>
+                        {/* Delete Button */}
+                        <button 
+                          onClick={() => handleDelete(item._id)}
+                          className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg transition-all inline-flex items-center justify-center"
+                          title="Delete Photo"
+                        >
+                          <Trash size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

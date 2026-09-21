@@ -4,6 +4,25 @@ import { Gallery } from '@/models/Gallery';
 import cloudinary from '@/lib/cloudinary';
 import { slugify } from '@/lib/slugify';
 
+// GET Single Gallery Item by ID
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    await connectDB();
+    const { id } = await params;
+    const item = await Gallery.findById(id);
+    if (!item) {
+      return NextResponse.json({ success: false, message: 'Gallery item not found' }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: item });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
 // PUT Update Gallery Item (e.g. isFeaturedOnHome)
 export async function PUT(
   request: NextRequest,

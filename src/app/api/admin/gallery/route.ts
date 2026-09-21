@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { title, description, category, images, sortOrder } = body;
+    const { title, description, category, service, images, sortOrder } = body;
 
     if (!images || !Array.isArray(images) || images.length === 0) {
       return NextResponse.json({ success: false, message: 'At least one image is required' }, { status: 400 });
@@ -31,6 +31,7 @@ export async function POST(request: Request) {
         title: title || '',
         description: description || '',
         category: category || 'Production',
+        service: service || null,
         image: img,
         sortOrder: sortOrder || 0,
         isFeaturedOnHome: false,

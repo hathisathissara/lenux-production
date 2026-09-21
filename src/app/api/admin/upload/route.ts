@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
 
+// Allow up to 30 seconds for large image uploads
+export const maxDuration = 30;
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -17,10 +20,11 @@ export async function POST(request: Request) {
     // 🌟 Cloudinary Upload Stream with Forced WebP Conversion & Lossy Compression
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const uploadResult = await new Promise<any>((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
+      const stream = cloudinary.uploader.upload_stream(
         {
           folder: `lenux/${folder}`,
           resource_type: 'image',
+          timeout: 20000, // 20 second timeout to avoid premature 499s
           // 🌟 PNG සහ වෙනත් ඕනෑම එකක් අනිවාර්යයෙන්ම WebP වලට හැරවීම සඳහා format එක force කරයි
           format: 'webp',
           transformation: [
@@ -32,12 +36,13 @@ export async function POST(request: Request) {
           if (error) reject(error);
           else resolve(result);
         }
-      ).end(buffer);
+      );
+      stream.end(buffer);
     });
 
     return NextResponse.json({
       success: true,
-      url: uploadResult.secure_url, // දැන් මෙහි URL එකේ අගට .webp අනිවාර්යයෙන්ම දිස්වේවි
+      url: uploadResult.secure_url,
       publicId: uploadResult.public_id
     });
 

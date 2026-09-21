@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
 import { Gallery } from "@/models/Gallery";
+import "@/models/Service";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
 import VisualGallery from "@/components/VisualGallery"; 
@@ -50,21 +51,29 @@ async function getGalleryData() {
 
   const [settingsDoc, galleryDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
-    Gallery.find().sort({ sortOrder: 1, createdAt: -1 }).lean(),
+    Gallery.find().populate('service', 'title').sort({ sortOrder: 1, createdAt: -1 }).lean(),
   ]);
 
   const settings = settingsDoc ? JSON.parse(JSON.stringify(settingsDoc)) : null;
 
   const rawGallery = galleryDoc ? JSON.parse(JSON.stringify(galleryDoc)) : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const galleryImages = rawGallery.map((item: any) => ({
-    _id: item._id,
-    title: item.title,
-    description: item.description,
-    category: item.category,
-    url: item.image?.url,
-    publicId: item.image?.publicId,
-  }));
+  const galleryImages = rawGallery.map((item: any) => {
+    const serviceName =
+      (typeof item.service === "object" && item.service?.title)
+        ? item.service.title
+        : (item.title || item.category || "Production");
+
+    return {
+      _id: item._id,
+      title: item.title,
+      description: item.description,
+      category: item.category,
+      service: serviceName,
+      url: item.image?.url,
+      publicId: item.image?.publicId,
+    };
+  });
 
   return { settings, galleryImages };
 }
