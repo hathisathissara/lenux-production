@@ -15,6 +15,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
+  alternates: {
+    canonical: "/services",
+  },
   title: "Our Services | Printing, Embossed Letters & Light Boards Sri Lanka",
   description: "Explore Lenux Production services: Digital and Offset printing, custom logo boards, shop branding, vehicle branding, and illuminated light boards in Colombo.",
   keywords: "digital printing colombo, offset printing sri lanka, shop branding sri lanka, embossed letters colombo, light boards sri lanka",

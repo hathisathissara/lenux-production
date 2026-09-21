@@ -32,6 +32,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const coverImg = project.coverImage?.url || `${SITE_URL}/images/logo.png`;
 
   return {
+    alternates: {
+      canonical: `/portfolio/${slug}`,
+    },
     title: `${projectTitle} | Lenux Production Portfolio`,
     description: projectDesc,
     openGraph: {

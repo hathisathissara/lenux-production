@@ -15,6 +15,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
+  alternates: {
+    canonical: "/gallery",
+  },
   title: "Photo Gallery | Lenux Production Sri Lanka",
   description: "Browse the official photo gallery of Lenux Production. See our completed signboards, vehicle branding, event setups, and creative branding projects in Sri Lanka.",
   keywords: "lenux production gallery, signboard gallery sri lanka, branding photos colombo",

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { connectDB } from "@/lib/db";
@@ -12,6 +13,14 @@ import { Sparkles, Award } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/team",
+  },
+  title: "Our Team | Lenux Production Sri Lanka",
+  description: "Meet the experienced and dedicated team behind Lenux Production's creative advertising, branding, and printing solutions.",
+};
 
 async function getTeamData() {
   await connectDB();

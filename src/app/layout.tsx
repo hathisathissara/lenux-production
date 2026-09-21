@@ -8,7 +8,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export async function generateMetadata(): Promise<Metadata> {
   let companyTitle = "Lenux Production";
-  let logoUrl = `${SITE_URL}/images/logo.png`; // Fallback image
+  let logoUrl = `${SITE_URL}/images/logo.png`;
 
   try {
     await connectDB();
@@ -20,7 +20,6 @@ export async function generateMetadata(): Promise<Metadata> {
       }
       if (settings.logo?.url) {
         const rawLogo = settings.logo.url;
-        // Absolute URL එකක් බවට පත් කිරීම (WhatsApp වලට Absolute URL අත්‍යවශ්‍ය වේ)
         logoUrl = rawLogo.startsWith("http")
           ? rawLogo
           : `${SITE_URL}${rawLogo.startsWith("/") ? "" : "/"}${rawLogo}`;
@@ -33,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteDescription = "Lenux Production is Sri Lanka's leading creative advertising and branding partner, providing high-quality digital printing, signboards, displays, and event solutions.";
 
   return {
-    metadataBase: SITE_URL ? new URL(SITE_URL) : null,
+    metadataBase: SITE_URL,
     title: {
       default: `${companyTitle} | Design, Print & Production`,
       template: `%s | ${companyTitle}`

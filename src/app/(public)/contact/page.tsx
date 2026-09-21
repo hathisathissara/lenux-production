@@ -18,6 +18,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
+  alternates: {
+    canonical: "/contact",
+  },
   title: "Get a Free Quote | Contact Lenux Production Colombo",
   description: "Contact Sri Lanka's leading branding and printing experts today. Request a free quote for signboards, embossed letters, logo boards, and digital print jobs.",
   keywords: "get a quote printing colombo, lenux contact number, banner printing price sri lanka",

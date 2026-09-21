@@ -14,6 +14,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
+  alternates: {
+    canonical: "/portfolio",
+  },
   title: "Our Recent Work | Signboard & Visual Production Gallery",
   description: "Discover the latest visual production projects by Lenux Production in Sri Lanka. View our completed shop branding, vehicle graphics, and premium signboards.",
   keywords: "vehicle branding sri lanka, completed signboard projects colombo, creative portfolio sri lanka",

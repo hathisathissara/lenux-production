@@ -17,6 +17,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata = {
+  alternates: {
+    canonical: "/about",
+  },
   title: "About Our Company | Advertising & Branding Sri Lanka",
   description: "Learn more about Lenux Production, a premier creative advertising and branding company in Sri Lanka. Specialists in sign boards, light boards, and full-scale print production.",
   keywords: "advertising agency sri lanka, sign boards colombo, branding company sri lanka, lenux production",

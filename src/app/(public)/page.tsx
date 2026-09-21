@@ -49,6 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteDescription = "Lenux Production is Sri Lanka's leading creative advertising and branding partner, providing high-quality digital printing, signboards, displays, and event solutions.";
 
   return {
+    alternates: {
+      canonical: '/',
+    },
     title: `${companyTitle} | Design, Print & Production`,
     description: siteDescription,
     openGraph: {
@@ -205,7 +208,7 @@ export default async function HomePage() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 pr-2 sm:pr-6 border-r border-white/10">
                   <Briefcase className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">20+</h4>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">150+</h4>
                     <p className="text-[10px] sm:text-xs text-white font-medium leading-tight mt-0.5">Projects Completed</p>
                   </div>
                 </div>

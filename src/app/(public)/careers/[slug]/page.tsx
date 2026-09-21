@@ -41,6 +41,9 @@ export async function generateMetadata({
   if (!job) return { title: "Job Not Found | Lenux Production" };
   const j = JSON.parse(JSON.stringify(job)) as IJob;
   return {
+    alternates: {
+      canonical: `/careers/${slug}`,
+    },
     title: `${j.title} | Careers at Lenux Production`,
     description: `${j.department} · ${j.jobType} · ${j.location} — ${j.description.slice(0, 140)}…`,
   };

@@ -6,136 +6,117 @@ import { JobVacancy } from "@/models/JobVacancy";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateSitemaps() {
-  return [
-    { id: 'pages' },
-    { id: 'portfolio' },
-    { id: 'gallery' },
-    { id: 'careers' },
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+  const staticPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/services`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/portfolio`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/team`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/careers`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
   ];
-}
-
-export default async function sitemap(props: {
-  id: Promise<string>;
-}): Promise<MetadataRoute.Sitemap> {
-  const id = await props.id;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
 
   try {
     await connectDB();
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // 1. Pages Sitemap (/sitemap/pages.xml)
-    // ──────────────────────────────────────────────────────────────────────────
-    if (id === 'pages') {
-      const staticPages = [
-        { route: '', priority: 1.0, changeFrequency: 'weekly' as const },
-        { route: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
-        { route: '/services', priority: 0.9, changeFrequency: 'weekly' as const },
-        { route: '/portfolio', priority: 0.9, changeFrequency: 'weekly' as const },
-        { route: '/gallery', priority: 0.8, changeFrequency: 'weekly' as const },
-        { route: '/team', priority: 0.7, changeFrequency: 'monthly' as const },
-        { route: '/careers', priority: 0.8, changeFrequency: 'weekly' as const },
-        { route: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
-      ];
+    // 2. Dynamic Portfolio projects
+    const projectsDoc = await Portfolio.find({
+      isPublished: true,
+      slug: { $exists: true, $ne: null },
+    })
+      .select('slug updatedAt')
+      .lean();
 
-      return staticPages.map((page) => ({
-        url: `${baseUrl}${page.route}`,
-        lastModified: new Date(),
-        changeFrequency: page.changeFrequency,
-        priority: page.priority,
-      }));
-    }
+    type SlugDocItem = { slug: string; updatedAt?: Date };
 
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // 2. Portfolio Sitemap (/sitemap/portfolio.xml)
-    // ──────────────────────────────────────────────────────────────────────────
-    if (id === 'portfolio') {
-      const projectsDoc = await Portfolio.find({
-        isPublished: true,
-        slug: { $exists: true, $ne: null },
-      })
-        .select('slug updatedAt')
-        .lean();
-
-      const mainPortfolioPage = {
-        url: `${baseUrl}/portfolio`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.9,
-      };
-
-      type SlugDocItem = { slug: string; updatedAt?: Date };
-
-      const projectRoutes = (projectsDoc as unknown as SlugDocItem[]).map((proj) => ({
+    const projectRoutes: MetadataRoute.Sitemap = (projectsDoc as unknown as SlugDocItem[])
+      .filter((proj) => proj.slug && proj.slug.trim() !== '')
+      .map((proj) => ({
         url: `${baseUrl}/portfolio/${proj.slug}`,
         lastModified: proj.updatedAt || new Date(),
-        changeFrequency: 'monthly' as const,
+        changeFrequency: 'monthly',
         priority: 0.8,
       }));
 
-      return [mainPortfolioPage, ...projectRoutes];
-    }
+    // 3. Dynamic Gallery items
+    const galleryDoc = await Gallery.find({
+      slug: { $exists: true, $ne: null, $nin: ['', null] },
+    })
+      .select('slug updatedAt')
+      .lean();
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // 3. Gallery Sitemap (/sitemap/gallery.xml)
-    // ──────────────────────────────────────────────────────────────────────────
-    if (id === 'gallery') {
-      const galleryDoc = await Gallery.find({
-        slug: { $exists: true, $ne: null, $nin: ['', null] },
-      })
-        .select('slug updatedAt')
-        .lean();
-
-      const mainGalleryPage = {
-        url: `${baseUrl}/gallery`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      };
-
-      type SlugDocItem = { slug: string; updatedAt?: Date };
-
-      const galleryRoutes = (galleryDoc as unknown as SlugDocItem[]).map((item) => ({
+    const galleryRoutes: MetadataRoute.Sitemap = (galleryDoc as unknown as SlugDocItem[])
+      .filter((item) => item.slug && item.slug.trim() !== '')
+      .map((item) => ({
         url: `${baseUrl}/gallery/${item.slug}`,
         lastModified: item.updatedAt || new Date(),
-        changeFrequency: 'monthly' as const,
+        changeFrequency: 'monthly',
         priority: 0.7,
       }));
 
-      return [mainGalleryPage, ...galleryRoutes];
-    }
+    // 4. Dynamic Careers vacancies
+    const vacanciesDoc = await JobVacancy.find({
+      isActive: true,
+      slug: { $exists: true, $ne: null },
+    })
+      .select('slug updatedAt')
+      .lean();
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // 4. Careers Sitemap (/sitemap/careers.xml)
-    // ──────────────────────────────────────────────────────────────────────────
-    if (id === 'careers') {
-      const vacanciesDoc = await JobVacancy.find({ isActive: true, slug: { $exists: true, $ne: null } })
-        .select('slug updatedAt')
-        .lean();
-
-      const mainCareersPage = {
-        url: `${baseUrl}/careers`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.9,
-      };
-
-      type VacancyItem = { slug: string; updatedAt?: Date };
-
-      const vacancyRoutes = (vacanciesDoc as unknown as VacancyItem[]).map((vac) => ({
+    const vacancyRoutes: MetadataRoute.Sitemap = (vacanciesDoc as unknown as SlugDocItem[])
+      .filter((vac) => vac.slug && vac.slug.trim() !== '')
+      .map((vac) => ({
         url: `${baseUrl}/careers/${vac.slug}`,
         lastModified: vac.updatedAt || new Date(),
-        changeFrequency: 'weekly' as const,
+        changeFrequency: 'weekly',
         priority: 0.8,
       }));
 
-      return [mainCareersPage, ...vacancyRoutes];
-    }
+    return [...staticPages, ...projectRoutes, ...galleryRoutes, ...vacancyRoutes];
   } catch (error) {
-    console.error(`Error generating sitemap for id ${id}:`, error);
+    console.error("Error generating unified sitemap:", error);
+    return staticPages;
   }
-
-  return [];
 }

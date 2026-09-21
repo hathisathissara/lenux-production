@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: PageProps) {
   const titleText = item.title || item.category || "Gallery Item";
 
   return {
+    alternates: {
+      canonical: `/gallery/${slug}`,
+    },
     title: `${titleText} | Lenux Production`,
     description: item.description?.substring(0, 160) || "View our creative production work at Lenux Production.",
     openGraph: {

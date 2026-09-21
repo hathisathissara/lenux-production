@@ -31,6 +31,9 @@ interface IJob {
 export const dynamic = "force-dynamic";
 
 export const metadata = {
+  alternates: {
+    canonical: "/careers",
+  },
   title: "Careers & Job Vacancies | Lenux Production Sri Lanka",
   description: "Join the creative visual production team at Lenux Production. Explore career opportunities in graphic design, digital printing, signboard manufacturing, and advertising.",
 };
