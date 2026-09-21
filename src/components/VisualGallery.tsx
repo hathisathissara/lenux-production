@@ -51,23 +51,22 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
 
   const onPointerUp = () => { isDragging.current = false; };
 
-  // 🌟 Only show services/categories that actually have at least one gallery image
+  // 🌟 Filter pills — grouped by Photo Title (unique titles only)
   const services = [
     "all",
     ...Array.from(
       new Set(
         galleryImages
-          .map((img) => (img.service || img.category || "Production").trim())
-          .filter(Boolean)
+          .map((img) => img.title?.trim())
+          .filter(Boolean) as string[]
       )
     ),
   ];
 
-  // Filter images by selected service/category
+  // Filter images by selected Photo Title
   const filteredImages = galleryImages.filter((img) => {
     if (selectedService === "all") return true;
-    const itemService = (img.service || img.category || "Production").trim();
-    return itemService.toLowerCase() === selectedService.toLowerCase();
+    return (img.title?.trim() || "").toLowerCase() === selectedService.toLowerCase();
   });
 
   return (
@@ -88,10 +87,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
             svc === "all"
               ? galleryImages.length
               : galleryImages.filter(
-                  (img) =>
-                    (img.service || img.category || "Production")
-                      .trim()
-                      .toLowerCase() === svc.toLowerCase()
+                  (img) => (img.title?.trim() || "").toLowerCase() === svc.toLowerCase()
                 ).length;
 
           const isSelected = selectedService.toLowerCase() === svc.toLowerCase();
@@ -162,18 +158,16 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
                 </div>
 
                 {/* Always-Visible Title Strip */}
-                {imgItem.title && (
-                  <div className="px-4 py-3 bg-[#0d0d0d] border-t border-white/5">
-                    <p className="text-sm font-semibold text-white/90 line-clamp-1 tracking-wide">
-                      {imgItem.title}
+                <div className="px-4 py-3 bg-[#0d0d0d] border-t border-white/5 min-h-[48px]">
+                  <p className="text-sm font-semibold text-white/90 line-clamp-1 tracking-wide">
+                    {imgItem.title || ""}
+                  </p>
+                  {imgItem.description && (
+                    <p className="text-xs text-gray-500 font-light line-clamp-1 mt-0.5">
+                      {imgItem.description}
                     </p>
-                    {imgItem.description && (
-                      <p className="text-xs text-gray-500 font-light line-clamp-1 mt-0.5">
-                        {imgItem.description}
-                      </p>
-                    )}
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}
