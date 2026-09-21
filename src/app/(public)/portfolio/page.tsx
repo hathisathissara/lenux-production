@@ -60,10 +60,10 @@ async function getPortfolioData() {
 export default async function PortfolioPage() {
   const { settings, projects } = await getPortfolioData();
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
+  const phone = settings?.phone ;
+  const hours = settings?.businessHours ;
+  const companyName = settings?.companyName ;
+  const whatsapp = settings?.whatsapp ;
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">

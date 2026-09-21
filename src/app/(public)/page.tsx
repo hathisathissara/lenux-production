@@ -102,10 +102,10 @@ async function getHomeData() {
 export default async function HomePage() {
   const { settings, categories, featuredProjects, feedbacks, featuredGallery, clientLogos } = await getHomeData();
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
+  const phone = settings?.phone;
+  const whatsapp = settings?.whatsapp;
+  const hours = settings?.businessHours;
+  const companyName = settings?.companyName;
   const logoImg = settings?.logo?.url || "/images/logo.png";
 
   return (

@@ -52,16 +52,16 @@ async function getAboutData() {
 export default async function AboutPage() {
   const settings = await getAboutData();
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
+  const phone = settings?.phone;
+  const hours = settings?.businessHours;
+  const companyName = settings?.companyName;
+  const whatsapp = settings?.whatsapp;
   const logoUrl = settings?.logo?.url;
 
-  const visionText = settings?.vision || "To become Sri Lanka's leading creative and advertising agency, delivering innovative, high-quality, and impactful solutions that help businesses stand out and grow.";
-  const missionText = settings?.mission || "To provide fair, fast, and reliable advertising and production services that help our clients connect with their customers effectively under one roof.";
-  const visionImg = settings?.visionImage?.url || "/images/values-man-bg.jpeg";
-  const missionImg = settings?.missionImage?.url || "/images/hero-bg.png";
+  const visionText = settings?.vision ;
+  const missionText = settings?.mission ;
+  const visionImg = settings?.visionImage?.url;
+  const missionImg = settings?.missionImage?.url;
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">

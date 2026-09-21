@@ -56,9 +56,9 @@ export default async function GalleryDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
+  const phone = settings?.phone;
+  const hours = settings?.businessHours;
+  const companyName = settings?.companyName;
 
   const titleText = galleryItem.title || galleryItem.category || "Gallery Item";
 

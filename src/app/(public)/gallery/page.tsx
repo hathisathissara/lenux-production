@@ -2,11 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { connectDB } from "@/lib/db";
 import { ContactInformation } from "@/models/ContactInformation";
-import { Gallery } from "@/models/Gallery"; // 🌟 අපේ Admin වලින් Manage කරන Gallery Model එක
-
+import { Gallery } from "@/models/Gallery";
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import VisualGallery from "@/components/VisualGallery"; // 🌟 Interactive Gallery Component
+import VisualGallery from "@/components/VisualGallery"; 
 
 import { Sparkles, MessageCircle } from "lucide-react";
 import Footer from "@/components/Footer";
@@ -48,11 +47,11 @@ async function getGalleryData() {
 
   const [settingsDoc, galleryDoc] = await Promise.all([
     ContactInformation.findOne().lean(),
-    Gallery.find().sort({ sortOrder: 1, createdAt: -1 }).lean(), 
+    Gallery.find().sort({ sortOrder: 1, createdAt: -1 }).lean(),
   ]);
 
   const settings = settingsDoc ? JSON.parse(JSON.stringify(settingsDoc)) : null;
-  // VisualGallery එකට පහසුවෙන් දත්ත දෙන්න image object එක flatten කරමු
+
   const rawGallery = galleryDoc ? JSON.parse(JSON.stringify(galleryDoc)) : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const galleryImages = rawGallery.map((item: any) => ({
@@ -132,9 +131,9 @@ export default async function GalleryPage() {
               From graphic design and printing to complete business branding and on-site production.
             </p>
             
-            {/* 🌟 ඩිසයින් එකට අනුව බටන්ස් දෙක නිවැරදිව සකසා ඇත */}
+          
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {/* බටන් 1: Get a Free Quote */}
+             
               <Link 
                 href="/contact" 
                 className="w-full sm:w-auto px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"

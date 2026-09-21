@@ -6,9 +6,9 @@ import { Staff } from "@/models/Staff";
 
 import Header from "@/components/Header";
 import ScrollReveal from "@/components/ScrollReveal";
-import StaffCard from "@/components/StaffCard"; // අපි කලින් හැදූ Interactive Staff Card එක
+import StaffCard from "@/components/StaffCard"; 
 
-import { Sparkles, MessageCircle, Award } from "lucide-react";
+import { Sparkles, Award } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
@@ -29,10 +29,10 @@ async function getTeamData() {
 export default async function TeamPage() {
   const { settings, staffList } = await getTeamData();
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
+  const phone = settings?.phone;
+  const hours = settings?.businessHours;
+  const companyName = settings?.companyName;
+
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">
@@ -69,7 +69,6 @@ export default async function TeamPage() {
       <section className="py-28 bg-[#040404] relative">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           
-          {/* අමතර Heading එක ඉවත් කර, කෙලින්ම Cards ටික පෙන්වන සේ සකසා ඇත */}
           {staffList.length === 0 ? (
             <div className="bg-[#0a0a0a] rounded-3xl p-16 text-center border border-white/5 space-y-4 max-w-xl mx-auto">
               <Award size={48} className="mx-auto text-lenux-emerald opacity-60" />
@@ -96,7 +95,7 @@ export default async function TeamPage() {
           CTA BANNER
           ========================================== */}
       {/* ==========================================
-          🌟 HIGH-IMPACT CLIENT CTA BANNER
+          🌟 CAREERS CTA BANNER
           ========================================== */}
       <section className="py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
@@ -104,31 +103,19 @@ export default async function TeamPage() {
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
           <ScrollReveal>
             <h3 className="text-3xl sm:text-5xl font-extrabold text-white">
-              Have an Idea? <br /><span className="text-lenux-emerald">Let’s Bring It to Life.</span>
+              Want to Join the <br /><span className="text-lenux-emerald">Lenux Team?</span>
             </h3>
             <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
-              From graphic design and printing to complete business branding and on-site production.
+              Explore current career opportunities and become part of our creative journey.
             </p>
             
-            {/* 🌟 ඩිසයින් එකට අනුව බටන්ස් දෙක නිවැරදිව සකසා ඇත */}
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {/* බටන් 1: Get a Free Quote */}
               <Link 
-                href="/contact" 
-                className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
+                href="/careers" 
+                className="px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300 inline-flex items-center gap-2"
               >
-                Get a Free Quote
+                View Career Opportunities <span className="text-base leading-none">→</span>
               </Link>
-              
-              {/* බටන් 2: WhatsApp Us */}
-              <a 
-                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}?text=Hi%20Lenux%20Production%2C%20I%20need%20a%20quotation%20for...`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center gap-2"
-              >
-                <MessageCircle size={16} /> WhatsApp Us
-              </a>
             </div>
           </ScrollReveal>
         </div>

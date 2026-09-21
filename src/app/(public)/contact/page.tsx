@@ -61,14 +61,14 @@ async function getContactData() {
 export default async function ContactPage() {
   const { settings, services } = await getContactData();
 
-  const phone = settings?.phone || "+94 77 123 4567";
-  const secondaryPhone = settings?.secondaryPhone || "+94 11 123 4567";
-  const hours = settings?.businessHours || "Monday - Saturday: 8:30 AM - 5:30 PM";
-  const companyName = settings?.companyName || "LENUX PRODUCTION (PVT) LTD";
-  const email = settings?.email || "info@lenux.lk";
-  const address = settings?.address || "Colombo, Sri Lanka";
-  const whatsapp = settings?.whatsapp || "+94 77 123 4567";
-  const mapUrl = settings?.googleMapUrl || "";
+  const phone = settings?.phone;
+  const secondaryPhone = settings?.secondaryPhone;
+  const hours = settings?.businessHours;
+  const companyName = settings?.companyName;
+  const email = settings?.email;
+  const address = settings?.address;
+  const whatsapp = settings?.whatsapp;
+  const mapUrl = settings?.googleMapUrl;
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">

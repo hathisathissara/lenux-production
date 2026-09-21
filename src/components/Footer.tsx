@@ -65,6 +65,7 @@ export default async function Footer() {
             <li><Link href="/portfolio" className="hover:text-lenux-emerald transition-colors">Portfolio</Link></li>
             <li><Link href="/gallery" className="hover:text-lenux-emerald transition-colors">Gallery</Link></li>
             <li><Link href="/team" className="hover:text-lenux-emerald transition-colors">Our Team</Link></li>
+            <li><Link href="/careers" className="hover:text-lenux-emerald transition-colors">Careers</Link></li>
             <li><Link href="/contact" className="hover:text-lenux-emerald transition-colors">Contact</Link></li>
           </ul>
         </div>

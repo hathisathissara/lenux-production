@@ -23,6 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
     { name: 'Client Logos', href: '/admin/client-logos', icon: Building2 },
     { name: 'Team / Staff', href: '/admin/staff', icon: Users },
+    { name: 'Careers', href: '/admin/careers', icon: Briefcase },
     { name: 'Quote Requests', href: '/admin/quotes', icon: FileText },
     { name: 'Feedback', href: '/admin/feedback', icon: MessageSquare },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
