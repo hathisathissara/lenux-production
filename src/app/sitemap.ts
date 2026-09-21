@@ -3,16 +3,14 @@ import { connectDB } from "@/lib/db";
 import { Portfolio } from "@/models/Portfolio";
 import { Gallery } from "@/models/Gallery";
 import { JobVacancy } from "@/models/JobVacancy";
-import { ServiceCategory } from "@/models/ServiceCategory";
-import { Service } from "@/models/Service";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateSitemaps() {
   return [
     { id: 'pages' },
-    { id: 'services' },
     { id: 'portfolio' },
+    { id: 'gallery' },
     { id: 'careers' },
   ];
 }
@@ -49,49 +47,17 @@ export default async function sitemap(props: {
       }));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // 2. Services Sitemap (/sitemap/services.xml)
-    // ──────────────────────────────────────────────────────────────────────────
-    if (id === 'services') {
-      const [categoriesDoc, servicesDoc] = await Promise.all([
-        ServiceCategory.find({ isActive: true }).select('name slug updatedAt').lean(),
-        Service.find({ isActive: true }).select('title slug updatedAt').lean(),
-      ]);
-
-      const mainServicesPage = {
-        url: `${baseUrl}/services`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.9,
-      };
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const categoryRoutes = categoriesDoc.map((cat: any) => ({
-        url: `${baseUrl}/portfolio?category=${encodeURIComponent(cat.name)}`,
-        lastModified: cat.updatedAt || new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      }));
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const serviceRoutes = servicesDoc.map((ser: any) => ({
-        url: `${baseUrl}/portfolio?service=${encodeURIComponent(ser.title)}`,
-        lastModified: ser.updatedAt || new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-      }));
-
-      return [mainServicesPage, ...categoryRoutes, ...serviceRoutes];
-    }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 3. Portfolio Sitemap (/sitemap/portfolio.xml)
+    // 2. Portfolio Sitemap (/sitemap/portfolio.xml)
     // ──────────────────────────────────────────────────────────────────────────
     if (id === 'portfolio') {
-      const [projectsDoc, galleryDoc] = await Promise.all([
-        Portfolio.find({ isPublished: true }).select('slug updatedAt').lean(),
-        Gallery.find({ slug: { $exists: true, $ne: null } }).select('slug updatedAt').lean(),
-      ]);
+      const projectsDoc = await Portfolio.find({
+        isPublished: true,
+        slug: { $exists: true, $ne: null },
+      })
+        .select('slug updatedAt')
+        .lean();
 
       const mainPortfolioPage = {
         url: `${baseUrl}/portfolio`,
@@ -100,30 +66,52 @@ export default async function sitemap(props: {
         priority: 0.9,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const projectRoutes = projectsDoc.map((proj: any) => ({
+      type SlugDocItem = { slug: string; updatedAt?: Date };
+
+      const projectRoutes = (projectsDoc as unknown as SlugDocItem[]).map((proj) => ({
         url: `${baseUrl}/portfolio/${proj.slug}`,
         lastModified: proj.updatedAt || new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.8,
       }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const galleryRoutes = galleryDoc.map((item: any) => ({
+      return [mainPortfolioPage, ...projectRoutes];
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // 3. Gallery Sitemap (/sitemap/gallery.xml)
+    // ──────────────────────────────────────────────────────────────────────────
+    if (id === 'gallery') {
+      const galleryDoc = await Gallery.find({
+        slug: { $exists: true, $ne: null, $nin: ['', null] },
+      })
+        .select('slug updatedAt')
+        .lean();
+
+      const mainGalleryPage = {
+        url: `${baseUrl}/gallery`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      };
+
+      type SlugDocItem = { slug: string; updatedAt?: Date };
+
+      const galleryRoutes = (galleryDoc as unknown as SlugDocItem[]).map((item) => ({
         url: `${baseUrl}/gallery/${item.slug}`,
         lastModified: item.updatedAt || new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.7,
       }));
 
-      return [mainPortfolioPage, ...projectRoutes, ...galleryRoutes];
+      return [mainGalleryPage, ...galleryRoutes];
     }
 
     // ──────────────────────────────────────────────────────────────────────────
     // 4. Careers Sitemap (/sitemap/careers.xml)
     // ──────────────────────────────────────────────────────────────────────────
     if (id === 'careers') {
-      const vacanciesDoc = await JobVacancy.find({ isActive: true })
+      const vacanciesDoc = await JobVacancy.find({ isActive: true, slug: { $exists: true, $ne: null } })
         .select('slug updatedAt')
         .lean();
 
@@ -134,8 +122,9 @@ export default async function sitemap(props: {
         priority: 0.9,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const vacancyRoutes = vacanciesDoc.map((vac: any) => ({
+      type VacancyItem = { slug: string; updatedAt?: Date };
+
+      const vacancyRoutes = (vacanciesDoc as unknown as VacancyItem[]).map((vac) => ({
         url: `${baseUrl}/careers/${vac.slug}`,
         lastModified: vac.updatedAt || new Date(),
         changeFrequency: 'weekly' as const,

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lenux-production.vercel.app";
 
-  const sitemaps = ['pages', 'services', 'portfolio', 'careers'];
+  const sitemaps = ['pages', 'portfolio', 'gallery', 'careers'];
   const now = new Date().toISOString();
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
