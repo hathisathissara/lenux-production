@@ -95,8 +95,25 @@ function GalleryManageFormContent() {
             showNotification("Could not load gallery item data", "error");
           }
         } else {
-          // Create Mode — default to first category
-          if (loadedCategories.length > 0) {
+          // Create Mode — pre-fill title or category if provided via query parameters
+          const titleParam = searchParams.get("title");
+          if (titleParam) {
+            setTitle(titleParam);
+          }
+
+          const catParam = searchParams.get("category");
+          const matchedCategory = catParam
+            ? loadedCategories.find(
+                (c) =>
+                  c.name.toLowerCase() === catParam.toLowerCase() ||
+                  c._id === catParam
+              )
+            : null;
+
+          if (matchedCategory) {
+            setSelectedCategoryId(matchedCategory._id);
+            setSelectedCategoryName(matchedCategory.name);
+          } else if (loadedCategories.length > 0) {
             setSelectedCategoryId(loadedCategories[0]._id);
             setSelectedCategoryName(loadedCategories[0].name);
           }
@@ -110,7 +127,7 @@ function GalleryManageFormContent() {
     };
 
     fetchData();
-  }, [isEdit, editId]);
+  }, [isEdit, editId, searchParams]);
 
   // 🌟 2. Multiple Image Upload (Create Mode)
   const handleMultipleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,6 +190,11 @@ function GalleryManageFormContent() {
   // 🌟 4. Submit Form (Create or Edit)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!title.trim()) {
+      showNotification("Please enter a photo title.", "error");
+      return;
+    }
 
     if (isEdit) {
       if (!singleImage) {
@@ -299,10 +321,11 @@ function GalleryManageFormContent() {
           
           <div>
             <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1.5">
-              Photo Title <span className="text-gray-400 font-normal">(Optional)</span>
+              Photo Title <span className="text-red-500">*</span>
             </label>
             <input 
               type="text" 
+              required
               className="admin-input" 
               placeholder="e.g., Outdoor Signboard Installation" 
               value={title} 

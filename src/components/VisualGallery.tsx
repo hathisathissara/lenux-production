@@ -83,13 +83,6 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
         onPointerLeave={onPointerUp}
       >
         {services.map((svc: string) => {
-          const count =
-            svc === "all"
-              ? galleryImages.length
-              : galleryImages.filter(
-                  (img) => (img.title?.trim() || "").toLowerCase() === svc.toLowerCase()
-                ).length;
-
           const isSelected = selectedService.toLowerCase() === svc.toLowerCase();
 
           return (
@@ -104,7 +97,7 @@ export default function VisualGallery({ galleryImages }: VisualGalleryProps) {
                   : "bg-[#0d0d0d] text-gray-400 border border-white/5 hover:border-lenux-emerald/50 hover:text-white"
               }`}
             >
-              {svc === "all" ? `All (${galleryImages.length})` : `${svc} (${count})`}
+              {svc === "all" ? `All` : `${svc}`}
             </button>
           );
         })}
