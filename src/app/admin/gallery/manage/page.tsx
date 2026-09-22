@@ -21,6 +21,12 @@ interface CategoryItem {
   name: string;
 }
 
+interface UploadedImageItem {
+  url: string;
+  publicId: string;
+  isFeaturedOnHome?: boolean;
+}
+
 function GalleryManageFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,7 +49,7 @@ function GalleryManageFormContent() {
   const [singleImage, setSingleImage] = useState<{ url: string; publicId: string } | null>(null);
 
   // Multiple Images State for Create mode
-  const [selectedImages, setSelectedImages] = useState<{ url: string; publicId: string }[]>([]);
+  const [selectedImages, setSelectedImages] = useState<UploadedImageItem[]>([]);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -136,6 +142,7 @@ function GalleryManageFormContent() {
 
     setUploading(true);
     try {
+      const uploadedBatch: UploadedImageItem[] = [];
       for (let i = 0; i < files.length; i++) {
         const formData = new FormData();
         formData.append("file", files[i]);
@@ -144,9 +151,20 @@ function GalleryManageFormContent() {
         const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
         const data = await res.json();
         if (data.success) {
-          setSelectedImages((prev) => [...prev, { url: data.url, publicId: data.publicId }]);
+          uploadedBatch.push({
+            url: data.url,
+            publicId: data.publicId,
+            isFeaturedOnHome: false,
+          });
         }
       }
+      setSelectedImages((prev) => {
+        const combined = [...prev, ...uploadedBatch];
+        if (isFeaturedOnHome && !combined.some((img) => img.isFeaturedOnHome) && combined.length > 0) {
+          combined[0].isFeaturedOnHome = true;
+        }
+        return combined;
+      });
       showNotification("All selected photos uploaded successfully!", "success");
     } catch (err) {
       console.error(err);
@@ -158,6 +176,24 @@ function GalleryManageFormContent() {
 
   const removeSelectedImage = (index: number) => {
     setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const toggleImageFeatured = (index: number) => {
+    setSelectedImages((prev) =>
+      prev.map((img, i) =>
+        i === index ? { ...img, isFeaturedOnHome: !img.isFeaturedOnHome } : img
+      )
+    );
+  };
+
+  const handleToggleMainFeatured = (checked: boolean) => {
+    setIsFeaturedOnHome(checked);
+    setSelectedImages((prev) =>
+      prev.map((img, idx) => ({
+        ...img,
+        isFeaturedOnHome: checked ? idx === 0 : false,
+      }))
+    );
   };
 
   // 🌟 3. Single Image Replace Handler (Edit Mode)
@@ -247,11 +283,17 @@ function GalleryManageFormContent() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title,
-            description,
+            description: isFeaturedOnHome ? description : "",
             category: selectedCategoryName || "Production",
             serviceCategory: selectedCategoryId || null,
-            images: selectedImages,
+            images: selectedImages.map((img) => ({
+              url: img.url,
+              publicId: img.publicId,
+              isFeaturedOnHome: isFeaturedOnHome ? Boolean(img.isFeaturedOnHome) : false,
+              description: (isFeaturedOnHome && img.isFeaturedOnHome) ? description : "",
+            })),
             sortOrder,
+            isFeaturedOnHome: false,
           }),
         });
 
@@ -371,17 +413,41 @@ function GalleryManageFormContent() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1.5">
-              Description <span className="text-gray-400 font-normal">(Optional)</span>
-            </label>
-            <textarea 
-              rows={3} 
-              className="admin-input" 
-              placeholder="Provide context or material specifications for these photos..." 
-              value={description} 
-              onChange={(e) => setDescription(e.target.value)} 
-            />
+          {/* Feature on Home Toggle */}
+          <div className="p-4 bg-gray-50/80 rounded-2xl border border-gray-200/80 space-y-3">
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="featuredToggle"
+                checked={isFeaturedOnHome}
+                onChange={(e) => handleToggleMainFeatured(e.target.checked)}
+                className="w-4 h-4 text-lenux-emerald border-gray-300 rounded focus:ring-lenux-emerald cursor-pointer"
+              />
+              <label htmlFor="featuredToggle" className="text-xs font-bold text-gray-700 cursor-pointer flex items-center gap-1.5">
+                <Star size={14} className={isFeaturedOnHome ? "text-amber-500 fill-amber-500" : "text-gray-400"} />
+                Feature on Home Page Gallery
+              </label>
+            </div>
+
+            {/* Description is shown ONLY if Feature on Home is selected */}
+            {isFeaturedOnHome ? (
+              <div className="pt-2 animate-in fade-in duration-200">
+                <label className="block text-xs font-bold text-lenux-darkGray uppercase mb-1.5">
+                  Description <span className="text-gray-400 font-normal">(Shown on Home Page Showcase)</span>
+                </label>
+                <textarea 
+                  rows={3} 
+                  className="admin-input bg-white" 
+                  placeholder="Provide context or material specifications for the home showcase..." 
+                  value={description} 
+                  onChange={(e) => setDescription(e.target.value)} 
+                />
+              </div>
+            ) : (
+              <p className="text-[11px] text-gray-400">
+                Description is only shown for photos featured on the Home Page showcase. Check the box above to add a description.
+              </p>
+            )}
           </div>
 
           {/* 🌟 EDIT MODE: Single Image View & Replace */}
@@ -410,21 +476,6 @@ function GalleryManageFormContent() {
                   <p className="text-xs text-gray-400">Select a new image file to replace this photo.</p>
                 </div>
               </div>
-
-              {/* Featured on Home Checkbox in Edit Mode */}
-              <div className="flex items-center gap-2 pt-3">
-                <input
-                  type="checkbox"
-                  id="featuredToggle"
-                  checked={isFeaturedOnHome}
-                  onChange={(e) => setIsFeaturedOnHome(e.target.checked)}
-                  className="w-4 h-4 text-lenux-emerald border-gray-300 rounded focus:ring-lenux-emerald cursor-pointer"
-                />
-                <label htmlFor="featuredToggle" className="text-xs font-bold text-gray-700 cursor-pointer flex items-center gap-1.5">
-                  <Star size={14} className={isFeaturedOnHome ? "text-amber-500 fill-amber-500" : "text-gray-400"} />
-                  Feature on Home Page Gallery
-                </label>
-              </div>
             </div>
           ) : (
             /* 🌟 CREATE MODE: Multiple Image Upload */
@@ -449,20 +500,65 @@ function GalleryManageFormContent() {
                 </div>
               </div>
 
-              {/* Selected Images Grid Previews */}
+              {/* Selected Images Grid Previews with individual Home Featured toggle */}
               {selectedImages.length > 0 && (
-                <div className="mt-4 space-y-2">
-                  <p className="text-xs font-bold text-lenux-deep uppercase tracking-wider">
-                    Uploaded Photos Ready to Save ({selectedImages.length}):
-                  </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border border-gray-100 p-3 rounded-2xl bg-gray-50">
+                <div className="mt-5 space-y-2.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <p className="text-xs font-bold text-lenux-deep uppercase tracking-wider">
+                      Uploaded Photos Ready to Save ({selectedImages.length}):
+                    </p>
+                    {isFeaturedOnHome && (
+                      <span className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1.5 self-start">
+                        <Star size={12} className="text-amber-500 fill-amber-500" />
+                        Click Star to choose which photos appear on Home
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 border border-gray-100 p-3.5 rounded-2xl bg-gray-50">
                     {selectedImages.map((img, i) => (
-                      <div key={i} className="relative w-full h-24 bg-white rounded-xl border border-gray-200 group overflow-hidden shadow-sm">
-                        <Image src={img.url} alt="Preview" fill className="object-cover" />
+                      <div
+                        key={i}
+                        className={`relative w-full h-32 bg-white rounded-xl border transition-all group overflow-hidden shadow-xs ${
+                          img.isFeaturedOnHome
+                            ? "border-amber-400 ring-2 ring-amber-300/60 shadow-md"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <Image src={img.url} alt={`Preview ${i + 1}`} fill className="object-cover" />
+                        
+                        {/* Star Toggle on Individual Photo */}
+                        {isFeaturedOnHome && (
+                          <button
+                            type="button"
+                            onClick={() => toggleImageFeatured(i)}
+                            className={`absolute top-2 left-2 p-1.5 rounded-full transition-all shadow-md cursor-pointer ${
+                              img.isFeaturedOnHome
+                                ? "bg-amber-500 text-white hover:bg-amber-600 scale-105"
+                                : "bg-black/60 text-white/80 hover:bg-black/85 hover:text-amber-400"
+                            }`}
+                            title={
+                              img.isFeaturedOnHome
+                                ? "Featured on Home (Click to unfeature)"
+                                : "Click to feature this photo on Home"
+                            }
+                          >
+                            <Star size={13} fill={img.isFeaturedOnHome ? "currentColor" : "none"} />
+                          </button>
+                        )}
+
+                        {/* Featured Badge */}
+                        {isFeaturedOnHome && img.isFeaturedOnHome && (
+                          <span className="absolute bottom-2 left-2 text-[9px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded shadow">
+                            Home Featured
+                          </span>
+                        )}
+
+                        {/* Remove Image Button */}
                         <button 
                           type="button" 
                           onClick={() => removeSelectedImage(i)}
-                          className="absolute top-1.5 right-1.5 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                          className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-80 group-hover:opacity-100 transition-opacity shadow cursor-pointer"
                           title="Remove photo"
                         >
                           <Trash size={12} />
