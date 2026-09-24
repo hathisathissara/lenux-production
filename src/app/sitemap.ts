@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
 import { connectDB } from "@/lib/db";
 import { Portfolio } from "@/models/Portfolio";
-import { Gallery } from "@/models/Gallery";
 import { JobVacancy } from "@/models/JobVacancy";
 
 export const dynamic = 'force-dynamic';
@@ -81,23 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       }));
 
-    // 3. Dynamic Gallery items
-    const galleryDoc = await Gallery.find({
-      slug: { $exists: true, $ne: null, $nin: ['', null] },
-    })
-      .select('slug updatedAt')
-      .lean();
-
-    const galleryRoutes: MetadataRoute.Sitemap = (galleryDoc as unknown as SlugDocItem[])
-      .filter((item) => item.slug && item.slug.trim() !== '')
-      .map((item) => ({
-        url: `${baseUrl}/gallery/${item.slug}`,
-        lastModified: item.updatedAt || new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.7,
-      }));
-
-    // 4. Dynamic Careers vacancies
+    // 3. Dynamic Careers vacancies
     const vacanciesDoc = await JobVacancy.find({
       isActive: true,
       slug: { $exists: true, $ne: null },
@@ -114,7 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       }));
 
-    return [...staticPages, ...projectRoutes, ...galleryRoutes, ...vacancyRoutes];
+    return [...staticPages, ...projectRoutes, ...vacancyRoutes];
   } catch (error) {
     console.error("Error generating unified sitemap:", error);
     return staticPages;
