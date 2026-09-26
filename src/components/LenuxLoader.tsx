@@ -66,7 +66,7 @@ export default function LenuxLoader() {
           alignItems: "center",
           gap: "2px",
         }}>
-          {/* L, E — plain white */}
+          {/* L, E — green */}
           {"LE".split("").map((letter, i) => (
             <span
               key={i}
@@ -75,8 +75,8 @@ export default function LenuxLoader() {
                 fontWeight: 900,
                 fontSize: "clamp(52px, 12vw, 96px)",
                 letterSpacing: "-2px",
-                color: "#ffffff",
-                textShadow: "0 0 20px rgba(255,255,255,0.15)",
+                color: "#22c55e",
+                textShadow: "0 0 16px rgba(34,197,94,0.8), 0 0 40px rgba(34,197,94,0.4)",
                 animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
                 animationDelay: `${i * 0.1}s`,
                 display: "inline-block",
@@ -87,15 +87,15 @@ export default function LenuxLoader() {
             </span>
           ))}
 
-          {/* N — plain green */}
+          {/* N — plain white */}
           <span
             style={{
               fontFamily: "'Arial Black', 'Arial Bold', sans-serif",
               fontWeight: 900,
               fontSize: "clamp(52px, 12vw, 96px)",
               letterSpacing: "-2px",
-              color: "#22c55e",
-              textShadow: "0 0 16px rgba(34,197,94,0.8), 0 0 40px rgba(34,197,94,0.4)",
+              color: "#ffffff",
+              textShadow: "0 0 20px rgba(255,255,255,0.15)",
               animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
               animationDelay: "0.2s",
               display: "inline-block",
@@ -105,7 +105,7 @@ export default function LenuxLoader() {
             N
           </span>
 
-          {/* U, X — plain white */}
+          {/* U, X — green */}
           {"UX".split("").map((letter, i) => (
             <span
               key={i}
@@ -114,8 +114,8 @@ export default function LenuxLoader() {
                 fontWeight: 900,
                 fontSize: "clamp(52px, 12vw, 96px)",
                 letterSpacing: "-2px",
-                color: "#ffffff",
-                textShadow: "0 0 20px rgba(255,255,255,0.15)",
+                color: "#22c55e",
+                textShadow: "0 0 16px rgba(34,197,94,0.8), 0 0 40px rgba(34,197,94,0.4)",
                 animation: "letterDrop 0.6s cubic-bezier(0.22,1,0.36,1) both",
                 animationDelay: `${(i + 3) * 0.1}s`,
                 display: "inline-block",
