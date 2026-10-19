@@ -7,7 +7,6 @@ import "@/models/ContactInformation";
 import "@/models/ServiceCategory";
 import "@/models/Service";
 import "@/models/Portfolio";
-
 import "@/models/Feedback";
 import "@/models/Gallery";
 import "@/models/ClientLogo";
@@ -110,6 +109,7 @@ export default async function HomePage() {
   const hours = settings?.businessHours;
   const companyName = settings?.companyName;
   const logoImg = settings?.logo?.url || "/images/logo.png";
+  const yearsExperience = Math.max(1, new Date().getFullYear() - 2017);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between overflow-x-hidden relative font-sans">
@@ -118,9 +118,9 @@ export default async function HomePage() {
       <Header phone={phone} hours={hours} companyName={companyName} />
 
       {/* ==========================================
-          SECTION 01 — HERO SECTION (Optimized Background Visibility)
+          SECTION 01 — HERO SECTION (Premium Conversion-Focused)
           ========================================== */}
-      <section className="relative w-full min-h-screen flex items-center justify-start overflow-hidden pt-24 sm:pt-28 pb-14 sm:pb-16">
+        <section className="relative w-full min-h-screen flex items-end justify-start overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16 md:pb-20">
         <div className="absolute inset-0 z-0">
           {/* Mobile Background Image (< md) */}
           <div className="block md:hidden absolute inset-0">
@@ -148,31 +148,16 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/90 md:bg-gradient-to-r md:from-black/50 md:via-black/10 md:to-transparent z-10" />
         </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-6 w-full mt-4 sm:mt-8 md:mt-12">
+        <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-6 w-full">
           <ScrollReveal>
             <div className="max-w-4xl lg:max-w-5xl space-y-4 sm:space-y-5">
               {/* Category Tagline */}
-              <div className="flex items-center gap-2">
-                <span className="w-5 sm:w-8 h-[2px] bg-lenux-emerald shrink-0" />
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-[0.2em] text-white">
-                  Creative • Printing • Branding • Visual Advertising
-                </span>
-              </div>
-
-              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-white tracking-tight leading-[1.15] uppercase">
-                Welcome to{" "}
-                <span className="text-lenux-emerald block mt-1 whitespace-normal md:whitespace-nowrap">
-                  LENUX PRODUCTION
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-extrabold text-white tracking-tight leading-[1.1] uppercase drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+                We Make Brands{" "}
+                <span className="text-shimmer block mt-1">
+                  Impossible To Ignore.
                 </span>
               </h1>
-
-              <p className="text-sm sm:text-lg md:text-xl text-gray-200 font-semibold tracking-wide leading-snug">
-                Specialists in Design, Printing, Branding & Visual Advertising
-              </p>
-
-              <p className="text-xs sm:text-sm md:text-base text-gray-300 font-light leading-relaxed max-w-xl">
-                Lenux is the ideal platform to take your business to the public and reach a wider audience.
-              </p>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3.5 sm:gap-5 pt-2 sm:pt-4">
@@ -199,7 +184,7 @@ export default async function HomePage() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3.5 px-2 sm:px-6 border-r border-white/10">
                   <Award className="text-lenux-emerald shrink-0 size-6 sm:size-7 md:size-8" />
                   <div>
-                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">9+</h4>
+                    <h4 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">{yearsExperience}+</h4>
                     <p className="text-[10px] sm:text-xs text-white font-medium leading-tight mt-0.5">Years Of Experience</p>
                   </div>
                 </div>
@@ -231,26 +216,30 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 02 — Trusted by / Client Logos
           ========================================== */}
-      <TrustedBySection logos={clientLogos} />
+      <div className="section-seamless">
+        <TrustedBySection logos={clientLogos} />
+      </div>
 
       {/* ==========================================
           SECTION 03 — WHO WE ARE
           ========================================== */}
-      <section className="py-16 md:py-28 bg-[#070707] border-t border-white/5 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <section className="py-16 md:py-28 bg-[#070707] section-seamless relative overflow-hidden">
+        {/* Subtle ambient glow */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-lenux-emerald/[0.04] rounded-full blur-[120px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
           <div className="lg:col-span-6 space-y-6">
             <ScrollReveal>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest">
                 <Sparkles size={14} /> Who We Are
               </div>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight">
                 Turning Ideas Into <span className="text-lenux-emerald">Powerful Brand Visuals</span>
-              </h3>
+              </h2>
               <p className="text-gray-300 text-base md:text-lg font-light leading-relaxed">
-                With over 9 years of industry experience, <strong className="text-white font-medium">Lenux Production (Pvt) Ltd</strong> is a premier branding, signage, and visual communication specialist in Sri Lanka. From innovative indoor &amp; outdoor signboards to large-format digital printing and corporate branding, we engineer durable, high-impact solutions that make every brand stand out and leave a lasting impression.
+                With over {yearsExperience} years of industry experience, <strong className="text-white font-medium">Lenux Production (Pvt) Ltd</strong> is a premier branding, signage, and visual communication specialist in Sri Lanka. From innovative indoor &amp; outdoor signboards to large-format digital printing and corporate branding, we engineer durable, high-impact solutions that make every brand stand out and leave a lasting impression.
               </p>
-              <div className="pt-4">
-                <Link href="/about" className="inline-flex items-center gap-2 px-8 py-3.5 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-lenux-dark transition-all duration-300 shadow-lg shadow-lenux-emerald/20">
+              <div className="pt-2">
+                <Link href="/about" className="inline-flex items-center gap-2 px-8 py-3.5 bg-lenux-emerald text-black font-extrabold rounded-full text-xs uppercase tracking-wider hover:bg-emerald-400 hover:scale-105 transition-all duration-300 shadow-lg shadow-lenux-emerald/25">
                   Discover Lenux Production <ArrowRight size={16} />
                 </Link>
               </div>
@@ -258,14 +247,22 @@ export default async function HomePage() {
           </div>
           <div className="lg:col-span-6">
             <ScrollReveal>
-              <div className="relative h-[450px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <div className="relative h-[400px] md:h-[480px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group bg-[#0a0a0a]">
                 <Image
                   src={logoImg}
-                  alt="Lenux Production Facility"
+                  alt="Lenux Production - Company Logo"
                   fill
-                  className="object-contain p-8 hover:scale-105 transition-transform duration-700"
+                  className="object-contain p-10 group-hover:scale-105 transition-transform duration-700"
+                  style={{ mixBlendMode: "screen" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* Overlay badge */}
+                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                  <div className="bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl px-5 py-3">
+                    <p className="text-lenux-emerald text-xs font-bold uppercase tracking-widest">Est. 2015</p>
+                    <p className="text-white font-semibold text-sm mt-0.5">Moratuwa, Sri Lanka</p>
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
           </div>
@@ -275,14 +272,17 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 04 — OUR SERVICES
           ========================================== */}
-      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
+      <section className="py-16 md:py-28 bg-black section-seamless relative">
+        <div className="max-w-7xl mx-auto px-6 space-y-14">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
               <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Our Expertise</span>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide uppercase">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide uppercase">
                 What We <span className="text-lenux-emerald">Do</span>
-              </h3>
+              </h2>
+              <p className="text-gray-400 text-sm font-light leading-relaxed max-w-lg mx-auto">
+                From concept to completion — we deliver end-to-end creative solutions that make your brand shine.
+              </p>
             </div>
           </ScrollReveal>
 
@@ -290,19 +290,20 @@ export default async function HomePage() {
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {categories.map((cat: any) => (
               <ScrollReveal key={cat._id}>
-                <div className="bg-[#0c0c0c] rounded-2xl border border-white/5 overflow-hidden hover:border-lenux-emerald/50 transition-all duration-500 group flex flex-col justify-between h-full shadow-lg">
+                <div className="bg-[#0c0c0c] rounded-2xl border border-white/5 overflow-hidden hover:border-lenux-emerald/50 hover:shadow-lg hover:shadow-lenux-emerald/10 transition-all duration-500 group flex flex-col justify-between h-full shadow-md">
                   <div>
                     <div className="relative w-full h-44 bg-gray-900 overflow-hidden">
                       {cat.image?.url && <Image src={cat.image.url} alt={cat.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
-                    <div className="p-6 space-y-2">
-                      <h4 className="text-lg font-bold text-white group-hover:text-lenux-emerald transition-colors">{cat.name}</h4>
+                    <div className="p-5 space-y-2">
+                      <h3 className="text-base font-bold text-white group-hover:text-lenux-emerald transition-colors">{cat.name}</h3>
                       <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{cat.description || "High quality visual production."}</p>
                     </div>
                   </div>
-                  <div className="p-6 pt-0">
-                    <Link href={`/services`} className="text-xs font-bold text-lenux-emerald hover:text-white flex items-center gap-1.5 transition-colors">
-                      Explore Services <ArrowRight size={14} />
+                  <div className="p-5 pt-0">
+                    <Link href={`/services`} className="text-xs font-bold text-lenux-emerald hover:text-white flex items-center gap-1.5 transition-colors group/link">
+                      Explore Services <ArrowRight size={13} className="group-hover/link:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>
@@ -310,9 +311,12 @@ export default async function HomePage() {
             ))}
           </div>
 
-          <div className="text-center pt-6">
-            <Link href="/services" className="px-8 py-3.5 border border-lenux-emerald transition-all duration-300 inline-flex items-center gap-2">
-              View All Services <ArrowRight size={16} />
+          <div className="text-center pt-4">
+            <Link
+              href="/services"
+              className="px-9 py-3.5 border border-lenux-emerald/60 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-lenux-emerald hover:border-lenux-emerald hover:text-black hover:scale-105 transition-all duration-300 inline-flex items-center gap-2"
+            >
+              View All Services <ArrowRight size={15} />
             </Link>
           </div>
         </div>
@@ -321,34 +325,39 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 05 — WHY CHOOSE LENUX
           ========================================== */}
-      <section className="py-16 md:py-28 bg-[#060606] border-t border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
+      <section className="py-16 md:py-28 bg-[#060606] section-seamless relative overflow-hidden">
+        {/* Subtle diagonal grid texture */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(16,185,129,1) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+        <div className="max-w-7xl mx-auto px-6 space-y-14">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto space-y-4">
               <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Our Competitive Advantage</span>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide">
                 Why Choose <span className="text-lenux-emerald">Lenux Production?</span>
-              </h3>
+              </h2>
+              <p className="text-gray-400 text-sm font-light leading-relaxed">
+                We combine creativity, quality, and speed to deliver results that exceed expectations.
+              </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { title: "Complete Solutions", desc: "Design to final installation managed in one place.", icon: ShieldCheck },
-              { title: "Experienced Team", desc: "Backed by skilled professionals and modern tech.", icon: Award },
-              { title: "High Quality Work", desc: "Uncompromising standards in materials and finishing.", icon: ThumbsUp },
-              { title: "Fair Pricing", desc: "Top-tier services at competitive, fair prices.", icon: DollarSign },
-              { title: "Fast Delivery", desc: "Prompt and efficient turnaround times.", icon: Zap },
-              { title: "Trusted Service", desc: "Honest and reliable business partnership.", icon: Clock4 }
+              { title: "Complete Solutions", desc: "Design to final installation managed in one place — stress-free from start to finish.", icon: ShieldCheck },
+              { title: "Experienced Team", desc: `Over ${yearsExperience} years backed by skilled professionals and state-of-the-art equipment.`, icon: Award },
+              { title: "High Quality Work", desc: "Uncompromising standards in materials, colours, and finishing on every job.", icon: ThumbsUp },
+              { title: "Fair Pricing", desc: "Top-tier services at competitive, transparent prices with no hidden costs.", icon: DollarSign },
+              { title: "Fast Turnaround", desc: "Prompt and efficient delivery so your business never misses a deadline.", icon: Zap },
+              { title: "Trusted Partner", desc: "Honest, reliable, and long-term business relationships built on real results.", icon: Clock4 }
             ].map((item, i) => {
               const Icon = item.icon;
               return (
                 <ScrollReveal key={i}>
-                  <div className="p-8 rounded-3xl bg-[#0d0d0d] border border-white/5 hover:border-lenux-emerald/40 transition-all duration-500 group shadow-lg">
-                    <div className="w-12 h-12 rounded-2xl bg-lenux-emerald/10 border border-lenux-emerald/30 flex items-center justify-center text-lenux-emerald mb-6 group-hover:scale-110 transition-transform">
-                      <Icon size={24} />
+                  <div className="p-7 rounded-2xl bg-[#0d0d0d] border border-white/5 hover:border-lenux-emerald/40 hover:bg-[#0f0f0f] hover:shadow-lg hover:shadow-lenux-emerald/8 transition-all duration-500 group">
+                    <div className="w-11 h-11 rounded-xl bg-lenux-emerald/10 border border-lenux-emerald/30 flex items-center justify-center text-lenux-emerald mb-5 group-hover:scale-110 group-hover:bg-lenux-emerald/20 transition-all duration-300">
+                      <Icon size={22} />
                     </div>
-                    <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-lenux-emerald transition-colors duration-300">{item.title}</h3>
                     <p className="text-xs md:text-sm text-gray-400 font-light leading-relaxed">{item.desc}</p>
                   </div>
                 </ScrollReveal>
@@ -361,41 +370,49 @@ export default async function HomePage() {
       {/* ==========================================
           🌟 SECTION 06 — FEATURED PORTFOLIO
           ========================================== */}
-      <section className="py-16 md:py-28 bg-black border-t border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
+      <section className="py-16 md:py-28 bg-black section-seamless relative">
+        <div className="max-w-7xl mx-auto px-6 space-y-14">
           <ScrollReveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-3">
                 <span className="text-xs font-bold text-lenux-emerald uppercase tracking-widest">Our Original Works</span>
-                <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wide">
                   Recent <span className="text-lenux-emerald">Projects</span>
-                </h3>
-                <p className="text-gray-400 text-sm">A selection of creative projects produced by Lenux Production.</p>
+                </h2>
+                <p className="text-gray-400 text-sm max-w-md leading-relaxed">A curated selection of creative projects delivered by Lenux Production.</p>
               </div>
-              <Link href="/portfolio" className="px-6 py-3 border border-white/20 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:border-lenux-emerald hover:bg-lenux-emerald/10 transition-all w-fit">
-                View Full Portfolio →
+              <Link
+                href="/portfolio"
+                className="px-6 py-3 border border-white/20 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:border-lenux-emerald hover:bg-lenux-emerald/10 hover:text-lenux-emerald transition-all w-fit shrink-0"
+              >
+                View Full Portfolio <ArrowRight size={13} className="inline ml-1" />
               </Link>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {featuredProjects.map((proj: any) => (
               <ScrollReveal key={proj._id}>
                 <Link
-                  href={`/portfolio/${proj.slug}`} // 🌟 
-                  className="group rounded-3xl overflow-hidden bg-[#0a0a0a] border border-white/5 hover:border-lenux-emerald/40 transition-all duration-500 shadow-xl flex flex-col justify-between block"
+                  href={`/portfolio/${proj.slug}`}
+                  className="group rounded-2xl overflow-hidden bg-[#0a0a0a] border border-white/5 hover:border-lenux-emerald/40 hover:shadow-xl hover:shadow-lenux-emerald/10 transition-all duration-500 flex flex-col justify-between block"
                 >
-                  <div className="relative w-full h-64 overflow-hidden bg-gray-900">
+                  <div className="relative w-full h-60 overflow-hidden bg-gray-900">
                     <Image src={proj.coverImage.url} alt={proj.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-lenux-emerald/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  <div className="p-6 space-y-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-lenux-emerald bg-lenux-emerald/10 px-2.5 py-1 rounded-md">
+                  <div className="p-5 space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-lenux-emerald bg-lenux-emerald/10 px-2.5 py-1 rounded-md inline-block">
                       {proj.service?.title || "Production Project"}
                     </span>
-                    <h4 className="text-lg font-bold text-white group-hover:text-lenux-emerald transition-colors">{proj.title}</h4>
-                    {proj.clientName && <p className="text-xs text-gray-400">Client: {proj.clientName}</p>}
+                    <h3 className="text-base font-bold text-white group-hover:text-lenux-emerald transition-colors duration-300">{proj.title}</h3>
+                    {proj.clientName && <p className="text-xs text-gray-500">Client: {proj.clientName}</p>}
+                    <div className="flex items-center gap-1 text-lenux-emerald text-xs font-semibold pt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      View Project <ArrowRight size={12} />
+                    </div>
                   </div>
                 </Link>
               </ScrollReveal>
@@ -419,34 +436,40 @@ export default async function HomePage() {
       {/* ==========================================
           SECTION 08 — CLIENT CTA BANNER
           ========================================== */}
+      <section className="py-20 md:py-28 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] section-seamless relative text-center overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -bottom-12 right-0 w-72 h-72 bg-lenux-emerald/10 rounded-full blur-[120px] pointer-events-none" />
+        {/* Top border glow */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-lenux-emerald/50 to-transparent" />
 
-      <section className="py-16 md:py-24 bg-gradient-to-r from-[#06241a] via-[#081f17] to-[#040e0a] border-t border-lenux-emerald/30 relative text-center">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-lenux-emerald/20 rounded-full blur-[140px] pointer-events-none" />
-
-        <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
+        <div className="max-w-4xl mx-auto px-6 space-y-7 relative z-10">
           <ScrollReveal>
-            <h3 className="text-3xl sm:text-5xl font-extrabold text-white">
-              Have an Idea? <br /><span className="text-lenux-emerald">Let’s Bring It to Life.</span>
-            </h3>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lenux-emerald/30 bg-lenux-emerald/10 text-lenux-emerald text-xs font-bold uppercase tracking-widest mb-2">
+              <Sparkles size={12} /> Ready to Get Started?
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+              Have an Idea? <br /><span className="text-lenux-emerald">Let&apos;s Bring It to Life.</span>
+            </h2>
             <p className="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
-              From graphic design and printing to complete business branding and on-site production.
+              From graphic design and printing to complete business branding and on-site production — we handle it all.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {/* බටන් 1: Get a Free Quote */}
+            <div className="flex flex-wrap justify-center gap-4 pt-3">
+              {/* Button 1: Get Your Free Quote */}
               <Link
                 href="/contact"
-                className="w-full sm:w-auto px-8 py-4 bg-lenux-emerald text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-dark shadow-xl shadow-lenux-emerald/30 transition-all duration-300"
+                className="w-full sm:w-auto px-9 py-4 bg-lenux-emerald text-black font-extrabold rounded-full text-xs uppercase tracking-widest hover:bg-emerald-400 hover:scale-105 shadow-xl shadow-lenux-emerald/40 transition-all duration-300"
               >
-                Get a Free Quote
+                Get Your Free Quote
               </Link>
 
-              {/* බටන් 2: WhatsApp Us */}
+              {/* Button 2: WhatsApp Us */}
               <a
                 href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '').replace(/^0/, '94')}?text=Hi%20Lenux%20Production%2C%20I%20need%20a%20quotation%20for...`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-4 border border-emerald-400/40 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-9 py-4 border border-emerald-400/50 text-emerald-400 bg-emerald-950/40 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-lenux-emerald hover:text-black hover:border-lenux-emerald hover:scale-105 transition-all duration-300 inline-flex items-center justify-center gap-2"
               >
                 <MessageCircle size={16} /> WhatsApp Us
               </a>

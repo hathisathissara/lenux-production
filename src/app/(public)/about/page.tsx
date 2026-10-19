@@ -58,6 +58,7 @@ export default async function AboutPage() {
   const phone = settings?.phone;
   const hours = settings?.businessHours;
   const companyName = settings?.companyName;
+  const yearsExperience = Math.max(1, new Date().getFullYear() - 2017);
   const whatsapp = settings?.whatsapp;
   const logoUrl = settings?.logo?.url;
 
@@ -113,7 +114,7 @@ export default async function AboutPage() {
                   <strong className="text-white font-semibold">Lenux Production (Pvt) Ltd</strong> is a professionally managed company specializing in Branding, Advertising, Signage, Printing, and Visual Communication Solutions across Sri Lanka. We are committed to delivering innovative, high-quality, and reliable branding solutions that help businesses strengthen their identity and create a lasting impression.
                 </p>
                 <p>
-                  With over 9 years of industry experience, our journey began with a passion for creativity, quality craftsmanship, and customer satisfaction. Before officially registering our business, we spent several years providing branding and advertising solutions, gaining valuable hands-on experience and building strong client relationships.
+                  With over {yearsExperience} years of industry experience, our journey began with a passion for creativity, quality craftsmanship, and customer satisfaction. Before officially registering our business, we spent several years providing branding and advertising solutions, gaining valuable hands-on experience and building strong client relationships.
                 </p>
                 <p>
                   On 1st February 2020, we officially registered as an Individual Business, marking the beginning of our professional business journey. As our business continued to grow, we proudly achieved another milestone by incorporating as <strong className="text-white font-semibold">Lenux Production (Pvt) Ltd</strong> on 13th June 2026—reflecting our commitment to long-term growth, corporate excellence, and delivering greater value to our customers.

@@ -66,7 +66,7 @@ export default function HomeFeaturedGallery({ images }: HomeFeaturedGalleryProps
 
         {/* Slideshow Container */}
         <div
-          className="relative w-full"
+          className="relative w-full group"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
