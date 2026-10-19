@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // 🌟 Link එක import කර ඇත
-import { ArrowLeft } from "lucide-react"; // 🌟 Back Arrow Icon එක
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -27,7 +27,10 @@ export default function AdminLogin() {
       const data = await res.json();
 
       if (data.success) {
-        router.push("/admin");
+        // 🌟 Redirect back to the original page if callbackUrl exists, otherwise /admin
+        const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+        const callbackUrl = params?.get("callbackUrl") || "/admin";
+        router.push(callbackUrl);
         router.refresh();
       } else {
         setError(data.message || "Invalid login credentials.");

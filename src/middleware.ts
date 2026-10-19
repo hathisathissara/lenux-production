@@ -11,14 +11,17 @@ export function middleware(request: NextRequest) {
   // Cookie එකෙන් token එක ගන්නවා
   const token = request.cookies.get('token')?.value || '';
 
-  // 1. Token එක නැතුව Admin ඇතුළට යන්න හැදුවොත් Login එකට යවනවා
+  // 1. Token එක නැතුව Admin ඇතුළට යන්න හැදුවොත් Login එකට යවනවා (ගිය original path එක callbackUrl ලෙස යවයි)
   if (isAdminPath && !token) {
-    return NextResponse.redirect(new URL('/admin/login', request.nextUrl));
+    const loginUrl = new URL('/admin/login', request.nextUrl);
+    loginUrl.searchParams.set('callbackUrl', path);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Token එක තියෙද්දි ආයෙත් Login Page එකට ගියොත් කෙලින්ම Dashboard එකට යවනවා
+  // 2. Token එක තියෙද්දි ආයෙත් Login Page එකට ගියොත් Dashboard හෝ callbackUrl එකට යවනවා
   if (isPublicAdminPath && token) {
-    return NextResponse.redirect(new URL('/admin', request.nextUrl));
+    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/admin';
+    return NextResponse.redirect(new URL(callbackUrl, request.nextUrl));
   }
 
   return NextResponse.next();

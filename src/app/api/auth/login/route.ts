@@ -36,14 +36,13 @@ export async function POST(request: Request) {
       user: { name: admin.name, email: admin.email }
     });
 
-    // Token එක HttpOnly Cookie එකක් විදියට Set කරනවා (Security වැඩි කරන්න)
     response.cookies.set({
       name: 'token',
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60, // දවස් 7යි
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
     });
 
