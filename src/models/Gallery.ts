@@ -22,7 +22,6 @@ const GallerySchema = new Schema(
   { timestamps: true, strict: false }
 );
 
-// Next.js Hot Reload වලදී Stale Model Cache වීම වැළැක්වීම
 if (mongoose.models.Gallery) {
   delete mongoose.models.Gallery;
 }

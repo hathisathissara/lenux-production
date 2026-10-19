@@ -4,7 +4,7 @@ const AdminSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // මෙතනට එන්නේ Hash කරපු Password එකක් (bcrypt)
+    password: { type: String, required: true },
     role: { type: String, default: 'admin' },
   },
   { timestamps: true }

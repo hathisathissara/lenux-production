@@ -27,7 +27,7 @@ const ServiceSchema = new Schema(
   { timestamps: true }
 );
 
-// Next.js Hot Reload වලදී Stale Model Cache වීම වැළැක්වීම
+
 if (mongoose.models.Service) {
   delete mongoose.models.Service;
 }

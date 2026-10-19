@@ -29,11 +29,9 @@ const ContactInformationSchema = new Schema(
     tiktok: { type: String, default: '' },
     otherSocial: { type: String, default: '' },
   },
-  // strict: false දැමීමෙන් කිසිදු field එකක් Mongoose මඟින් discard නොවේ
   { timestamps: true, strict: false }
 );
 
-// Next.js Hot Reload වලදී පරණ Model එක cache වී තිබීම වැළැක්වීම
 if (mongoose.models.ContactInformation) {
   delete mongoose.models.ContactInformation;
 }
