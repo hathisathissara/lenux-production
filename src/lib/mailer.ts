@@ -1,13 +1,27 @@
 import nodemailer from "nodemailer";
 
-// ─── Transporter (Gmail App Password) ────────────────────────────────────────
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+// ─── Transporter (Gmail App Password - Production Ready) ─────────────────────
+function getTransporter() {
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
+
+  if (!user || !pass) {
+    console.warn("[Mailer] GMAIL_USER or GMAIL_APP_PASSWORD is not set in environment variables!");
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // Use SSL (port 465 works reliably across cloud/serverless providers)
+    auth: {
+      user,
+      pass,
+    },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+  });
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface QuoteEmailData {
@@ -129,6 +143,9 @@ async function sendClientThankYou(data: QuoteEmailData) {
     </html>
   `;
 
+  const transporter = getTransporter();
+  if (!transporter) return;
+
   await transporter.sendMail({
     from: `"Lenux Production" <${process.env.GMAIL_USER}>`,
     to: data.email,
@@ -195,6 +212,9 @@ async function sendBusinessNotification(data: QuoteEmailData, businessEmail: str
     </html>
   `;
 
+  const transporter = getTransporter();
+  if (!transporter) return;
+
   await transporter.sendMail({
     from: `"Lenux Quote System" <${process.env.GMAIL_USER}>`,
     to: businessEmail,
@@ -219,5 +239,10 @@ export async function sendQuoteEmails(data: QuoteEmailData, businessEmail?: stri
   }
 
   // Parallel send — one fails වුනත් other affect නොකරයි
-  await Promise.allSettled(promises);
+  const results = await Promise.allSettled(promises);
+  results.forEach((res) => {
+    if (res.status === "rejected") {
+      console.error("[Mailer] Failed to send email:", res.reason);
+    }
+  });
 }

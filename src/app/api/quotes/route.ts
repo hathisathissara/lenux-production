@@ -46,9 +46,12 @@ export async function POST(request: Request) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const businessEmail = (contactInfo as any)?.email || process.env.GMAIL_TO;
 
-    sendQuoteEmails({ fullName, companyName, phoneNumber, email, requiredService, message }, businessEmail).catch(
-      (err) => console.error('[Mailer] Failed to send quote emails:', err)
-    );
+    // 📧 Send email (Awaited with try/catch so serverless/production doesn't freeze before SMTP sends)
+    try {
+      await sendQuoteEmails({ fullName, companyName, phoneNumber, email, requiredService, message }, businessEmail);
+    } catch (err) {
+      console.error('[Mailer] Failed to send quote emails:', err);
+    }
 
     return NextResponse.json({ success: true, message: 'Quotation request submitted successfully!', data: newQuote }, { status: 201 });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
