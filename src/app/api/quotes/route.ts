@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { QuoteRequest } from '@/models/QuoteRequest';
+import { ContactInformation } from '@/models/ContactInformation';
+import { sendQuoteEmails } from '@/lib/mailer';
 
 // GET All Quote Requests
 export async function GET() {
@@ -14,7 +16,6 @@ export async function GET() {
   }
 }
 
-// POST Create Quote Request (පාරිභෝගිකයා එවද්දී සේව් වන තැන)
 export async function POST(request: Request) {
   try {
     await connectDB();
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
       fullName,
       companyName,
       phoneNumber,
-      email: email || '', // 🌟 Email එක නැත්නම් හිස්ව සේව් වේ
+      email: email || '', 
       requiredService,
       quantity,
       preferredDeliveryDate: preferredDeliveryDate ? new Date(preferredDeliveryDate) : undefined,
@@ -38,6 +39,16 @@ export async function POST(request: Request) {
       message,
       fileAttachment
     });
+
+
+    // 📧 Business email — ContactInformation DB ගෙන් fetch, fallback: GMAIL_TO env
+    const contactInfo = await ContactInformation.findOne().select('email').lean();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const businessEmail = (contactInfo as any)?.email || process.env.GMAIL_TO;
+
+    sendQuoteEmails({ fullName, companyName, phoneNumber, email, requiredService, message }, businessEmail).catch(
+      (err) => console.error('[Mailer] Failed to send quote emails:', err)
+    );
 
     return NextResponse.json({ success: true, message: 'Quotation request submitted successfully!', data: newQuote }, { status: 201 });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
