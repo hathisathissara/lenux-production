@@ -5,7 +5,10 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
 
-  const isPublicAdminPath = path === '/admin/login';
+  const isPublicAdminPath = 
+    path === '/admin/login' || 
+    path === '/admin/forgot-password' || 
+    path === '/admin/reset-password';
   const isAdminPath = path.startsWith('/admin') && !isPublicAdminPath;
 
 

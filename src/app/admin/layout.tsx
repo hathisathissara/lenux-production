@@ -10,8 +10,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 1. ඔයා ඉන්නේ Login පිටුවේ නම්, Sidebar එක නැතුව කෙලින්ම Page එක පෙන්නනවා
-  if (pathname === '/admin/login') {
+  // 1. ඔයා ඉන්නේ Login, Forgot-Password හෝ Reset-Password පිටුවේ නම්, Sidebar එක නැතුව කෙලින්ම Page එක පෙන්නනවා
+  if (
+    pathname === '/admin/login' || 
+    pathname === '/admin/forgot-password' || 
+    pathname === '/admin/reset-password'
+  ) {
     return <>{children}</>;
   }
 

@@ -153,7 +153,16 @@ export default function AdminLogin() {
           </div>
 
           <div>
-            <label className="block text-sm text-lenux-darkGray mb-2 font-medium">Password</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm text-lenux-darkGray font-medium">Password</label>
+              {/* 🌟 Forgot Password Link */}
+              <Link 
+                href="/admin/forgot-password" 
+                className="text-xs text-lenux-emerald hover:underline font-semibold transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
             <input
               type="password"
               required
@@ -182,6 +191,7 @@ export default function AdminLogin() {
         </form>
 
       </div>
+
     </div>
   );
 }
