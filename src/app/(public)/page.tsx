@@ -133,15 +133,25 @@ export default async function HomePage() {
             />
           </div>
 
-          {/* Desktop Background Image (>= md) */}
+          {/* Desktop Background Video (>= md) — image shown as poster until video loads */}
           <div className="hidden md:block absolute inset-0">
-            <Image
-              src="/images/hero-bg.png"
-              alt="Lenux Production Hero"
-              fill
-              className="object-cover object-center md:object-right"
-              priority
-            />
+            <video
+              autoPlay
+              muted
+              playsInline
+              poster="/images/hero-bg.png"
+              className="absolute inset-0 w-full h-full object-cover object-right"
+            >
+              <source src="/video/hero-bg.mp4" type="video/mp4" />
+              {/* Fallback for no-video browsers */}
+              <Image
+                src="/images/hero-bg.png"
+                alt="Lenux Production Hero"
+                fill
+                className="object-cover object-center md:object-right"
+                priority
+              />
+            </video>
           </div>
 
           {/* 🌟 Background Visibility & Contrast Overlay */}
