@@ -280,7 +280,7 @@ export default async function HomePage() {
       </section>
 
       {/* ==========================================
-          SECTION 04 — OUR SERVICES
+          SECTION 04 — OUR SERVICES remove
           ========================================== 
       <section className="py-16 md:py-28 bg-black section-seamless relative">
         <div className="max-w-7xl mx-auto px-6 space-y-14">
