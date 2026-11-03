@@ -281,7 +281,7 @@ export default async function HomePage() {
 
       {/* ==========================================
           SECTION 04 — OUR SERVICES
-          ========================================== */}
+          ========================================== 
       <section className="py-16 md:py-28 bg-black section-seamless relative">
         <div className="max-w-7xl mx-auto px-6 space-y-14">
           <ScrollReveal>
@@ -297,7 +297,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any 
             {categories.map((cat: any) => (
               <ScrollReveal key={cat._id}>
                 <div className="bg-[#0c0c0c] rounded-2xl border border-white/5 overflow-hidden hover:border-lenux-emerald/50 hover:shadow-lg hover:shadow-lenux-emerald/10 transition-all duration-500 group flex flex-col justify-between h-full shadow-md">
@@ -330,7 +330,7 @@ export default async function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ==========================================
           SECTION 05 — WHY CHOOSE LENUX
