@@ -102,7 +102,7 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { settings, categories, featuredProjects, feedbacks, featuredGallery, clientLogos } = await getHomeData();
+  const { settings, featuredProjects, feedbacks, featuredGallery, clientLogos } = await getHomeData();
 
   const phone = settings?.phone;
   const whatsapp = settings?.whatsapp;
